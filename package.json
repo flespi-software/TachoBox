@@ -1,0 +1,50 @@
+{
+  "name": "tachobox",
+  "version": "0.0.1",
+  "description": "Viewer for tachograph DDD files",
+  "productName": "TachoBox",
+  "author": "Evgenij Spitsyn <spev@gurtam.team>",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
+    "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
+    "test": "echo \"No test specified\" && exit 0",
+    "dev": "quasar dev",
+    "build": "quasar build",
+    "deploy": "rm -rf dist && npm run build && rm -rf deploy && mkdir deploy && cp -R dist/spa/* LICENSE package.json deploy && node_modules/git-directory-deploy/bin/git-directory-deploy.sh -ddeploy -bgh-pages -rgit@git.gurtam.net:flespi/frontend/TachoBox.git && rm -rf deploy",
+    "postinstall": "quasar prepare"
+  },
+  "dependencies": {
+    "@quasar/extras": "^1.18.0",
+    "axios": "^1.14.0",
+    "flespi-io-js": "git+ssh://git@git.gurtam.net:flespi/frontend/flespi-io-js.git",
+    "leaflet": "^1.9.4",
+    "pinia": "^3.0.4",
+    "quasar": "^2.19.3",
+    "vue": "^3.5.32",
+    "vue-i18n": "^11.3.2",
+    "vue-router": "^5.0.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@intlify/unplugin-vue-i18n": "^11.0.7",
+    "@quasar/app-vite": "^2.6.0",
+    "@vue/eslint-config-prettier": "^10.2.0",
+    "autoprefixer": "^10.4.27",
+    "baseline-browser-mapping": "^2.10.16",
+    "eslint": "^10.2.0",
+    "eslint-plugin-vue": "^10.8.0",
+    "globals": "^17.4.0",
+    "postcss": "^8.5.9",
+    "prettier": "^3.8.1",
+    "vite-plugin-checker": "^0.12.0",
+    "vue-eslint-parser": "^10.4.0",
+    "git-directory-deploy": "^1.5.1"
+  },
+  "engines": {
+    "node": "^28 || ^26 || ^24 || ^22 || ^20",
+    "npm": ">= 6.13.4",
+    "yarn": ">= 1.21.1"
+  }
+}
