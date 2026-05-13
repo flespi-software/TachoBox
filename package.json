@@ -1,6 +1,6 @@
 {
   "name": "tachobox",
-  "version": "0.0.5 Alpha",
+  "version": "0.0.6 Alpha",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
@@ -22,9 +22,11 @@
     "leaflet": "^1.9.4",
     "pinia": "^3.0.4",
     "quasar": "^2.19.3",
+    "topojson-client": "^3.1.0",
     "vue": "^3.5.32",
     "vue-i18n": "^11.3.2",
-    "vue-router": "^5.0.4"
+    "vue-router": "^5.0.4",
+    "world-atlas": "^2.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.14.0",
