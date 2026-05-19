@@ -1,6 +1,6 @@
 {
   "name": "tachobox",
-  "version": "0.2.5 Alpha",
+  "version": "0.3.0 Alpha",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
