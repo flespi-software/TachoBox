@@ -1,6 +1,6 @@
 {
   "name": "tachobox",
-  "version": "0.3.1 Alpha",
+  "version": "0.3.2 Alpha",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
@@ -18,7 +18,7 @@
   "dependencies": {
     "@quasar/extras": "^1.18.0",
     "axios": "^1.14.0",
-    "flespi-io-js": "git+ssh://git@git.gurtam.net:flespi/frontend/flespi-io-js.git",
+    "flespi-io-js": "github:flespi-software/flespi-io-js#v3",
     "leaflet": "^1.9.4",
     "pinia": "^3.0.4",
     "quasar": "^2.19.3",
