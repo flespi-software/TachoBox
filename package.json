@@ -1,6 +1,6 @@
 {
   "name": "tachobox",
-  "version": "0.5.2 Alpha",
+  "version": "0.6.0-alpha.0",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
@@ -9,7 +9,8 @@
   "scripts": {
     "lint": "eslint -c ./eslint.config.js \"./src*/**/*.{js,cjs,mjs,vue}\"",
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
-    "test": "echo \"No test specified\" && exit 0",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "dev": "quasar dev",
     "build": "quasar build",
     "deploy": "rm -rf dist && npm run build && rm -rf deploy && mkdir deploy && cp -R dist/spa/* LICENSE package.json deploy && node_modules/git-directory-deploy/bin/git-directory-deploy.sh -ddeploy -bgh-pages -rgit@git.gurtam.net:flespi/frontend/TachoBox.git && rm -rf deploy",
@@ -42,6 +43,7 @@
     "postcss": "^8.5.9",
     "prettier": "^3.8.1",
     "vite-plugin-checker": "^0.12.0",
+    "vitest": "^4.1.8",
     "vue-eslint-parser": "^10.4.0"
   },
   "engines": {
