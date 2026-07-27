@@ -1,6 +1,6 @@
 {
   "name": "tachobox",
-  "version": "0.6.1-beta",
+  "version": "0.7.0-beta",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
@@ -11,6 +11,7 @@
     "format": "prettier --write \"**/*.{js,vue,scss,html,md,json}\" --ignore-path .gitignore",
     "test": "vitest run",
     "test:watch": "vitest",
+    "violations": "node scripts/find-violations.mjs",
     "dev": "quasar dev",
     "build": "quasar build",
     "deploy": "rm -rf dist && npm run build && rm -rf deploy && mkdir deploy && cp -R dist/spa/* LICENSE package.json deploy && node_modules/git-directory-deploy/bin/git-directory-deploy.sh -ddeploy -bgh-pages -rgit@git.gurtam.net:flespi/frontend/TachoBox.git && rm -rf deploy",
