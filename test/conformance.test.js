@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, resolve } from 'node:path'
-import { analyze } from '../scripts/find-violations.mjs'
+import { analyze } from '../src/analyze.js'
 import { rulesDocument } from '../scripts/update-conformance.mjs'
 import { RULES_VERSION } from '../src/compliance/index.js'
 

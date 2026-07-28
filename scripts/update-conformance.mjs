@@ -24,7 +24,7 @@ import {
   SEVERITY_DEFAULT,
   RULES_VERSION,
 } from '../src/compliance/index.js'
-import { analyze } from './find-violations.mjs'
+import { analyze } from '../src/analyze.js'
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const DEMO_FILES = ['example.json', 'example-vu.json']

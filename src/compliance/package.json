@@ -1,0 +1,33 @@
+{
+  "name": "@tachobox/compliance",
+  "version": "1.0.0",
+  "description": "Framework-free EU 561/2006 + 2016/403 driving and rest time violation engine",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./rules.json": "./rules.json",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "rules.js",
+    "rules.json",
+    "violations.js",
+    "activity.js",
+    "explain.js",
+    "README.md"
+  ],
+  "scripts": {
+    "example": "node example.mjs"
+  },
+  "keywords": [
+    "tachograph",
+    "eu-561-2006",
+    "eu-2016-403",
+    "drivers-hours",
+    "compliance"
+  ],
+  "license": "MIT",
+  "sideEffects": false
+}

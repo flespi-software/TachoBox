@@ -89,7 +89,59 @@ framework-free, dependency-free module - the numbers (`rules.js`) are separated 
 algorithms (`violations.js`) so it can be audited against the regulations and reused as a
 standalone library. See [src/compliance/README.md](src/compliance/README.md).
 
-Run it over one or more parsed DDD files from the command line:
+The directory is self-contained: copy it anywhere and run its demo, which builds
+sample activity inline and prints the findings. No data files, no build step.
+
+```bash
+cp -r src/compliance /tmp/compliance && node /tmp/compliance/example.mjs
+```
+
+### The pipeline
+
+Getting from a tachograph file to a list of infringements is three stages, each
+a separate framework-free module:
+
+| Stage | Module | In -> out |
+|-------|--------|-----------|
+| 1. Normalize | [`src/utils/ddd.js`](src/utils/ddd.js) ([README](src/utils/README.md)) | flespi `tacho-file-parse` response -> activity records, one per day |
+| 2. Analyse | [`src/compliance/`](src/compliance/) ([README](src/compliance/README.md)) | activity records -> violations, usage errors, anomalies |
+| 3. Report | [`src/analyze.js`](src/analyze.js) | stages 1 and 2 in one call -> a plain JSON report |
+
+Use stage 3 if you just want findings. Use stages 1 and 2 directly when you need
+the intermediate records too - the app does exactly that, rendering the same
+records as timelines and charts while the engine analyses them. Stage 2 alone is
+what you want if your files come from somewhere other than flespi: it takes plain
+records and has no idea where they came from.
+
+Decoding the raw `.ddd` binary is *not* part of this - stage 1 starts from
+already-parsed JSON. In this app that decoding is done server-side by the flespi
+plugin; with another parser, produce the record shape yourself and start at
+stage 2.
+
+A fourth module sits outside the pipeline:
+[`src/reference/`](src/reference/) ([README](src/reference/README.md)) holds the
+static spec lookup tables - country codes, event and fault types - used to turn
+numeric codes into labels.
+
+### From a flespi API response to a report
+
+If your input is what the flespi media API returns for a tacho file, the whole
+pipeline is one call - [`src/analyze.js`](src/analyze.js) wires the normalization
+adapter to the engine:
+
+```js
+import { analyze } from './src/analyze.js'
+
+const report = analyze(apiResponse)   // or an array of responses to merge
+// { rulesVersion, sources, summary, violations, usageErrors, anomalies }
+```
+
+`apiResponse` is the unmodified body of
+`GET /gw/devices/{id}/media?data={uuid, fields:'uuid,name,meta,content'}`. The
+bundled `public/example.json` is exactly such a response, which is why the same
+file serves as the conformance input.
+
+The same thing from the command line:
 
 ```bash
 npm run violations -- public/example.json --pretty
@@ -102,11 +154,11 @@ node scripts/find-violations.mjs day1.json day2.json day3.json --pretty
 Multiple files are normalized and merged into one timeline (the same day from two
 files keeps the richer record), then analysed together. They must be complementary -
 the same driver card or the same vehicle unit; mixing different drivers/vehicles (or a
-card with a VU) throws an error. It prints a JSON report
-(`{ sources, summary, violations, usageErrors, anomalies }`). The script
-([scripts/find-violations.mjs](scripts/find-violations.mjs)) is thin glue over the
-normalization adapter ([src/utils/ddd.js](src/utils/ddd.js)) and the compliance engine -
-a copy-paste starting point for your own integration.
+card with a VU) throws an error.
+
+[`scripts/find-violations.mjs`](scripts/find-violations.mjs) is only argument
+parsing and file reading around `analyze()`; import from
+[`src/analyze.js`](src/analyze.js) rather than shelling out to the script.
 
 ### Reimplementing it in another language
 
@@ -122,16 +174,6 @@ if they drift from the code. See
 engine deliberately does not detect, and
 [Algorithm notes](src/compliance/README.md#algorithm-notes) for the decisions a
 port has to match.
-
-### Reusable, framework-free modules
-
-The pieces above have no Vue/Quasar ties and can be lifted out on their own:
-
-| Module | Purpose |
-|--------|---------|
-| [`src/compliance/`](src/compliance/) | EU 561/2006 + 2016/403 violation engine ([README](src/compliance/README.md)) |
-| [`src/utils/ddd.js`](src/utils/ddd.js) | Normalization adapter: raw flespi tacho-file-parse JSON -> engine records |
-| [`src/reference/`](src/reference/) | Spec lookup tables - country codes, event/fault types ([README](src/reference/README.md)) |
 
 ## Project layout
 

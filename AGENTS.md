@@ -35,9 +35,10 @@ outside this app. Keep it that way:
 
 | Layer | Rule |
 |-------|------|
-| `src/compliance/` | Framework-free and dependency-free. No Vue, no Pinia, no Quasar, no imports from `src/components`, `src/stores` or `src/utils/format.js`. Relative imports carry the `.js` extension so the module runs in plain Node. |
+| `src/compliance/` | Framework-free and dependency-free, and **self-contained**: no imports outside its own directory at all, so the folder can be copied elsewhere and run. It has its own `package.json`. Relative imports carry the `.js` extension so it runs in plain Node. `cd src/compliance && node example.mjs` must keep working - that demo is the advertised entry point for anyone vendoring the engine. |
 | `src/reference/` | Same constraints. Static lookup tables only. |
-| `src/utils/ddd.js` | The adapter between the raw flespi `tacho-file-parse` JSON and the normalized records the engine consumes. Also framework-free. |
+| `src/utils/ddd.js` | The adapter between the raw flespi `tacho-file-parse` JSON and the normalized records the engine consumes. Also framework-free. Documented in `src/utils/README.md`. |
+| `src/analyze.js` | Facade over the two: flespi API response in, report out. The public entry point for consumers and the one a port mirrors, so its report shape is a contract - `test/conformance/` pins it. |
 | `src/stores/`, `src/components/`, `src/pages/` | May import from all of the above; never the other way round. |
 
 `scripts/find-violations.mjs` runs the engine under Node with no bundler. If you
