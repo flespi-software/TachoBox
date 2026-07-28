@@ -4,6 +4,8 @@ Web-based viewer for tachograph DDD files parsed into JSON. Works with driver ca
 
 **[Live demo](https://tachobox.flespi.io/#/?demo=1)** | [Documentation](docs/overview.md) | [MIT licensed](LICENSE)
 
+![The overview: counts of violations, usage errors and anomalies, the vehicles driven, a daily distance chart, an activity heatmap, a driver profile radar and per-activity totals, with a colour-coded calendar alongside](docs/screenshot.png)
+
 > **Disclaimer.** TachoBox is not an official or certified DDD file viewer. It is a way to explore and evaluate the contents of a tachograph file. The data it displays - including the compliance findings - must not be used for legal or regulatory purposes.
 
 ## Features
