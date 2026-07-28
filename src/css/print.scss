@@ -1,0 +1,350 @@
+/* Print section titles - hidden on screen, visible in print */
+.print-title {
+  display: none;
+}
+
+.print-all-sections {
+  display: none;
+}
+
+@media print {
+  /* Hide chrome */
+  .q-header,
+  .q-drawer,
+  .q-drawer__backdrop,
+  .calendar-panel,
+  .date-range-bar,
+  .q-dialog,
+  .no-print {
+    display: none !important;
+  }
+
+  /* Show print sections */
+  .print-all-sections {
+    display: block !important;
+  }
+
+  .print-title {
+    display: block !important;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 0 4px;
+    border-bottom: 2px solid #333;
+    margin-bottom: 8px;
+    /* Safari slices the heading's glyphs across the page boundary (top of the
+       letters on one page, bottom on the next). break-inside: avoid forces the
+       whole heading to the next page instead of slicing it; display: table is a
+       WebKit reinforcement since Safari often ignores break-inside on plain
+       block elements. break-after keeps the title glued to its content. */
+    display: table !important;
+    width: 100% !important;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+    page-break-after: avoid !important;
+    break-after: avoid !important;
+  }
+
+  .print-section {
+    page-break-before: always;
+  }
+
+  .print-section:first-child {
+    page-break-before: auto;
+  }
+
+  /* Reset page layout */
+  .q-page-container {
+    padding: 0 !important;
+  }
+
+  .index-page {
+    overflow: visible !important;
+  }
+
+  .page-layout {
+    display: block !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+
+  /* Safari ignores page-break / break-inside on anything inside a flex
+     container, so it slices titles and rows mid-line. Flatten the flex
+     ancestor chain to block layout so pagination works. */
+  .main-panel {
+    display: block !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  .data-card {
+    display: block !important;
+    flex: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Show driver info */
+  .driver-info-wrapper {
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Hide tab bar */
+  .q-tabs {
+    display: none !important;
+  }
+
+  /* Let tables flow */
+  .q-table__container,
+  .q-virtual-scroll,
+  .q-table__middle {
+    overflow: visible !important;
+    height: auto !important;
+    max-height: none !important;
+  }
+
+  /* Quasar's .q-table__container is display: flex. Safari ignores
+     page-break / break-inside on anything inside a flex container, so table
+     rows get sliced across the page boundary. Flatten it to block. */
+  .q-table__container {
+    display: block !important;
+  }
+
+  .q-virtual-scroll__content {
+    position: static !important;
+  }
+
+  /* Heatmap / overview */
+  .overview-layout {
+    height: auto !important;
+  }
+
+  .overview-content {
+    overflow: visible !important;
+  }
+
+  /* SVG charts - ensure visible */
+  svg {
+    overflow: visible !important;
+  }
+
+  /* Activity legend row */
+  .activity-legend-item {
+    color: #333 !important;
+  }
+
+  /* Light background for print */
+  body,
+  .q-page,
+  .q-card {
+    background: white !important;
+    color: #333 !important;
+  }
+
+  /* Grey utility text washes out in Safari print (defaults to
+     -webkit-print-color-adjust: economy). Darken to a legible grey and
+     force exact colour rendering so labels stay readable on white. */
+  .text-grey,
+  .text-grey-1,
+  .text-grey-2,
+  .text-grey-3,
+  .text-grey-4,
+  .text-grey-5,
+  .text-grey-6,
+  .text-grey-7,
+  .text-grey-8,
+  .text-grey-9 {
+    color: #777 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Radar chart - dark grid/labels on white background */
+  .grid-ring {
+    stroke: rgba(0, 0, 0, 0.15) !important;
+  }
+
+  .axis-line {
+    stroke: rgba(0, 0, 0, 0.2) !important;
+  }
+
+  .axis-label {
+    fill: rgba(0, 0, 0, 0.7) !important;
+  }
+
+  /* Radar - side-by-side layout */
+  .activity-radar {
+    flex-direction: row !important;
+    align-items: flex-start;
+  }
+
+  .radar-stats {
+    margin-top: 0 !important;
+    border-top: none !important;
+    border-left: 1px solid #ddd;
+    padding-top: 0 !important;
+    padding-left: 10px !important;
+  }
+
+  /* Heatmap - visible empty cells */
+  .level-0 {
+    background: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  /* Distance chart - dark grid/labels on white background */
+  .chart-grid-line {
+    stroke: rgba(0, 0, 0, 0.08) !important;
+  }
+
+  .chart-separator {
+    stroke: rgba(0, 0, 0, 0.12) !important;
+  }
+
+  .chart-label {
+    fill: rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* Force background colors for heatmap and activity timelines */
+  .heatmap-cell,
+  .activity-segment,
+  .activity-fill,
+  .card-out-hatch,
+  .day-fill,
+  .day-card-out,
+  .legend-dot,
+  .legend-dot-card-out,
+  .activity-rest,
+  .activity-driving,
+  .activity-work,
+  .activity-availability,
+  .alert-chip,
+  .dist-bar,
+  .dist-bar-bg,
+  .euro-plate,
+  .euro-plate__band,
+  .euro-plate__number,
+  .level-0, .level-1, .level-2, .level-3, .level-4 {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* Hide table footers */
+  .q-table__bottom {
+    display: none !important;
+  }
+
+  /* Tables - light background */
+  .q-table,
+  .q-table th,
+  .q-table td,
+  .q-table thead tr,
+  .q-table tbody tr,
+  .sticky-header-table thead tr th {
+    background: white !important;
+    color: #333 !important;
+    border-color: #ddd !important;
+  }
+
+  .q-table thead tr th {
+    font-weight: bold;
+    border-bottom: 2px solid #333 !important;
+  }
+
+  /* WebKit only honors break-inside: avoid on table rows when the table uses
+     border-collapse: collapse (Quasar defaults to separate). Without this
+     Safari slices rows across the page boundary. */
+  .q-table {
+    border-collapse: collapse !important;
+  }
+
+  /* Don't slice a table row across the page boundary, and repeat the
+     header row at the top of each printed page. */
+  .q-table tr,
+  .q-table td,
+  .q-table th,
+  tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  .q-table thead,
+  thead {
+    display: table-header-group !important;
+  }
+
+  /* position: sticky on the table header breaks page pagination in Safari
+     (rows get sliced across the page boundary). Reset it for print. */
+  .sticky-header-table thead tr th {
+    position: static !important;
+  }
+
+  /* Safari never honors break-inside: avoid on <tr>, so the Activities rows
+     (with the graphical timeline) keep getting sliced across page boundaries.
+     Fallback: render the table as block-level rows laid out with CSS grid.
+     Safari DOES honor break-inside on block elements, and giving every row the
+     same column template keeps the columns aligned like a real table. Column
+     widths mirror the `columns` definition in ActivityTable.vue. */
+  .activity-table table,
+  .activity-table thead,
+  .activity-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+
+  .activity-table thead tr,
+  .activity-table tbody tr {
+    display: grid !important;
+    /* Fixed columns are sized to fit a portrait A4 (~718px) with the timeline
+       (minmax(0, 1fr)) absorbing the rest. minmax(0, ...) - not 120px - lets the
+       timeline shrink so the row never grows wider than the page. */
+    grid-template-columns: 80px 20px 20px 44px minmax(0, 1fr) 58px 58px 66px 70px 86px;
+    align-items: center !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    border: none !important;
+    border-bottom: 1px solid #ddd !important;
+    font-size: 10px !important;
+  }
+
+  .activity-table thead tr {
+    border-bottom: 2px solid #333 !important;
+  }
+
+  /* The icon columns have empty headers; a per-cell border-bottom (from
+     .q-table thead tr th) floats up to the collapsed cell's middle. Keep the
+     underline only on the row, not on individual header cells. Selector matches
+     .q-table thead tr th specificity and wins by source order. */
+  .activity-table thead tr th {
+    border: none !important;
+  }
+
+  .activity-table th,
+  .activity-table td {
+    display: block !important;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+    text-overflow: ellipsis !important;
+    border: none !important;
+    height: auto !important;
+    padding: 2px 3px !important;
+    /* Quasar applies the column `style` (width / min-width: 200px on timeline)
+       inline on each cell. Those inline minimums force the grid cell to stay
+       wide, so minmax(0, 1fr) can't shrink it - clear them for print. */
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  /* The timeline keeps a min-width on screen (180px) - clear it for print so it
+     fills exactly its grid cell instead of overflowing into the next column. */
+  .activity-table .activity-timeline {
+    min-width: 0 !important;
+    width: auto !important;
+  }
+
+  /* Warning banners */
+  .warning-banner {
+    border: 1px solid #f2c037 !important;
+  }
+}

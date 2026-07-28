@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`analyze() pipeline > summary is unchanged 1`] = `
+{
+  "anomalies": 10,
+  "bySeverity": {
+    "minor": 2,
+    "most-serious": 5,
+    "serious": 2,
+    "uncategorized": 3,
+    "very-serious": 7,
+  },
+  "byType": {
+    "biweekly-driving": 1,
+    "continuous-driving": 4,
+    "daily-driving": 4,
+    "daily-rest": 2,
+    "daily-rest-reduced": 2,
+    "weekly-driving": 1,
+    "weekly-rest-compensation": 1,
+    "weekly-rest-interval": 1,
+    "weekly-rest-pair": 3,
+  },
+  "usageErrors": 4,
+  "violations": 19,
+}
+`;
+
+exports[`analyze() pipeline > summary is unchanged 2`] = `
+{
+  "anomalies": 0,
+  "bySeverity": {
+    "most-serious": 1,
+    "serious": 2,
+    "very-serious": 3,
+  },
+  "byType": {
+    "continuous-driving": 3,
+    "daily-driving": 2,
+    "daily-rest": 1,
+  },
+  "usageErrors": 0,
+  "violations": 6,
+}
+`;

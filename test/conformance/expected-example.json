@@ -1,0 +1,283 @@
+{
+  "rulesVersion": "1.0.0",
+  "sources": [
+    {
+      "type": "driver-card",
+      "generation": "g2",
+      "holder": "C_20260201_0800_M_Rossi_I001234567890001.ddd",
+      "days": 107,
+      "range": {
+        "from": "2025-12-01",
+        "to": "2026-03-31"
+      }
+    }
+  ],
+  "summary": {
+    "violations": 19,
+    "bySeverity": {
+      "very-serious": 7,
+      "serious": 2,
+      "most-serious": 5,
+      "minor": 2,
+      "uncategorized": 3
+    },
+    "byType": {
+      "continuous-driving": 4,
+      "daily-driving": 4,
+      "daily-rest": 2,
+      "weekly-rest-interval": 1,
+      "weekly-driving": 1,
+      "biweekly-driving": 1,
+      "daily-rest-reduced": 2,
+      "weekly-rest-compensation": 1,
+      "weekly-rest-pair": 3
+    },
+    "usageErrors": 4,
+    "anomalies": 10
+  },
+  "violations": [
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "very-serious",
+      "date": "2025-12-04",
+      "minutes": 660,
+      "text": "Continuous driving 11h exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "serious",
+      "date": "2025-12-04",
+      "minutes": 660,
+      "text": "Daily driving 11h exceeds the extended 10h limit"
+    },
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "serious",
+      "date": "2025-12-10",
+      "minutes": 310,
+      "text": "Continuous driving 5h 10m exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "very-serious",
+      "date": "2025-12-16",
+      "minutes": 420,
+      "text": "Continuous driving 7h exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "very-serious",
+      "date": "2025-12-16",
+      "minutes": 900,
+      "text": "Daily driving 15h exceeds the extended 10h limit"
+    },
+    {
+      "code": "8.2",
+      "type": "daily-rest",
+      "severity": "most-serious",
+      "date": "2025-12-16",
+      "minutes": 300,
+      "text": "Daily rest 5h below minimum 9h"
+    },
+    {
+      "code": "8.6",
+      "type": "weekly-rest-interval",
+      "severity": "very-serious",
+      "date": "2026-02-16",
+      "minutes": 9480,
+      "text": "More than 6×24h (158h) without a weekly rest"
+    },
+    {
+      "code": "6.2",
+      "type": "weekly-driving",
+      "severity": "very-serious",
+      "date": "2026-02-16",
+      "minutes": 3900,
+      "text": "Weekly driving 65h exceeds 56h limit"
+    },
+    {
+      "code": "6.3",
+      "type": "biweekly-driving",
+      "severity": "minor",
+      "date": "2026-02-16",
+      "minutes": 5820,
+      "text": "Biweekly driving 97h exceeds 90h limit"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "minor",
+      "date": "2026-02-17",
+      "minutes": 630,
+      "text": "Daily driving 10h 30m exceeds the extended 10h limit"
+    },
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "very-serious",
+      "date": "2026-02-18",
+      "minutes": 390,
+      "text": "Continuous driving 6h 30m exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "very-serious",
+      "date": "2026-02-19",
+      "minutes": 690,
+      "text": "Daily driving 11h 30m exceeds 9h (extension already used twice this week)"
+    },
+    {
+      "code": "8.2",
+      "type": "daily-rest-reduced",
+      "severity": "uncategorized",
+      "date": "2026-02-19",
+      "minutes": 600,
+      "text": "Reduced daily rest 10h — more than 3 since last weekly rest"
+    },
+    {
+      "code": "8.2",
+      "type": "daily-rest-reduced",
+      "severity": "uncategorized",
+      "date": "2026-02-20",
+      "minutes": 600,
+      "text": "Reduced daily rest 10h — more than 3 since last weekly rest"
+    },
+    {
+      "code": "8.2",
+      "type": "daily-rest",
+      "severity": "most-serious",
+      "date": "2026-02-21",
+      "minutes": 360,
+      "text": "Daily rest 6h below minimum 9h"
+    },
+    {
+      "code": "8.6",
+      "type": "weekly-rest-compensation",
+      "severity": "uncategorized",
+      "date": "2026-03-02",
+      "text": "Reduced weekly rest (24h) not compensated within 3 weeks"
+    },
+    {
+      "code": "8.6",
+      "type": "weekly-rest-pair",
+      "severity": "most-serious",
+      "date": "2026-03-08",
+      "minutes": 1440,
+      "text": "Two reduced weekly rests in a row (24h then 24h) — one must be regular"
+    },
+    {
+      "code": "8.6",
+      "type": "weekly-rest-pair",
+      "severity": "most-serious",
+      "date": "2026-03-15",
+      "minutes": 1440,
+      "text": "Two reduced weekly rests in a row (24h then 24h) — one must be regular"
+    },
+    {
+      "code": "8.6",
+      "type": "weekly-rest-pair",
+      "severity": "most-serious",
+      "date": "2026-03-22",
+      "minutes": 1440,
+      "text": "Two reduced weekly rests in a row (24h then 24h) — one must be regular"
+    }
+  ],
+  "usageErrors": [
+    {
+      "code": "EU165 34.7",
+      "type": "34.7",
+      "severity": "serious",
+      "date": "2026-02-20",
+      "text": "Work period start marking missing"
+    },
+    {
+      "code": "EU165 34.7",
+      "type": "34.7",
+      "severity": "serious",
+      "date": "2026-02-20",
+      "text": "Work period end marking missing"
+    },
+    {
+      "code": "EU165 34.7",
+      "type": "34.7",
+      "severity": "serious",
+      "date": "2026-02-21",
+      "text": "Work period start marking missing"
+    },
+    {
+      "code": "EU165 34.7",
+      "type": "34.7",
+      "severity": "serious",
+      "date": "2026-02-21",
+      "text": "Work period end marking missing"
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2025-12-03",
+      "text": "Power supply interruption"
+    },
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2025-12-12",
+      "text": "Card insertion while driving"
+    },
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2025-12-15",
+      "text": "Driving without appropriate card"
+    },
+    {
+      "type": "unaccounted",
+      "severity": "info",
+      "date": "2025-12-23",
+      "text": "11h 4m unaccounted time on 23/12/2025"
+    },
+    {
+      "type": "unaccounted",
+      "severity": "info",
+      "date": "2025-12-27",
+      "text": "9h 58m unaccounted time on 27/12/2025"
+    },
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2026-01-10",
+      "text": "Power supply interruption"
+    },
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2026-01-28",
+      "text": "Power supply interruption"
+    },
+    {
+      "type": "gap",
+      "severity": "warning",
+      "date": "2026-02-01",
+      "text": "14 day(s) missing between 31/01/2026 and 15/02/2026"
+    },
+    {
+      "type": "event",
+      "severity": "critical",
+      "date": "2026-02-20",
+      "text": "Stored data integrity error"
+    },
+    {
+      "type": "event",
+      "severity": "warning",
+      "date": "2026-02-21",
+      "text": "Driving without appropriate card"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+// EU digital tachograph event and fault type codes (numeric -> label).
+// Sources:
+//   Gen1, Gen2v1: EU 2016/799, Appendix 1, section 2.70 - https://dtc.jrc.ec.europa.eu/iot_doc/EU%202016-799-EN.pdf (p. L 139/114-115)
+//   Gen2v2: EU 2021/1228, amendment to section 2.70 - https://dtc.jrc.ec.europa.eu/iot_doc/EU_2021-1228.pdf
+
+export const eventTypes = {
+  "0": "No further details",
+  "1": "Insertion of a non-valid card",
+  "2": "Card conflict",
+  "3": "Time overlap",
+  "4": "Driving without an appropriate card",
+  "5": "Card insertion while driving",
+  "6": "Last card session not correctly closed",
+  "7": "Over speeding",
+  "8": "Power supply interruption",
+  "9": "Motion data error",
+  "10": "Vehicle motion conflict",
+  "11": "Time conflict (GNSS vs VU internal clock)",
+  "12": "Communication error with remote communication facility",
+  "13": "Absence of position information from GNSS receiver",
+  "14": "Communication error with external GNSS facility",
+  "15": "GNSS anomaly",
+  "16": "Security breach: no further details",
+  "17": "Motion sensor authentication failure",
+  "18": "Tachograph card authentication failure",
+  "19": "Unauthorised change of motion sensor",
+  "20": "Card data input integrity error",
+  "21": "Stored user data integrity error",
+  "22": "Internal data transfer error",
+  "23": "Unauthorised case opening",
+  "24": "Hardware sabotage",
+  "25": "Tamper detection of GNSS",
+  "26": "External GNSS facility authentication failure",
+  "27": "External GNSS facility certificate expired",
+  "28": "Inconsistency between motion data and stored driver activity data",
+  "32": "Sensor breach: no further details",
+  "33": "Sensor authentication failure",
+  "34": "Sensor stored data integrity error",
+  "35": "Sensor internal data transfer error",
+  "36": "Sensor unauthorised case opening",
+  "37": "Sensor hardware sabotage"
+}
+
+export const faultTypes = {
+  "48": "Recording equipment fault: no further details",
+  "49": "VU internal fault",
+  "50": "Printer fault",
+  "51": "Display fault",
+  "52": "Downloading fault",
+  "53": "Sensor fault",
+  "54": "Internal GNSS receiver fault",
+  "55": "External GNSS facility fault",
+  "56": "Remote communication facility fault",
+  "57": "ITS interface fault",
+  "58": "Internal sensor fault",
+  "64": "Card fault: no further details",
+  "80": "GNSS fault: no further details",
+  "81": "Internal GNSS receiver fault",
+  "82": "External GNSS receiver fault",
+  "83": "External GNSS communication fault",
+  "84": "No GNSS position data",
+  "85": "Tamper detection of GNSS",
+  "86": "External GNSS facility certificate expired",
+  "96": "Remote communication fault: no further details",
+  "97": "Remote Communication Module fault",
+  "98": "Remote Communication Module communication fault",
+  "112": "ITS interface fault: no further details"
+}

@@ -1,0 +1,82 @@
+{
+  "rulesVersion": "1.0.0",
+  "sources": [
+    {
+      "type": "vu-daily",
+      "generation": "g1",
+      "holder": "2025-12-01_VU.ddd",
+      "days": 20,
+      "range": {
+        "from": "2025-12-01",
+        "to": "2025-12-20"
+      }
+    }
+  ],
+  "summary": {
+    "violations": 6,
+    "bySeverity": {
+      "very-serious": 3,
+      "serious": 2,
+      "most-serious": 1
+    },
+    "byType": {
+      "continuous-driving": 3,
+      "daily-driving": 2,
+      "daily-rest": 1
+    },
+    "usageErrors": 0,
+    "anomalies": 0
+  },
+  "violations": [
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "very-serious",
+      "date": "2025-12-04",
+      "minutes": 660,
+      "text": "Continuous driving 11h exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "serious",
+      "date": "2025-12-04",
+      "minutes": 660,
+      "text": "Daily driving 11h exceeds the extended 10h limit"
+    },
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "serious",
+      "date": "2025-12-10",
+      "minutes": 310,
+      "text": "Continuous driving 5h 10m exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "7",
+      "type": "continuous-driving",
+      "severity": "very-serious",
+      "date": "2025-12-16",
+      "minutes": 420,
+      "text": "Continuous driving 7h exceeds 4h30 limit without 45min break"
+    },
+    {
+      "code": "6.1",
+      "type": "daily-driving",
+      "severity": "very-serious",
+      "date": "2025-12-16",
+      "minutes": 900,
+      "text": "Daily driving 15h exceeds the extended 10h limit"
+    },
+    {
+      "code": "8.2",
+      "type": "daily-rest",
+      "severity": "most-serious",
+      "date": "2025-12-16",
+      "minutes": 300,
+      "text": "Daily rest 5h below minimum 9h"
+    }
+  ],
+  "usageErrors": [],
+  "anomalies": []
+}

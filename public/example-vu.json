@@ -1,0 +1,3558 @@
+{
+  "result": [
+    {
+      "uuid": "demo-vu-1-19e215cd6a0",
+      "name": "2025-12-01_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764555924
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          350581
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 311,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 311,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 331,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 331,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 533,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 533,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 578,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 578,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 810,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 810,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 843,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 843,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-2-19e215cd6a1",
+      "name": "2025-12-02_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764634426
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          350923
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 325,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 325,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 344,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 344,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 570,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 570,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 796,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 796,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 833,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 833,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-3-19e215cd6a1",
+      "name": "2025-12-03_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764764970
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          351331
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 354,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 354,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 372,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 372,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 588,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 588,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 633,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 633,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 869,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 869,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 906,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 906,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-4-19e215cd6a1",
+      "name": "2025-12-04_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764874878
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          352143
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 300,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 300,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 320,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 320,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 620,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 620,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 640,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 640,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 850,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 850,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 865,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 865,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 1015,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 1015,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 1040,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 1040,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-5-19e215cd6a1",
+      "name": "2025-12-05_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764972371
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          352550
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 327,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 327,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 348,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 348,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 570,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 570,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 816,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 816,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 845,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 845,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-6-19e215cd6a1",
+      "name": "2025-12-06_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1764982287
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          352635
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 400,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 400,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 420,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 420,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 504,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 504,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 543,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 543,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-7-19e215cd6a1",
+      "name": "2025-12-07_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765139962
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          352635
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-8-19e215cd6a1",
+      "name": "2025-12-08_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765234508
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          352990
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 363,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 363,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 393,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 393,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 632,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 632,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 677,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 677,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 868,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 868,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 893,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 893,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-9-19e215cd6a1",
+      "name": "2025-12-09_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765305618
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          353313
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 328,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 328,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 345,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 345,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 557,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 557,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 602,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 602,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 810,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 810,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 840,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 840,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-10-19e215cd6a1",
+      "name": "2025-12-10_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765329904
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          353793
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 360,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 360,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 385,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 385,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 695,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 695,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 740,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 740,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 920,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 920,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 950,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 950,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-11-19e215cd6a1",
+      "name": "2025-12-11_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765434264
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          354259
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 343,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 343,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 363,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 363,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 566,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 566,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 611,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 611,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 766,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 766,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 789,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 789,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-12-19e215cd6a1",
+      "name": "2025-12-12_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765570413
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          354735
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 386,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 386,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 412,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 412,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 602,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 602,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 647,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 647,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 867,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 867,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 895,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 895,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-13-19e215cd6a1",
+      "name": "2025-12-13_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765657856
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          354735
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-14-19e215cd6a1",
+      "name": "2025-12-14_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765717435
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          354735
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-15-19e215cd6a2",
+      "name": "2025-12-15_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765762054
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          355139
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 319,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 319,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 346,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 346,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 530,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 530,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 575,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 575,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 740,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 740,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 774,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 774,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-16-19e215cd6a2",
+      "name": "2025-12-16_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765900155
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          355759
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 270,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 270,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 300,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 300,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 540,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 540,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 585,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 585,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 825,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 825,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 855,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 855,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 930,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 930,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 1170,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 1170,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 1200,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 1200,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 1380,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 1380,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 1410,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 1410,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-17-19e215cd6a2",
+      "name": "2025-12-17_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1765933967
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          356155
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 356,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 356,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 375,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 375,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 605,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 605,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 650,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 650,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 882,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 882,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 907,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 907,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-18-19e215cd6a2",
+      "name": "2025-12-18_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1766090359
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          356628
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 360,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 360,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 389,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 389,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 615,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 660,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 660,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 892,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 892,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 916,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 916,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-19-19e215cd6a2",
+      "name": "2025-12-19_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1766134420
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          357062
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 302,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 302,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 323,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 323,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 528,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 528,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "DRIVING",
+            "cardInserted": true,
+            "changeTime": 573,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "AVAILABILITY",
+            "cardInserted": false,
+            "changeTime": 573,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "WORK",
+            "cardInserted": true,
+            "changeTime": 801,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 801,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": true,
+            "changeTime": 823,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 823,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    },
+    {
+      "uuid": "demo-vu-20-19e215cd6a2",
+      "name": "2025-12-20_VU.ddd",
+      "meta": {
+        "vin": "WF0XXXGCDX1234567",
+        "plate_number": "BH-472-K",
+        "region": "NL",
+        "type": "tacho"
+      },
+      "content": {
+        "CurrentDateTime": [
+          1766194079
+        ],
+        "VehicleIdentificationNumber": [
+          "WF0XXXGCDX1234567"
+        ],
+        "VehicleRegistrationNumber": [
+          "BH-472-K"
+        ],
+        "OdometerValueMidnight": [
+          357062
+        ],
+        "ActivityChangeInfo": [
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "DRIVER"
+          },
+          {
+            "activity": "BREAK/REST",
+            "cardInserted": false,
+            "changeTime": 0,
+            "drivingStatus": "SINGLE",
+            "slot": "CO-DRIVER"
+          }
+        ],
+        "CardSlotsStatus": [
+          {
+            "firstDriverSlot": "Driver",
+            "secondDriverSlot": "Empty"
+          }
+        ],
+        "VuCompanyLocksData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Demo Transport B.V.",
+            "companyAddress": "Voorbeeldstraat 1, 0000 AA Rotterdam",
+            "lockInTime": 1710496800,
+            "lockOutTime": 4294967295
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00009876543000"
+              },
+              "generation": "2"
+            },
+            "companyName": "Example Logistics B.V.",
+            "companyAddress": "Testweg 99, 0000 ZZ Amsterdam",
+            "lockInTime": 1641825000,
+            "lockOutTime": 1710496500
+          }
+        ],
+        "VuDownloadActivityData": [
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1766248200
+          },
+          {
+            "FullCardNumberAndGeneration": {
+              "FullCardNumber": {
+                "cardIssuingMemberState": "NL",
+                "cardType": 4,
+                "cardTypeDescription": "Company card",
+                "driverIdentification": "NL00001234567000"
+              },
+              "generation": "2"
+            },
+            "companyOrWorkshopName": "Demo Transport B.V.",
+            "downloadingTime": 1761987600
+          }
+        ],
+        "VuControlActivityData": []
+      }
+    }
+  ]
+}

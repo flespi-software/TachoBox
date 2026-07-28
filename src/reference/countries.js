@@ -1,0 +1,75 @@
+// NationNumeric codes per EU Regulation 2016/799 (Annex IC)
+// https://dtc.jrc.ec.europa.eu/iot_doc/EU%202016-799-EN.pdf
+// Amended by EU 2021/1228 - https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32021R1228
+
+export const NATION_NUMERIC = {
+  0: 'No information',
+  1: 'Austria',
+  2: 'Albania',
+  3: 'Andorra',
+  4: 'Armenia',
+  5: 'Azerbaijan',
+  6: 'Belgium',
+  7: 'Bulgaria',
+  8: 'Bosnia and Herzegovina',
+  9: 'Belarus',
+  10: 'Switzerland',
+  11: 'Cyprus',
+  12: 'Czech Republic',
+  13: 'Germany',
+  14: 'Denmark',
+  15: 'Spain',
+  16: 'Estonia',
+  17: 'France',
+  18: 'Finland',
+  19: 'Liechtenstein',
+  20: 'Faroe Islands',
+  21: 'United Kingdom',
+  22: 'Georgia',
+  23: 'Greece',
+  24: 'Hungary',
+  25: 'Croatia',
+  26: 'Italy',
+  27: 'Ireland',
+  28: 'Iceland',
+  29: 'Kazakhstan',
+  30: 'Luxembourg',
+  31: 'Lithuania',
+  32: 'Latvia',
+  33: 'Malta',
+  34: 'Monaco',
+  35: 'Moldova',
+  36: 'North Macedonia',
+  37: 'Norway',
+  38: 'Netherlands',
+  39: 'Portugal',
+  40: 'Poland',
+  41: 'Romania',
+  42: 'San Marino',
+  43: 'Russia',
+  44: 'Sweden',
+  45: 'Slovakia',
+  46: 'Slovenia',
+  47: 'Turkmenistan',
+  48: 'Turkey',
+  49: 'Ukraine',
+  50: 'Vatican City',
+  51: 'Yugoslavia',
+  52: 'Montenegro',
+  53: 'Serbia',
+  54: 'Uzbekistan',
+  55: 'Tajikistan',
+  56: 'Kyrgyz Republic',
+  57: 'Israel',
+  253: 'European Community',
+  254: 'Rest of Europe',
+  255: 'Rest of the World',
+}
+
+// Name for a NationNumeric code. Passes through a non-numeric string (already a
+// name), and returns a dash for empty/unknown input.
+export function nationName(code) {
+  if (code === undefined || code === null || code === '') return '—'
+  if (typeof code === 'string' && isNaN(code)) return code
+  return NATION_NUMERIC[Number(code)] || `Unknown (${code})`
+}

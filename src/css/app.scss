@@ -1,0 +1,126 @@
+// app global css in SCSS form
+@import './print.scss';
+
+// Activity palette - single source for timeline, table, calendar and legend.
+// Exposed as CSS variables so a row's whole timeline can be painted as one
+// gradient (see ActivityTable). Light values are the default; dark overrides.
+:root {
+  --act-driving: #ff8a65;
+  --act-work: #4fc3f7;
+  --act-availability: #ffca28;
+  --act-rest: #bdbdbd;
+}
+body.body--dark {
+  --act-driving: #ff5722;
+  --act-work: #03a9f4;
+  --act-availability: #ffa000;
+  --act-rest: #616161;
+}
+.activity-driving { background-color: var(--act-driving); }
+.activity-work { background-color: var(--act-work); }
+.activity-availability { background-color: var(--act-availability); }
+.activity-rest { background-color: var(--act-rest); }
+
+// Compliance severity text palette - single source for the severity colours used
+// as TEXT (headers, counts, codes, dates, icons) across the compliance panel,
+// activity table, day detail and overview alerts. Unlike Quasar's fixed
+// text-amber / text-red-10 classes (which assume one background), these are
+// theme-aware: the light values read on the white page, the dark overrides read
+// on the dark page (#263238). Severity order: minor < serious < very < most.
+:root {
+  --sev-minor: #8a6a00;
+  --sev-warning: #e65100;
+  --sev-serious: #d84315;
+  --sev-very-serious: #c62828;
+  --sev-most-serious: #b71c1c;
+  --sev-uncertain: #546e7a;
+  --sev-uncategorized: #5c6bc0;
+}
+body.body--dark {
+  --sev-minor: #ffca28;
+  --sev-warning: #ffa726;
+  --sev-serious: #ff8a50;
+  --sev-very-serious: #ff6b6b;
+  --sev-most-serious: #ff1744;
+  --sev-uncertain: #90a4ae;
+  --sev-uncategorized: #9fa8da;
+}
+.sev-minor { color: var(--sev-minor); }
+.sev-warning { color: var(--sev-warning); }
+.sev-serious { color: var(--sev-serious); }
+.sev-very-serious { color: var(--sev-very-serious); }
+.sev-most-serious { color: var(--sev-most-serious); }
+.sev-uncertain { color: var(--sev-uncertain); }
+.sev-uncategorized { color: var(--sev-uncategorized); }
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba($primary, 0.5) transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba($primary, 0.4);
+  border-radius: 3px;
+
+  &:hover {
+    background: rgba($primary, 0.7);
+  }
+}
+
+.sticky-header-table {
+  thead tr th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+  }
+}
+body.body--dark .sticky-header-table thead tr th {
+  background: $dark;
+}
+body.body--light .sticky-header-table thead tr th {
+  background: #fff;
+}
+
+.map-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  border-radius: 0 !important;
+}
+
+.leaflet-fullscreen-control a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  font-size: 18px;
+  text-decoration: none;
+  color: #333;
+}
+
+.clickable-table {
+  tbody tr {
+    cursor: pointer;
+    &:hover td {
+      background: rgba(0, 0, 0, 0.04);
+    }
+  }
+}
+body.body--dark .clickable-table {
+  tbody tr:hover td {
+    background: rgba(255, 255, 255, 0.05);
+  }
+}

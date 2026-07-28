@@ -1,0 +1,150 @@
+{
+  "rulesVersion": "1.0.0",
+  "units": {
+    "limits": "minutes, unless the name says otherwise",
+    "severityValue": "minutes (driving time, rest duration or interval)"
+  },
+  "sources": {
+    "limits": "Regulation (EU) 561/2006",
+    "severity": "Commission Regulation (EU) 2016/403, Annex"
+  },
+  "banding": {
+    "over": "larger value is worse; the first band with at <= value wins",
+    "under": "smaller value is worse; the first band with at > value wins",
+    "offset": "subtracted from the value before comparison",
+    "residual": "minor",
+    "unknownType": "serious"
+  },
+  "limits": {
+    "continuousDrive": 270,
+    "breakRequired": 45,
+    "breakSplit1": 15,
+    "breakSplit2": 30,
+    "dailyDrive": 540,
+    "dailyDriveExtended": 600,
+    "dailyDriveExtPerWeek": 2,
+    "weeklyDrive": 3360,
+    "biweeklyDrive": 5400,
+    "dailyRestRegular": 660,
+    "dailyRestReduced": 540,
+    "dailyRestSplitPart1": 180,
+    "dailyRestReducedMax": 3,
+    "weeklyRestReduced": 1440,
+    "weeklyRestRegular": 2700,
+    "weeklyRestMaxInterval": 8640
+  },
+  "severity": {
+    "continuous-driving": {
+      "dir": "over",
+      "bands": [
+        {
+          "at": 360,
+          "level": "very-serious"
+        },
+        {
+          "at": 300,
+          "level": "serious"
+        }
+      ]
+    },
+    "weekly-driving": {
+      "dir": "over",
+      "bands": [
+        {
+          "at": 4200,
+          "level": "most-serious"
+        },
+        {
+          "at": 3900,
+          "level": "very-serious"
+        },
+        {
+          "at": 3600,
+          "level": "serious"
+        }
+      ]
+    },
+    "biweekly-driving": {
+      "dir": "over",
+      "bands": [
+        {
+          "at": 6750,
+          "level": "most-serious"
+        },
+        {
+          "at": 6300,
+          "level": "very-serious"
+        },
+        {
+          "at": 6000,
+          "level": "serious"
+        }
+      ]
+    },
+    "daily-rest": {
+      "dir": "under",
+      "bands": [
+        {
+          "at": 420,
+          "level": "most-serious"
+        },
+        {
+          "at": 480,
+          "level": "very-serious"
+        },
+        {
+          "at": 540,
+          "level": "serious"
+        }
+      ]
+    },
+    "weekly-rest-reduced-short": {
+      "dir": "under",
+      "bands": [
+        {
+          "at": 1200,
+          "level": "most-serious"
+        },
+        {
+          "at": 1320,
+          "level": "very-serious"
+        },
+        {
+          "at": 1440,
+          "level": "serious"
+        }
+      ]
+    },
+    "weekly-rest-regular-short": {
+      "dir": "under",
+      "bands": [
+        {
+          "at": 2160,
+          "level": "most-serious"
+        },
+        {
+          "at": 2520,
+          "level": "very-serious"
+        },
+        {
+          "at": 2700,
+          "level": "serious"
+        }
+      ]
+    },
+    "weekly-rest-interval": {
+      "dir": "over",
+      "offset": 8640,
+      "bands": [
+        {
+          "at": 720,
+          "level": "very-serious"
+        },
+        {
+          "at": 180,
+          "level": "serious"
+        }
+      ]
+    }
+  }
+}
