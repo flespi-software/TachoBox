@@ -1,9 +1,31 @@
 {
   "name": "tachobox",
-  "version": "0.7.0-beta",
+  "version": "0.8.0-beta",
   "description": "Viewer for tachograph DDD files",
   "productName": "TachoBox",
   "author": "Evgenij Spitsyn <spev@gurtam.team>",
+  "license": "MIT",
+  "homepage": "https://tachobox.flespi.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flespi-software/TachoBox.git"
+  },
+  "bugs": {
+    "url": "https://github.com/flespi-software/TachoBox/issues"
+  },
+  "keywords": [
+    "tachograph",
+    "ddd",
+    "digital-tachograph",
+    "driver-card",
+    "eu-561-2006",
+    "drivers-hours",
+    "compliance",
+    "telematics",
+    "flespi",
+    "quasar",
+    "vue"
+  ],
   "type": "module",
   "private": true,
   "scripts": {
@@ -12,9 +34,10 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "violations": "node scripts/find-violations.mjs",
+    "conformance:update": "node scripts/update-conformance.mjs",
     "dev": "quasar dev",
     "build": "quasar build",
-    "deploy": "rm -rf dist && npm run build && rm -rf deploy && mkdir deploy && cp -R dist/spa/* LICENSE package.json deploy && node_modules/git-directory-deploy/bin/git-directory-deploy.sh -ddeploy -bgh-pages -rgit@git.gurtam.net:flespi/frontend/TachoBox.git && rm -rf deploy",
+    "deploy": "rm -rf dist && npm run build && rm -rf deploy && mkdir deploy && cp -R dist/spa/* LICENSE package.json deploy && node_modules/git-directory-deploy/bin/git-directory-deploy.sh -ddeploy -bgh-pages -rgit@github.com:flespi-software/TachoBox.git && rm -rf deploy",
     "postinstall": "quasar prepare"
   },
   "dependencies": {
