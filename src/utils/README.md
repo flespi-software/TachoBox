@@ -32,10 +32,45 @@ files loaded straight from disk.
 
 | Function | Purpose |
 |----------|---------|
-| `detectAndNormalize(json)` | Detects what the file is - driver card, VU daily, or VU technical-only - and returns a *source* object: `{ type, uuid, key, downloadTs, meta, name, g1, g2, enabled }`. Returns `null` if the JSON is not a recognized parsed DDD file. |
+| `detectAndNormalize(json)` | Detects what the file is - driver card, vehicle unit, or a VU download with no activity - and returns a *source* object: `{ type, uuid, key, downloadTs, meta, name, g1, g2, enabled }`. Returns `null` if the JSON is not a recognized parsed DDD file. |
 | `extractRecords(data)` | Pulls the flat record arrays (`activityRecords`, `placeRecords`, `eventRecords`, `faultRecords`, GNSS, vehicles, ...) out of one generation's data. |
 | `mergeRecordSets(sources, gen)` | Merges several sources into one timeline for the chosen generation (`'g1'` or `'g2'`), deduplicating. Where two sources carry the same day, the record with more activity changes wins, so a day's driving is never silently dropped. |
 | `isCompatible(src, enabledSources)` | Whether a source can be analysed together with the ones already loaded. Different drivers, different vehicles, or a card mixed with a VU are incompatible. |
+
+## How a vehicle unit file differs from a driver card
+
+The two are not the same structure with different values - they are laid out
+differently, and the adapter exists largely to hide that.
+
+A driver card hands you one contiguous structure with the days inside it. A VU
+(mass memory) download instead carries each day as its own block under
+`VuActivities`, with its own activity list, date, odometer and sub-records:
+
+```
+content.VuActivities[i] = {
+  DateOfDayDownloaded,        // UTC midnight, a scalar - not a one-element array
+  OdometerValueMidnight,      // also a scalar
+  ActivityChangeInfo[],       // both DRIVER and CO-DRIVER slots
+  VuPlaceDailyWorkPeriodData[], VuGNSSADRecords[], VuCardIWData[],
+  VuBorderCrossingRecords[], VuLoadUnloadRecords[], VuSpecificConditionData[],
+}
+```
+
+Two naming differences matter, because the UI and the engine speak driver-card:
+
+- a place record wraps its fields in `placeRecord`, where a card has them flat;
+- the GNSS position sits under `GNSSPlaceAuthRecord`, where a card calls it
+  `gnssPlaceRecord`.
+
+`normalizeVuGen2` remaps both. It is written tolerantly, so a record that already
+arrives in the card shape passes through untouched.
+
+Two consequences worth knowing. Daily distance for a VU is *derived*, not
+recorded: it is the gap between consecutive midnight odometer readings, so the
+last day of a download always reads 0. And the whole download becomes a single
+vehicle record spanning its date range, rather than one per day.
+
+Events, faults and speed data are not mapped from VU files yet.
 
 ## Why the two generations are separate
 

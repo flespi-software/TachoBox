@@ -74,6 +74,87 @@ function normalizeVuDaily(items) {
   }
 }
 
+// Vehicle-unit (mass memory) download. Unlike a driver card, where the days sit
+// in one contiguous structure, a VU file carries them as separate per-day blocks
+// under VuActivities - each with its own activity list, date, odometer and
+// per-day sub-records. Note the per-day fields are scalars here, not the
+// single-element arrays used at the top level of the file.
+function normalizeVuGen2(content, meta = {}) {
+  const days = [...(content.VuActivities || [])]
+    .filter((d) => d && d.DateOfDayDownloaded)
+    .sort((a, b) => a.DateOfDayDownloaded - b.DateOfDayDownloaded)
+
+  // Distance per day is the gap between consecutive midnight odometer readings.
+  // The last day has no following reading, so it stays 0 rather than guessing.
+  const activityDailyRecords = days.map((d, i) => {
+    const odo = d.OdometerValueMidnight ?? 0
+    const nextOdo = days[i + 1]?.OdometerValueMidnight
+    return {
+      activityRecordDate: d.DateOfDayDownloaded,
+      activityChangeInfo: d.ActivityChangeInfo || [],
+      activityDayDistance: odo && nextOdo != null ? Math.max(0, nextOdo - odo) : 0,
+    }
+  })
+
+  const collect = (key) => days.flatMap((d) => d[key] || [])
+
+  // A VU file names the same records differently from a driver card. Places wrap
+  // the fields in `placeRecord`, and the GNSS position sits under
+  // `GNSSPlaceAuthRecord` where a card calls it `gnssPlaceRecord`. Map both to
+  // the card shape so the UI and the compliance engine stay card-agnostic.
+  // Written tolerantly: a record already in the card shape passes through.
+  const unwrapPlace = (r) => ({ ...(r.placeRecord || r) })
+  // The GNSS block is called GNSSPlaceAuthRecord in a VU file. A card calls it
+  // gnssPlaceRecord in GNSS records but gnssPlaceAuthRecord in border crossings,
+  // so the target name differs per record type. Load/unload records already use
+  // GNSSPlaceAuthRecord on both sides and need no remapping.
+  const renameGnss = (target) => (r) => {
+    const place = r[target] || r.GNSSPlaceAuthRecord || r.gnssPlaceRecord
+    return place ? { ...r, [target]: place } : r
+  }
+
+  const first = days[0]
+  const last = days[days.length - 1]
+  const vin = meta.vin || content.VehicleIdentificationNumber?.[0] || ''
+
+  return {
+    EF_Driver_Activity_Data: {
+      CardDriverActivity: { activityDailyRecords },
+    },
+    EF_Identification: {
+      CardIdentification: {
+        cardNumber: meta.plate_number || resolveRegistration(content).vehicleRegistrationNumber || '',
+        cardIssuingMemberState: meta.region || resolveRegistration(content).vehicleRegistrationNation || '',
+      },
+      DriverCardHolderIdentification: {
+        cardHolderName: {
+          holderSurname: vin || meta.plate_number || 'Vehicle Unit',
+          holderFirstNames: '',
+        },
+      },
+    },
+    // One vehicle for the whole download, spanning the days it covers, rather
+    // than one pseudo-vehicle per day as the previous VU handling produced.
+    EF_Vehicles_Used: {
+      cardVehicleRecords: first ? [{
+        vehicleRegistration: resolveRegistration(content),
+        vehicleFirstUse: first.DateOfDayDownloaded,
+        vehicleLastUse: last.DateOfDayDownloaded + 86399,
+        vehicleOdometerBegin: first.OdometerValueMidnight ?? 0,
+        vehicleOdometerEnd: last.OdometerValueMidnight ?? 0,
+      }] : [],
+    },
+    EF_Places: { placeRecords: collect('VuPlaceDailyWorkPeriodData').map(unwrapPlace) },
+    EF_GNSS_Places: { gnssAccumulatedDrivingRecords: collect('VuGNSSADRecords').map(renameGnss('gnssPlaceRecord')) },
+    EF_Specific_Conditions: { specificConditionRecords: collect('VuSpecificConditionData') },
+    EF_Border_Crossings: { cardBorderCrossingRecords: collect('VuBorderCrossingRecords').map(renameGnss('gnssPlaceAuthRecord')) },
+    EF_Load_Unload_Operations: { cardLoadUnloadRecords: collect('VuLoadUnloadRecords') },
+    EF_Control_Activity_Data: content.VuControlActivityData?.[0] || null,
+    VU_Company_Locks: content.VuCompanyLocksData || [],
+    VU_Download_Activity: content.VuDownloadActivityData || [],
+  }
+}
+
 function normalizeVuTechnical(items) {
   const firstMeta = items[0].meta || {}
   const first = items[0].content || {}
@@ -147,6 +228,27 @@ export function detectAndNormalize(json) {
       }
     }
 
+    // Current VU (mass memory) layout: one item holding every day under
+    // VuActivities. Must be checked before the technical-only branch below,
+    // which would otherwise swallow the file and report zero activity.
+    if (content?.VuActivities?.length) {
+      const vin = first.meta?.vin || content.VehicleIdentificationNumber?.[0] || ''
+      const plate = first.meta?.plate_number || resolveRegistration(content).vehicleRegistrationNumber || ''
+      return {
+        type: 'vu-daily',
+        uuid: first.uuid || null,
+        key: `vu:${vin || plate}`,
+        downloadTs: content.CurrentDateTime?.[0] || 0,
+        meta: first.meta || {},
+        name: first.name || '',
+        g1: normalizeVuGen2(content, first.meta || {}),
+        g2: null,
+        enabled: true,
+      }
+    }
+
+    // Legacy VU layout: one item per day, activity directly under content.
+    // Kept for JSON files saved from earlier versions of the app.
     if (content?.ActivityChangeInfo?.length) {
       const vin = first.meta?.vin || content.VehicleIdentificationNumber?.[0] || ''
       const plate = first.meta?.plate_number || content.VehicleRegistrationIdentification?.[0]?.vehicleRegistrationNumber || content.VehicleRegistrationNumber?.[0] || ''

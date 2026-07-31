@@ -2,7 +2,7 @@
 
 TachoBox is a web-based viewer for tachograph DDD files parsed into JSON. It works with both driver card and vehicle unit (VU) daily data, supporting Gen1 and Gen2 formats.
 
-> **Note:** VU file parsing is currently under development. When loading VU data, the application displays only a minimal set of information (daily activities). Full VU support - including detailed events, faults, speed data, and vehicle-specific records - is planned for future releases. Driver card files are fully supported.
+> **Note:** Driver card files are fully supported. A vehicle unit download loads its daily activities, places, GNSS positions, border crossings, load/unload operations, control activities, company locks and download history, and its daily distance is derived from the midnight odometer readings. Events, faults and speed data are not read from VU files yet.
 
 ## Getting data in
 
@@ -14,7 +14,7 @@ There are four ways to load data:
 
 Multiple files can be loaded simultaneously. Incompatible files (e.g. different drivers) prompt you to choose which one to display.
 
-VU files without driver activity data (e.g. mass memory downloads containing only company locks and download history) are partially supported - the available technical/admin data is loaded and a warning is shown.
+A VU download that carries no driver activity at all - only company locks and download history - still loads: the available technical and administrative data is shown, together with a warning that there is no activity to analyse.
 
 ## Overview
 
