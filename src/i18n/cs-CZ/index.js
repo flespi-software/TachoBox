@@ -469,6 +469,8 @@ export default {
   'Speed': 'Rychlost',
   'Speed (max / avg)': 'Rychlost (max. / prům.)',
   'Still inserted': 'Stále vložena',
+  "Not recorded in the file": "V souboru nezaznamenáno",
+  "The card was still in the slot when this file was downloaded": "Karta byla při stažení tohoto souboru stále ve slotu",
   'Technical': 'Technické',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Tachograf uchovává 24 hodin pohybu, proto může toto období zahrnovat mnoho dní:',
   'Tyre size': 'Rozměr pneumatik',

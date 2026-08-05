@@ -469,6 +469,8 @@ export default {
   'Speed': 'Ātrums',
   'Speed (max / avg)': 'Ātrums (maks. / vid.)',
   'Still inserted': 'Joprojām ievietota',
+  "Not recorded in the file": "Failā nav reģistrēts",
+  "The card was still in the slot when this file was downloaded": "Karte joprojām atradās slotā, kad šis fails tika lejupielādēts",
   'Technical': 'Tehniskie',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Tahogrāfs saglabā 24 stundas kustības, tāpēc šis periods var aptvert daudzas dienas:',
   'Tyre size': 'Riepu izmērs',

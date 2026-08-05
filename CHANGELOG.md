@@ -8,6 +8,25 @@ changed in the data, what it means for a port, and where to look in the code.
 See [src/compliance/README.md](src/compliance/README.md#porting-to-another-language)
 for the conformance artifacts used to check a port.
 
+## 0.9.1
+
+### Unwritten fields are all ones, not null
+
+A field the recorder never filled in is stored as an all-ones filler
+(Reg. 2016/799, Appendix 1), so it decodes as a plausible number rather than as
+missing data: `0xFFFFFFFF` for a timestamp (a date in 2106), `0xFFFFFF` for an
+odometer (16 777 215 km), `0xFFFFFFFF` for a serial number. The parser passes
+them through as read, which is right - the consumer has to recognize them.
+
+The common case is a card that was still in the slot when the download happened:
+`VuCardIWData[].cardWithdrawalTime` and `vehicleOdometerValueAtWithdrawal` both
+come back as fillers, and subtracting the insertion odometer yields a trip of
+16.6 million km. Check before displaying and before any arithmetic; the
+comparison is `>= sentinel`, since some units write the maximum legal value
+rather than the exact filler. In this codebase the check lives in
+`src/utils/format.js` (`isUnsetTime`, `isUnsetOdometer`), and every table marks
+such cells explicitly rather than leaving them blank.
+
 ## 0.9.0
 
 The flespi `tacho-file-parse` plugin was corrected: the previous decoder
@@ -232,7 +251,8 @@ duplication rather than bugs:
 4. Canonicalize the GNSS block name per record type (table in item 2).
 5. Assert record **counts** against a known file, not just that parsing succeeds -
    both bugs above were silent.
-6. Re-run the conformance reports in `test/conformance/`; they should still match,
+6. Filter the all-ones fillers before displaying or subtracting (see 0.9.1).
+7. Re-run the conformance reports in `test/conformance/`; they should still match,
    since the compliance engine is unchanged.
 
 ## Earlier versions

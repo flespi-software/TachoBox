@@ -691,7 +691,7 @@ import { useAuthStore } from 'src/stores/auth'
 import { ACTIVITY_CLS } from 'src/utils/activity'
 import { isValidGeo } from 'src/utils/geo'
 import { downloadMediaFile } from 'src/utils/media'
-import { formatDate, formatDateTime, dayStart, MAX_TS, MAX_ODO } from 'src/utils/format'
+import { formatDate, formatDateTime, dayStart, isUnsetTime, isUnsetOdometer } from 'src/utils/format'
 import { analyzeDayViolations, analyzeDailyDriving, analyzeDailyRest, analyzeWeeklyRest, detectAnomalies, detectUsageErrors } from 'src/compliance'
 
 const GAP = 8
@@ -808,11 +808,9 @@ export default defineComponent({
           grouped[key] = { plate, nation, minTs: Infinity, maxTs: 0, minOdom: Infinity, maxOdom: 0 }
         const g = grouped[key]
         g.minTs = Math.min(g.minTs, r.vehicleFirstUse)
-        if (r.vehicleLastUse < MAX_TS) g.maxTs = Math.max(g.maxTs, r.vehicleLastUse)
-        const odomBegin =
-          r.vehicleOdometerBegin && r.vehicleOdometerBegin < MAX_ODO ? r.vehicleOdometerBegin : 0
-        const odomEnd =
-          r.vehicleOdometerEnd && r.vehicleOdometerEnd < MAX_ODO ? r.vehicleOdometerEnd : 0
+        if (!isUnsetTime(r.vehicleLastUse)) g.maxTs = Math.max(g.maxTs, r.vehicleLastUse)
+        const odomBegin = isUnsetOdometer(r.vehicleOdometerBegin) ? 0 : r.vehicleOdometerBegin || 0
+        const odomEnd = isUnsetOdometer(r.vehicleOdometerEnd) ? 0 : r.vehicleOdometerEnd || 0
         if (odomBegin) g.minOdom = Math.min(g.minOdom, odomBegin)
         if (odomEnd) g.maxOdom = Math.max(g.maxOdom, odomEnd)
       }

@@ -469,6 +469,8 @@ export default {
   'Speed': 'Viteză',
   'Speed (max / avg)': 'Viteză (max / med.)',
   'Still inserted': 'Încă introdus',
+  "Not recorded in the file": "Neînregistrat în fișier",
+  "The card was still in the slot when this file was downloaded": "Cardul era încă în slot când acest fișier a fost descărcat",
   'Technical': 'Tehnic',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Tahograful stochează 24 de ore de mișcare, deci acest interval poate acoperi multe zile:',
   'Tyre size': 'Dimensiune anvelope',

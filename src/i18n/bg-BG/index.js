@@ -469,6 +469,8 @@ export default {
   'Speed': 'Скорост',
   'Speed (max / avg)': 'Скорост (макс. / средна)',
   'Still inserted': 'Все още поставена',
+  "Not recorded in the file": "Не е записано във файла",
+  "The card was still in the slot when this file was downloaded": "Картата все още беше в слота, когато този файл беше изтеглен",
   'Technical': 'Техническа',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Тахографът съхранява 24 часа движение, затова този период може да обхваща много дни:',
   'Tyre size': 'Размер на гумите',

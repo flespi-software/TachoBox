@@ -80,8 +80,13 @@ that script must still run.
   disc, violation periods) must stay UTC regardless of the time-zone setting, or
   they desync from the bars they sit next to. `format.js` has separate helpers
   for this - use them instead of the instant formatters.
-- `MAX_TS` (`0xFFFFFFFF`) and `MAX_ODO` (`0xFFFFFF`) are "not set" sentinels and
-  must be filtered before display.
+- `MAX_TS` (`0xFFFFFFFF`), `MAX_ODO` (`0xFFFFFF`) and `MAX_SERIAL` are "not set"
+  fillers written by the recorder, not missing values - they decode as a date in
+  2106 or a 16 777 215 km odometer. Check with `isUnsetTime` / `isUnsetOdometer`
+  from `format.js` before displaying **and before any arithmetic** (a filler
+  minus a real odometer reading is a 16-million-km trip), and show
+  `NOT_RECORDED` or a named state such as "Still inserted" rather than a blank
+  cell, so the user can tell "the file does not say" from "nothing happened".
 
 ## Internationalization
 

@@ -30,7 +30,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { formatDate, formatDateTime, MAX_ODO, MAX_TS } from 'src/utils/format'
+import { formatDate, formatDateTime, formatOdometer, isUnsetOdometer, isUnsetTime, MAX_SERIAL } from 'src/utils/format'
 import RecordTable from './RecordTable.vue'
 
 // Equipment data from a vehicle unit download: what the recorder is, how it was
@@ -47,12 +47,12 @@ export default defineComponent({
 
     // Serial numbers arrive as an object; monthYear is a BCD MMYY string.
     const serial = (s) => {
-      if (!s || s.serialNumber == null || s.serialNumber === 4294967295) return ''
+      if (!s || s.serialNumber == null || s.serialNumber === MAX_SERIAL) return ''
       const my = s.monthYear && s.monthYear !== 'FFFF' ? ` (${s.monthYear.slice(0, 2)}/${s.monthYear.slice(2)})` : ''
       return `${s.serialNumber}${my}`
     }
-    const odo = (v) => (v == null || v >= MAX_ODO ? '' : `${v.toLocaleString()} ${t('km')}`)
-    const time = (v) => (!v || v >= MAX_TS ? '' : formatDateTime(v))
+    const odo = (v) => (isUnsetOdometer(v) ? '' : `${formatOdometer(v)} ${t('km')}`)
+    const time = (v) => (isUnsetTime(v) ? '' : formatDateTime(v))
 
     const identification = computed(() => {
       const id = props.data?.identification

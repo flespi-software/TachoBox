@@ -13,13 +13,12 @@
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { nationName } from 'src/reference'
-import { formatDate, MAX_ODO } from 'src/utils/format'
+import { formatDate, isUnsetOdometer, NOT_RECORDED } from 'src/utils/format'
 import EuroPlate from 'src/components/EuroPlate.vue'
 import RecordTable from './RecordTable.vue'
 
 function validOdo(v) {
-  if (v === undefined || v === null || v >= MAX_ODO) return null
-  return v
+  return isUnsetOdometer(v) ? null : v
 }
 
 export default defineComponent({
@@ -53,12 +52,12 @@ export default defineComponent({
           firstUseTs: r.vehicleFirstUse,
           firstUseStr: formatDate(r.vehicleFirstUse),
           lastUseStr: formatDate(r.vehicleLastUse),
-          odometerBegin: validOdo(r.vehicleOdometerBegin) ?? '—',
-          odometerEnd: validOdo(r.vehicleOdometerEnd) ?? '—',
+          odometerBegin: validOdo(r.vehicleOdometerBegin) ?? NOT_RECORDED,
+          odometerEnd: validOdo(r.vehicleOdometerEnd) ?? NOT_RECORDED,
           distance: validOdo(r.vehicleOdometerBegin) !== null && validOdo(r.vehicleOdometerEnd) !== null
             ? r.vehicleOdometerEnd - r.vehicleOdometerBegin
-            : '—',
-          blockCounter: r.vuDataBlockCounter || '—',
+            : NOT_RECORDED,
+          blockCounter: r.vuDataBlockCounter || NOT_RECORDED,
         }))
         .sort((a, b) => a.firstUseTs - b.firstUseTs),
     )

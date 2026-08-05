@@ -469,6 +469,8 @@ export default {
   'Speed': 'Hastighet',
   'Speed (max / avg)': 'Hastighet (max / snitt)',
   'Still inserted': 'Fortfarande isatt',
+  "Not recorded in the file": "Inte registrerat i filen",
+  "The card was still in the slot when this file was downloaded": "Kortet satt fortfarande i kortplatsen när denna fil laddades ned",
   'Technical': 'Teknisk',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Färdskrivaren lagrar 24 timmars rörelse, så denna period kan omfatta många dagar:',
   'Tyre size': 'Däckdimension',

@@ -469,6 +469,8 @@ export default {
   'Speed': 'Greitis',
   'Speed (max / avg)': 'Greitis (maks. / vid.)',
   'Still inserted': 'Vis dar įdėta',
+  "Not recorded in the file": "Faile neužfiksuota",
+  "The card was still in the slot when this file was downloaded": "Kortelė vis dar buvo lizde, kai šis failas buvo atsisiųstas",
   'Technical': 'Techniniai',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Tachografas saugo 24 valandas judėjimo, todėl šis laikotarpis gali apimti daug dienų:',
   'Tyre size': 'Padangų dydis',

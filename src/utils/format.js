@@ -19,8 +19,31 @@ import { ref } from 'vue'
 export const SECONDS_PER_DAY = 86400
 
 // "Not set" / "not available" sentinels used across the tachograph data model.
+// A field the recorder never filled in is stored as all ones (Reg. 2016/799,
+// Appendix 1), so it decodes as a plausible-looking number: a timestamp in 2106
+// or an odometer of 16 777 215 km. Never display one, and never do arithmetic
+// with it - check with the helpers below first.
 export const MAX_TS = 4294967295 // 0xFFFFFFFF - timestamp not set
 export const MAX_ODO = 16777215 //  0xFFFFFF   - odometer not available
+export const MAX_SERIAL = 4294967295 // 0xFFFFFFFF - serial number not set
+
+// What the UI shows in place of a value the file does not carry.
+export const NOT_RECORDED = '—'
+
+/** True when a timestamp is absent or carries the "not set" filler. */
+export function isUnsetTime(ts) {
+  return ts == null || ts === 0 || ts >= MAX_TS
+}
+
+/** True when an odometer reading is absent or carries the "not set" filler. */
+export function isUnsetOdometer(v) {
+  return v == null || v >= MAX_ODO
+}
+
+/** Format an odometer reading in km, or a dash if the file does not carry it. */
+export function formatOdometer(v) {
+  return isUnsetOdometer(v) ? NOT_RECORDED : v.toLocaleString()
+}
 
 // Selectable date layouts. The value is the BCP-47 locale that produces that
 // numeric date order; time is always rendered 24-hour regardless (see below).
@@ -60,7 +83,7 @@ export function dayStart(ts) {
 
 /** Format a UNIX-seconds timestamp as a date, or a dash if unset. */
 export function formatDate(ts) {
-  if (!ts || ts >= MAX_TS) return '—'
+  if (isUnsetTime(ts)) return NOT_RECORDED
   return new Date(ts * 1000).toLocaleDateString(activeLocale(), {
     day: '2-digit',
     month: '2-digit',
@@ -71,7 +94,7 @@ export function formatDate(ts) {
 
 /** Format a UNIX-seconds timestamp as date + time, or a dash if unset. */
 export function formatDateTime(ts) {
-  if (!ts || ts >= MAX_TS) return '—'
+  if (isUnsetTime(ts)) return NOT_RECORDED
   return new Date(ts * 1000).toLocaleString(activeLocale(), {
     day: '2-digit',
     month: '2-digit',
@@ -85,7 +108,7 @@ export function formatDateTime(ts) {
 
 /** Format a UNIX-seconds timestamp as time only (HH:MM), or a dash if unset. */
 export function formatTimeOfDay(ts) {
-  if (!ts || ts >= MAX_TS) return '—'
+  if (isUnsetTime(ts)) return NOT_RECORDED
   return new Date(ts * 1000).toLocaleTimeString(activeLocale(), {
     hour: '2-digit',
     minute: '2-digit',
@@ -110,6 +133,6 @@ export function formatDayParts(ts, opts) {
 
 /** Long weekday name in the active time zone (pairs with formatDate for headers). */
 export function formatWeekdayLong(ts) {
-  if (!ts || ts >= MAX_TS) return '—'
+  if (isUnsetTime(ts)) return NOT_RECORDED
   return new Date(ts * 1000).toLocaleDateString(activeLocale(), { weekday: 'long', timeZone: timeZone.value })
 }

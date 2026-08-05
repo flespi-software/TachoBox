@@ -267,7 +267,7 @@ import ActivityBar from 'src/components/ActivityBar.vue'
 import ActivityRadar from 'src/components/ActivityRadar.vue'
 import EuroPlate from 'src/components/EuroPlate.vue'
 import { eventTypes as EVENT_TYPES, faultTypes as FAULT_TYPES } from 'src/reference'
-import { formatDate, formatTimeOfDay, formatWeekdayLong } from 'src/utils/format'
+import { formatDate, formatTimeOfDay, formatWeekdayLong, isUnsetOdometer } from 'src/utils/format'
 
 export default defineComponent({
   name: 'DayDetailDialog',
@@ -558,9 +558,8 @@ export default defineComponent({
       )
       if (!v) return null
       const reg = v.vehicleRegistration
-      const ODOM_NA = 16777215
-      const odomStart = v.vehicleOdometerBegin && v.vehicleOdometerBegin < ODOM_NA ? v.vehicleOdometerBegin : null
-      const odomEnd = v.vehicleOdometerEnd && v.vehicleOdometerEnd < ODOM_NA ? v.vehicleOdometerEnd : null
+      const odomStart = isUnsetOdometer(v.vehicleOdometerBegin) ? null : v.vehicleOdometerBegin || null
+      const odomEnd = isUnsetOdometer(v.vehicleOdometerEnd) ? null : v.vehicleOdometerEnd || null
       return {
         plateNumber: reg?.vehicleRegistrationNumber || '',
         nationCode: reg?.vehicleRegistrationNation ?? null,

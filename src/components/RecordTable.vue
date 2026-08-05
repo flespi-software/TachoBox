@@ -14,6 +14,21 @@
     :style="tableStyle"
     @row-click="onRowClick"
   >
+    <!-- Default cell rendering. Its only job is to mark the placeholder the
+         formatters emit for values the file does not carry, so an empty-looking
+         cell is not read as "nothing happened". Columns with their own
+         #body-cell-<name> slot take priority over this. -->
+    <template #body-cell="cellProps">
+      <q-td :props="cellProps">
+        <span
+          v-if="cellProps.value === NOT_RECORDED"
+          class="text-grey"
+          :title="$t('Not recorded in the file')"
+        >{{ NOT_RECORDED }}</span>
+        <template v-else>{{ cellProps.value }}</template>
+      </q-td>
+    </template>
+
     <!-- Forward any slots (e.g. a custom #body) to the underlying q-table -->
     <template v-for="(_, name) in $slots" #[name]="slotProps">
       <slot :name="name" v-bind="slotProps ?? {}" />
@@ -23,6 +38,7 @@
 
 <script setup>
 import { inject, ref } from 'vue'
+import { NOT_RECORDED } from 'src/utils/format'
 
 const props = defineProps({
   rows: { type: Array, required: true },

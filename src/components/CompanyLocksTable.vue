@@ -5,7 +5,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { formatDateTime, MAX_TS } from 'src/utils/format'
+import { formatDateTime, isUnsetTime } from 'src/utils/format'
 import RecordTable from './RecordTable.vue'
 
 export default defineComponent({
@@ -35,7 +35,7 @@ export default defineComponent({
           cardId: r.FullCardNumberAndGeneration?.FullCardNumber?.driverIdentification || '—',
           lockInTs: r.lockInTime || 0,
           lockInStr: formatDateTime(r.lockInTime),
-          lockOutStr: r.lockOutTime >= MAX_TS ? t('Active') : formatDateTime(r.lockOutTime),
+          lockOutStr: isUnsetTime(r.lockOutTime) ? t('Active') : formatDateTime(r.lockOutTime),
         }))
         .sort((a, b) => b.lockInTs - a.lockInTs),
     )

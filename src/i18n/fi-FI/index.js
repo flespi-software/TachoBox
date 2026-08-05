@@ -468,6 +468,8 @@ export default {
   'Speed': 'Nopeus',
   'Speed (max / avg)': 'Nopeus (maks. / keskim.)',
   'Still inserted': 'Yhä asetettuna',
+  "Not recorded in the file": "Ei tallennettu tiedostoon",
+  "The card was still in the slot when this file was downloaded": "Kortti oli yhä korttipaikassa, kun tämä tiedosto ladattiin",
   'Technical': 'Tekniset',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Ajopiirturi tallentaa 24 tuntia liikettä, joten tämä jakso voi kattaa useita päiviä:',
   'Tyre size': 'Rengaskoko',

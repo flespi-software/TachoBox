@@ -468,6 +468,8 @@ export default {
   'Speed': 'Snelheid',
   'Speed (max / avg)': 'Snelheid (max / gem.)',
   'Still inserted': 'Nog ingestoken',
+  "Not recorded in the file": "Niet vastgelegd in het bestand",
+  "The card was still in the slot when this file was downloaded": "De kaart zat nog in de sleuf toen dit bestand werd gedownload",
   'Technical': 'Technisch',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'De tachograaf bewaart 24 uur beweging, dus deze periode kan vele dagen beslaan:',
   'Tyre size': 'Bandenmaat',

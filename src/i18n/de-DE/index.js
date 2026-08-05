@@ -469,6 +469,8 @@ export default {
   'Speed': 'Geschwindigkeit',
   'Speed (max / avg)': 'Geschwindigkeit (max. / Durchschn.)',
   'Still inserted': 'Noch eingesteckt',
+  "Not recorded in the file": "In der Datei nicht erfasst",
+  "The card was still in the slot when this file was downloaded": "Die Karte steckte noch im Schacht, als diese Datei heruntergeladen wurde",
   'Technical': 'Technisch',
   'The tachograph stores 24 hours of movement, so this window can span many days:': 'Der Tachograph speichert 24 Stunden Bewegung, daher kann dieser Zeitraum viele Tage umfassen:',
   'Tyre size': 'Reifengröße',

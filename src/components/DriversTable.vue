@@ -6,6 +6,26 @@
     clickable
     @day-click="$emit('day-click', $event)"
   >
+    <template #body-cell-withdrawn="cellProps">
+      <q-td :props="cellProps">
+        <span
+          v-if="cellProps.row.stillInserted"
+          class="text-grey"
+          :title="t('The card was still in the slot when this file was downloaded')"
+        >
+          <q-icon name="mdi-alert" size="14px" class="text-warning q-mr-xs" />{{ t('Still inserted') }}
+        </span>
+        <span v-else>{{ cellProps.row.withdrawnStr }}</span>
+      </q-td>
+    </template>
+
+    <template #body-cell-distance="cellProps">
+      <q-td :props="cellProps">
+        <span v-if="cellProps.row.distanceStr">{{ cellProps.row.distanceStr }}</span>
+        <span v-else class="text-grey" :title="t('Not recorded in the file')">{{ NOT_RECORDED }}</span>
+      </q-td>
+    </template>
+
     <template #body-cell-previous="cellProps">
       <q-td :props="cellProps">
         <EuroPlate
@@ -21,7 +41,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { formatDateTime, dayStart } from 'src/utils/format'
+import { formatDateTime, dayStart, isUnsetTime, isUnsetOdometer, NOT_RECORDED } from 'src/utils/format'
 import EuroPlate from 'src/components/EuroPlate.vue'
 import RecordTable from './RecordTable.vue'
 
@@ -55,9 +75,13 @@ export default defineComponent({
           const card = r.FullCardNumberAndGeneration?.FullCardNumber || r.FullCardNumber || {}
           const name = [r.cardHolderName?.holderSurname, r.cardHolderName?.holderFirstNames]
             .filter(Boolean).join(' ')
+          const prev = r.previousVehicleInfo || {}
+          // Both readings are fillers when the card was still inserted at
+          // download time, so the pair is usable only when neither is unset.
           const begin = r.vehicleOdometerValueAtInsertion
           const end = r.vehicleOdometerValueAtWithdrawal
-          const prev = r.previousVehicleInfo || {}
+          const hasDistance = !isUnsetOdometer(begin) && !isUnsetOdometer(end) && end >= begin
+          const stillInserted = isUnsetTime(r.cardWithdrawalTime)
           return {
             id: i,
             driver: name || t('Unknown'),
@@ -67,12 +91,11 @@ export default defineComponent({
             insertedTs: r.cardInsertionTime || 0,
             dayTs: dayStart(r.cardInsertionTime || 0),
             insertedStr: formatDateTime(r.cardInsertionTime),
-            // A withdrawal time of 0 means the card was still inserted when the
-            // file was downloaded.
-            withdrawnStr: r.cardWithdrawalTime ? formatDateTime(r.cardWithdrawalTime) : t('Still inserted'),
-            distanceStr: begin != null && end != null && end >= begin
-              ? `${(end - begin).toLocaleString()} ${t('km')}`
-              : '',
+            // The withdrawal time is 0 or the "not set" filler when the card was
+            // still in the slot at download time; rendered by the cell slot.
+            stillInserted,
+            withdrawnStr: stillInserted ? '' : formatDateTime(r.cardWithdrawalTime),
+            distanceStr: hasDistance ? `${(end - begin).toLocaleString()} ${t('km')}` : '',
             // Rendered as a plate by the #body-cell-previous slot; the plain
             // string stays as the sort/filter value for the column.
             previous: prev.vehicleRegistrationNumber || '',
@@ -83,7 +106,7 @@ export default defineComponent({
         .sort((a, b) => b.insertedTs - a.insertedTs),
     )
 
-    return { columns, rows }
+    return { columns, rows, t, NOT_RECORDED }
   },
 })
 </script>

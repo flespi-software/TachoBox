@@ -52,7 +52,7 @@ import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { nationName } from 'src/reference'
 import { useDddStore } from 'src/stores/ddd'
-import { formatDate, formatDateTime, MAX_ODO } from 'src/utils/format'
+import { formatDate, formatDateTime, isUnsetOdometer } from 'src/utils/format'
 import EuroPlate from 'src/components/EuroPlate.vue'
 
 export default defineComponent({
@@ -80,7 +80,7 @@ export default defineComponent({
       let odometer = null
       if (first) {
         const odo = first.vehicleOdometerEnd || first.vehicleOdometerBegin
-        if (odo && odo < MAX_ODO) odometer = odo
+        if (odo && !isUnsetOdometer(odo)) odometer = odo
       }
 
       let period = ''
