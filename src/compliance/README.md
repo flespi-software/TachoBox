@@ -30,7 +30,7 @@ node ~/compliance/example.mjs
 You should see output like this:
 
 ```
-Compliance engine, rule set 1.0.0
+Compliance engine, rule set 1.1.0
 8 days analysed, 27 violations, 0 anomalies
 
 2026-06-01  very-serious   Art.7     Continuous driving 6h exceeds 4h30 limit without 45min break
@@ -118,7 +118,8 @@ weekly and rest rules span day boundaries.
 | `analyzeDailyRest(records)`     | Art.8.2 | insufficient daily rest |
 | `analyzeWeeklyRest(records)`    | Art.8.6 | weekly rest interval / pairing / compensation |
 | `analyzeWeeklyViolations(records)` | Art.6.2, 6.3 | an **object** `{ weeklyViolations, biweeklyViolations }`, not an array |
-| `detectUsageErrors(records, places, events)` | Reg.165/2014 Art.34 | missing markings, improper card removal |
+| `detectUsageErrors(records, places, events, {placesTruncatedBefore})` | Reg.165/2014 Art.34 | missing markings, improper card removal. Pass the boundary from `placeBufferBoundary`, or the overwritten period cannot be told apart from genuinely unmarked work |
+| `placeBufferBoundary(places, placeCapacity)` | - | Point before which place markings were overwritten, or `null` while the buffer has room. Compute it over the **complete** place set |
 | `detectAnomalies(records, events)` | - | data gaps, suspicious events, unaccounted time |
 | `crossReference(sources)` | - | driver-card vs vehicle-unit discrepancies |
 | `dayStatusMap(records)` | - | `Map<dayTs, 'red'|'amber'|'grey'>` for calendars/timelines |
@@ -147,8 +148,8 @@ to produce it:
 import { detectAndNormalize, mergeRecordSets } from './utils/ddd.js'
 
 const source = detectAndNormalize(parsedDddJson)
-const { activityRecords, placeRecords, eventRecords } =
-  mergeRecordSets([source], source.g2 ? 'g2' : 'g1')
+const { activityRecords, placeRecords, placeCapacity, eventRecords } =
+  mergeRecordSets([source], source.generation)
 ```
 
 ```js
@@ -203,7 +204,9 @@ const { weeklyViolations, biweeklyViolations } = analyzeWeeklyViolations(activit
 const violations = [...perDay, ...spanning, ...weeklyViolations, ...biweeklyViolations]
 
 // Separate categories, not violations - see the severity note below.
-const usageErrors = detectUsageErrors(activityRecords, placeRecords, eventRecords)
+const usageErrors = detectUsageErrors(activityRecords, placeRecords, eventRecords, {
+  placesTruncatedBefore: placeBufferBoundary(placeRecords, placeCapacity),
+})
 const anomalies = detectAnomalies(activityRecords, eventRecords)
 ```
 
@@ -349,6 +352,22 @@ a regular weekly rest -- without that guard, a long mid-week daily rest pairs
 with the real weekly rest and produces a false positive. Compensation for a
 reduced weekly rest is satisfied by any later rest block within 21 days lasting
 at least the shortfall plus 9h.
+
+**Place markings are only judged where the record survives.** A card stores its
+place entries in a ring buffer of `noOfCardPlaceRecords` slots while its activity
+data reaches back much further. Once that buffer wraps it discards the oldest
+entries, so before the earliest retained marking a missing one proves nothing.
+`placeBufferBoundary(places, capacity)` returns that point, or `null` while the
+buffer still has room - with slots free nothing was lost and every missing
+marking is real. Pass it to `detectUsageErrors` as `{ placesTruncatedBefore }`.
+
+Two things this hinges on. It is the *capacity*, not the earliest record, that
+decides: on one card measured here the rule turned 893 findings into 2, while a
+reference card with 103 of 112 slots used must keep all of its findings to agree
+with the official infringement report. And the boundary must be derived from the
+**complete** place set - hand it a date-filtered slice and a full buffer looks
+like it still has room, so suppression quietly switches off and the findings come
+back.
 
 **Data gaps are skipped, not flagged.** If the span between two rests contains
 more than an hour of uncovered timeline, the interval is not assessed. This

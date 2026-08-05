@@ -145,6 +145,23 @@
                   >
                   <q-tooltip>{{ $t('Roadside inspection and control records') }}</q-tooltip>
                 </q-tab>
+                <q-tab v-if="dddStore.unfilteredCounts.drivers && isTabVisible('drivers')" name="drivers" icon="mdi-account-multiple">
+                  <span
+                    >{{ $t('Drivers') }}
+                    <q-badge color="primary" floating>{{
+                      dddStore.driverRecords.length
+                    }}</q-badge></span
+                  >
+                  <q-tooltip>{{ $t('Driver cards used in this vehicle unit') }}</q-tooltip>
+                </q-tab>
+                <q-tab v-if="dddStore.unfilteredCounts.speed && isTabVisible('speed')" name="speed" icon="mdi-speedometer">
+                  <span>{{ $t('Speed') }}</span>
+                  <q-tooltip>{{ $t('Per-second speed recorded by the vehicle unit') }}</q-tooltip>
+                </q-tab>
+                <q-tab v-if="dddStore.unfilteredCounts.technical && isTabVisible('technical')" name="technical" icon="mdi-cog-outline">
+                  <span>{{ $t('Technical') }}</span>
+                  <q-tooltip>{{ $t('Vehicle unit identification, calibrations and paired sensors') }}</q-tooltip>
+                </q-tab>
                 <q-tab v-if="dddStore.unfilteredCounts.mapPoints && isTabVisible('map')" name="map" icon="mdi-map">
                   <span
                     >{{ $t('Map') }}
@@ -438,6 +455,22 @@
                 />
               </q-tab-panel>
 
+              <q-tab-panel v-if="dddStore.unfilteredCounts.drivers" name="drivers" class="q-pa-none">
+                <DriversTable
+                  :records="dddStore.driverRecords"
+                  :tableStyle="tableStyle"
+                  @day-click="onDayClick"
+                />
+              </q-tab-panel>
+
+              <q-tab-panel v-if="dddStore.unfilteredCounts.speed" name="speed" class="q-pa-none">
+                <SpeedPanel :blocks="dddStore.speedBlocks" :authorised-speed="dddStore.authorisedSpeed" :activity-records="dddStore.activityRecords" />
+              </q-tab-panel>
+
+              <q-tab-panel v-if="dddStore.unfilteredCounts.technical" name="technical" class="q-pa-none">
+                <TechnicalDataPanel :data="dddStore.technicalData" />
+              </q-tab-panel>
+
               <q-tab-panel v-if="dddStore.unfilteredCounts.mapPoints" name="map" class="q-pa-none">
                 <GnssMap
                   :records="dddStore.gnssRecords"
@@ -534,6 +567,21 @@
                 <div class="print-title">{{ $t('Controls') }}</div>
                 <ControlActivityTable :records="dddStore.controlActivityRecords" />
               </div>
+
+              <div v-if="dddStore.unfilteredCounts.drivers" class="print-section">
+                <div class="print-title">{{ $t('Drivers') }}</div>
+                <DriversTable :records="dddStore.driverRecords" />
+              </div>
+
+              <div v-if="dddStore.unfilteredCounts.speed" class="print-section">
+                <div class="print-title">{{ $t('Speed') }}</div>
+                <SpeedPanel :blocks="dddStore.speedBlocks" :authorised-speed="dddStore.authorisedSpeed" :activity-records="dddStore.activityRecords" />
+              </div>
+
+              <div v-if="dddStore.unfilteredCounts.technical" class="print-section">
+                <div class="print-title">{{ $t('Technical') }}</div>
+                <TechnicalDataPanel :data="dddStore.technicalData" />
+              </div>
             </div>
           </q-card>
         </div>
@@ -626,6 +674,9 @@ import DownloadActivityTable from 'src/components/DownloadActivityTable.vue'
 import BorderCrossingsTable from 'src/components/BorderCrossingsTable.vue'
 import LoadUnloadTable from 'src/components/LoadUnloadTable.vue'
 import ControlActivityTable from 'src/components/ControlActivityTable.vue'
+import DriversTable from 'src/components/DriversTable.vue'
+import TechnicalDataPanel from 'src/components/TechnicalDataPanel.vue'
+import SpeedPanel from 'src/components/SpeedPanel.vue'
 import PointsMap from 'src/components/PointsMap.vue'
 import DateRangeBar from 'src/components/DateRangeBar.vue'
 import DayDetailDialog from 'src/components/DayDetailDialog.vue'
@@ -667,6 +718,9 @@ export default defineComponent({
     BorderCrossingsTable,
     LoadUnloadTable,
     ControlActivityTable,
+    DriversTable,
+    TechnicalDataPanel,
+    SpeedPanel,
     PointsMap,
     DateRangeBar,
     DayDetailDialog,
@@ -716,7 +770,7 @@ export default defineComponent({
       return d ? Number(d) : null
     })
 
-    const ALL_TABS = ['overview', 'activities', 'vehicles', 'places', 'events', 'faults', 'conditions', 'compliance', 'locks', 'downloads', 'borders', 'cargo', 'controls', 'map']
+    const ALL_TABS = ['overview', 'activities', 'vehicles', 'places', 'events', 'faults', 'conditions', 'compliance', 'locks', 'downloads', 'borders', 'cargo', 'controls', 'drivers', 'speed', 'technical', 'map']
     function isTabVisible(name) {
       return !allowedTabs.value || allowedTabs.value.has(name)
     }
@@ -787,7 +841,7 @@ export default defineComponent({
         anomalies += day.anomalies.length
       }
       // EU165 usage errors (34.x) are shown in the compliance panel too - count them.
-      const usage = detectUsageErrors(dddStore.activityRecords, dddStore.placeRecords, dddStore.eventRecords).length
+      const usage = detectUsageErrors(dddStore.activityRecords, dddStore.placeRecords, dddStore.eventRecords, { placesTruncatedBefore: dddStore.placesTruncatedBefore }).length
       const violationColor = violations ? 'sev-very-serious' : ''
       return { violations, uncertain, anomalies, usage, violationColor }
     })
@@ -869,10 +923,10 @@ export default defineComponent({
 
     const cargoMapPoints = computed(() =>
       dddStore.loadUnloadRecords
-        .filter((r) => isValidGeo(r.GNSSPlaceAuthRecord?.geoCoordinates))
+        .filter((r) => isValidGeo(r.gnssPlaceAuthRecord?.geoCoordinates))
         .map((r) => ({
-          lat: r.GNSSPlaceAuthRecord.geoCoordinates.latitude,
-          lng: r.GNSSPlaceAuthRecord.geoCoordinates.longitude,
+          lat: r.gnssPlaceAuthRecord.geoCoordinates.latitude,
+          lng: r.gnssPlaceAuthRecord.geoCoordinates.longitude,
           time: r.timeStamp,
           color: r.operationType === 1 ? '#66bb6a' : '#ef5350',
           popup: `<b>${r.operationType === 1 ? t('Load') : t('Unload')}</b><br>${formatDateTime(r.timeStamp)}`,

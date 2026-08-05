@@ -55,7 +55,10 @@ const label = computed(() => {
 
 const caption = computed(() => {
   const typePart = props.src.type === 'driver-card' ? t('Driver Card') : t('VU Daily')
-  const genPart = props.src.g2 ? 'G1+G2' : 'G1'
+  // A vehicle unit file states its generation outright; a card is labelled by
+  // which applications it actually carries.
+  const by = props.src.byGeneration || {}
+  const genPart = by.g1 && by.g2 ? 'G1+G2' : (props.src.generation || 'g1').toUpperCase()
   return `${typePart} · ${genPart}`
 })
 

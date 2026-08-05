@@ -12,7 +12,7 @@
 // or SEVERITY changes, or when the set of detected infringements changes.
 // Reimplementations in other languages should report the version they were
 // ported from, so a divergence shows up instead of going unnoticed.
-export const RULES_VERSION = '1.0.0'
+export const RULES_VERSION = '1.1.0'
 
 const H = (h) => Math.round(h * 60) // hours -> minutes
 

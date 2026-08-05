@@ -13,6 +13,7 @@ export {
   dayStatusMap,
   detectAnomalies,
   detectUsageErrors,
+  placeBufferBoundary,
   crossReference,
 } from './violations.js'
 

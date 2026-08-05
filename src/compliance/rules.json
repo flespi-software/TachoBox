@@ -1,5 +1,5 @@
 {
-  "rulesVersion": "1.0.0",
+  "rulesVersion": "1.1.0",
   "units": {
     "limits": "minutes, unless the name says otherwise",
     "severityValue": "minutes (driving time, rest duration or interval)"

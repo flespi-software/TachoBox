@@ -26,11 +26,19 @@ export default defineComponent({
   setup(props) {
     const { t } = useI18n()
 
+    // Over-speeding events (vehicle unit files only) carry the speed that
+    // triggered them. The column appears only when some row has one, so a driver
+    // card table keeps its original four columns.
+    const hasSpeed = computed(() => props.records.some((r) => r.maxSpeedValue != null))
+
     const columns = computed(() => [
       { name: 'type', label: t('Event Type'), field: 'typeStr', align: 'left' },
       { name: 'typeCode', label: t('Code'), field: 'typeCode', align: 'center' },
       { name: 'begin', label: t('Begin'), field: 'beginStr', align: 'left' },
       { name: 'end', label: t('End'), field: 'endStr', align: 'left' },
+      ...(hasSpeed.value
+        ? [{ name: 'speed', label: t('Speed (max / avg)'), field: 'speedStr', align: 'right' }]
+        : []),
     ])
 
     const rows = computed(() =>
@@ -43,6 +51,9 @@ export default defineComponent({
           dayTs: dayStart(r.eventBeginTime || 0),
           beginStr: formatDateTime(r.eventBeginTime),
           endStr: formatDateTime(r.eventEndTime),
+          speedStr: r.maxSpeedValue != null
+            ? `${r.maxSpeedValue} / ${r.averageSpeedValue ?? '-'} ${t('km/h')}`
+            : '',
         }))
         .sort((a, b) => a.beginTs - b.beginTs),
     )

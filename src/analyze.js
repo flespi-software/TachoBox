@@ -16,7 +16,7 @@
 //
 // Framework-free: runs in plain Node and in the browser, no dependencies.
 
-import { detectAndNormalize, mergeRecordSets, extractRecords, isCompatible } from './utils/ddd.js'
+import { detectAndNormalize, mergeRecordSets, extractRecords, isCompatible, sourceData } from './utils/ddd.js'
 import {
   analyzeDayViolations,
   analyzeDailyDriving,
@@ -24,6 +24,7 @@ import {
   analyzeWeeklyRest,
   analyzeWeeklyViolations,
   detectUsageErrors,
+  placeBufferBoundary,
   detectAnomalies,
   RULES_VERSION,
 } from './compliance/index.js'
@@ -50,12 +51,14 @@ const shape = (v) => ({
 
 // Per-source summary (type, generation used, holder, day count and date range).
 function describeSource(src, usedGen) {
-  const data = usedGen === 'g2' && src.g2 ? src.g2 : src.g1
+  const data = sourceData(src, usedGen)
   const days = extractRecords(data).activityRecords.filter((r) => r.activityChangeInfo?.length)
   const dates = days.map((r) => r.activityRecordDate).sort((a, b) => a - b)
   return {
     type: src.type,
-    generation: usedGen === 'g2' && src.g2 ? 'g2' : 'g1',
+    // For a card this is the application actually used for this run; a vehicle
+    // unit has only one generation and reports it regardless of what was asked.
+    generation: src.byGeneration?.[usedGen] ? usedGen : src.generation,
     holder: src.name || undefined,
     days: days.length,
     range: dates.length ? { from: isoDay(dates[0]), to: isoDay(dates[dates.length - 1]) } : null,
@@ -83,8 +86,8 @@ export function analyze(input, { gen } = {}) {
   }
   const valid = sources
 
-  const usedGen = gen || (valid.some((s) => s.g2) ? 'g2' : 'g1')
-  const { activityRecords, placeRecords, eventRecords } = mergeRecordSets(valid, usedGen)
+  const usedGen = gen || (valid.some((s) => s.byGeneration?.g2) ? 'g2' : 'g1')
+  const { activityRecords, placeRecords, placeCapacity, eventRecords } = mergeRecordSets(valid, usedGen)
 
   // Same call sequence as the UI's CompliancePanel.
   const withDay = (v, dayTs) => ({ ...v, dayTs: v.dayTs ?? dayTs })
@@ -104,7 +107,9 @@ export function analyze(input, { gen } = {}) {
   const weekly = [...weeklyViolations, ...biweeklyViolations].map((v) => withDay(v, v.weekStart))
 
   const violations = [...perDay, ...rest, ...weekly].sort((a, b) => (a.dayTs || 0) - (b.dayTs || 0))
-  const usageErrors = detectUsageErrors(activityRecords, placeRecords, eventRecords)
+  const usageErrors = detectUsageErrors(activityRecords, placeRecords, eventRecords, {
+    placesTruncatedBefore: placeBufferBoundary(placeRecords, placeCapacity),
+  })
   const anomalies = detectAnomalies(activityRecords, eventRecords)
 
   return {

@@ -259,7 +259,7 @@ export default defineComponent({
     })
 
     const usageErrors = computed(() => {
-      const raw = detectUsageErrors(dddStore.activityRecords, dddStore.placeRecords, dddStore.eventRecords)
+      const raw = detectUsageErrors(dddStore.activityRecords, dddStore.placeRecords, dddStore.eventRecords, { placesTruncatedBefore: dddStore.placesTruncatedBefore })
       return raw.map((e) => {
         const dayTs = e.ts ? e.ts - (e.ts % 86400) : null
         const dateStr = e.ts ? formatDateTime(e.ts) : ''
@@ -336,7 +336,11 @@ export default defineComponent({
     // errors, anomalies, cross-reference findings). An array index key would let
     // Vue patch the wrong row - and carry over a stale tooltip - when the lists
     // are re-filtered by the category/severity toggles above.
-    const rowKey = (x) => [x.type, x.code, x.dayTs ?? x.ts ?? x.weekStart, x.minutes, x.startMin, x.message].join('|')
+    // The exact `ts` must win over `dayTs`: usage errors carry both, and dayTs is
+    // rounded to midnight, so two findings of the same kind on one day would
+    // otherwise collide. Duplicate keys corrupt Vue's list patching and surface
+    // as "Cannot read properties of null" from deep inside the renderer.
+    const rowKey = (x) => [x.type, x.code, x.ts ?? x.dayTs ?? x.weekStart, x.minutes, x.startMin, x.message].join('|')
 
     return {
       settingsStore,

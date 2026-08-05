@@ -59,7 +59,7 @@ export default defineComponent({
       return props.records
         .map((r, i) => {
           const ts = r.timeStamp || 0
-          const geo = r.GNSSPlaceAuthRecord?.geoCoordinates
+          const geo = r.gnssPlaceAuthRecord?.geoCoordinates
           const valid = isValidGeo(geo)
           return {
             id: i,

@@ -18,21 +18,13 @@
       <q-tr :props="props" :class="{ 'highlight-row': props.row.date === highlightDate }" @click="$emit('day-click', props.row.date)" style="cursor: pointer">
         <q-td v-for="col in props.cols" :key="col.name" :props="props">
           <template v-if="col.name === 'timeline'">
-            <div class="activity-timeline" @mousemove="onSegHover($event, props.row)" @mouseleave="$event.currentTarget.title = ''">
-              <div class="activity-fill" :style="{ background: rowGradient(props.row) }" />
-              <div
-                v-for="(seg, i) in cardOutSegs(props.row)"
-                :key="'co' + i"
-                class="card-out-hatch"
-                :style="{ left: seg.startPct + '%', width: seg.widthPct + '%' }"
-              />
-              <div
-                v-for="(m, mi) in timelineMarkers(props.row.date)"
-                :key="'m' + mi"
-                class="timeline-marker"
-                :style="{ left: m.pct + '%' }"
-              />
-            </div>
+            <ActivityBar
+              class="activity-timeline"
+              :segments="props.row.segments"
+              :hidden-activities="hiddenActivities"
+              :markers="timelineMarkers(props.row.date)"
+              min-width="180px"
+            />
           </template>
           <template v-else-if="col.name === 'distance'">
             <div v-if="props.row.distPct" class="dist-cell">
@@ -100,10 +92,12 @@
 import { defineComponent, computed, ref, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { formatDuration, buildDaySegments } from 'src/utils/activity'
+import ActivityBar from 'src/components/ActivityBar.vue'
 import { formatDate } from 'src/utils/format'
 
 export default defineComponent({
   name: 'ActivityTable',
+  components: { ActivityBar },
   inject: { printMode: { default: () => ref(false) } },
   props: {
     records: { type: Array, required: true },
@@ -195,34 +189,8 @@ export default defineComponent({
       activeMarker.value = null
     }
 
-    // Whole-row timeline painted as a single CSS gradient (one DOM node instead
-    // of one div per segment) - far cheaper to render under virtual scroll.
-    const ACT_VAR = {
-      DRIVING: 'var(--act-driving)', WORK: 'var(--act-work)',
-      AVAILABILITY: 'var(--act-availability)', 'BREAK/REST': 'var(--act-rest)',
-    }
-    function rowGradient(row) {
-      const parts = []
-      for (const s of row.segments) {
-        const col = props.hiddenActivities.has(s.activity) ? 'transparent' : (ACT_VAR[s.activity] || 'var(--act-rest)')
-        parts.push(`${col} ${s.startPct.toFixed(3)}% ${(s.startPct + s.widthPct).toFixed(3)}%`)
-      }
-      return parts.length ? `linear-gradient(90deg, ${parts.join(', ')})` : 'transparent'
-    }
-    function cardOutSegs(row) {
-      return row.segments.filter((s) => s.cardOut && !props.hiddenActivities.has(s.activity))
-    }
     // Per-segment hover info without per-segment DOM: find the segment under the
     // cursor and set the container's native title imperatively.
-    function onSegHover(e, row) {
-      const el = e.currentTarget
-      const rect = el.getBoundingClientRect()
-      const pct = ((e.clientX - rect.left) / rect.width) * 100
-      const seg = row.segments.find((s) => !props.hiddenActivities.has(s.activity) && pct >= s.startPct && pct < s.startPct + s.widthPct)
-      const title = seg ? `${seg.activity}${seg.cardOut ? ' · ' + t('card not inserted') : ''}: ${seg.startLabel} — ${seg.endLabel}` : ''
-      if (el.title !== title) el.title = title
-    }
-
     function timelineMarkers(date) {
       const m = activeMarker.value
       if (!m || m.date !== date) return []
@@ -249,45 +217,15 @@ export default defineComponent({
       return 'blue-grey'
     }
 
-    return { tableRef, columns, rows, highlightDate, onVirtualScroll, violationColor, anomalyColor, setMarker, clearMarker, timelineMarkers, formatMin, rowGradient, cardOutSegs, onSegHover }
+    return { tableRef, columns, rows, highlightDate, onVirtualScroll, violationColor, anomalyColor, setMarker, clearMarker, timelineMarkers, formatMin }
   },
 })
 </script>
 
 <style scoped>
 .activity-timeline {
-  position: relative;
   height: 18px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 3px;
-  overflow: hidden;
-  min-width: 180px;
 }
-.activity-fill {
-  position: absolute;
-  inset: 0;
-  opacity: 0.85;
-}
-
-.card-out-hatch {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  pointer-events: none;
-  background-image: linear-gradient(45deg, rgba(0, 0, 0, 0.18) 25%, transparent 25%, transparent 50%, rgba(0, 0, 0, 0.18) 50%, rgba(0, 0, 0, 0.18) 75%, transparent 75%);
-  background-size: 6px 6px;
-}
-
-.timeline-marker {
-  position: absolute;
-  top: -2px;
-  height: calc(100% + 4px);
-  width: 0;
-  border-left: 2px solid #fff;
-  z-index: 2;
-  pointer-events: none;
-}
-
 .event-icon {
   cursor: pointer;
 }

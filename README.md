@@ -2,7 +2,7 @@
 
 Web-based viewer for tachograph DDD files parsed into JSON. Works with driver card and vehicle unit (VU) data, Gen1 and Gen2 formats, and analyses driving and rest times against EU Regulation 561/2006.
 
-**[Live demo](https://tachobox.flespi.io/#/?demo=1)** | [Documentation](docs/overview.md) | [MIT licensed](LICENSE)
+**[Live demo](https://tachobox.flespi.io/#/?demo=1)** | [Documentation](docs/overview.md) | [Changelog](CHANGELOG.md) | [MIT licensed](LICENSE)
 
 ![The overview: counts of violations, usage errors and anomalies, the vehicles driven, a daily distance chart, an activity heatmap, a driver profile radar and per-activity totals, with a colour-coded calendar alongside](docs/screenshot.png)
 

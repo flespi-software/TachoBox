@@ -556,14 +556,34 @@ function reconstructCardEvents(records) {
   return events
 }
 
-export function detectUsageErrors(records, placeRecords = [], eventRecords = []) {
+// Where the card's place-record ring buffer has wrapped, i.e. the point before
+// which markings were overwritten and their absence means nothing. Returns null
+// while the buffer still has room - then nothing was lost.
+// MUST be computed over the complete place set: on a date-filtered slice the
+// count looks below capacity and the earliest entry is too late, so the answer
+// comes out wrong in both directions.
+export function placeBufferBoundary(placeRecords = [], placeCapacity = null) {
+  if (placeCapacity == null || placeRecords.length < placeCapacity) return null
+  const times = placeRecords.map((p) => p.entryTime).filter(Boolean)
+  return times.length ? Math.min(...times) - PLACE_MARK_TOLERANCE : null
+}
+
+export function detectUsageErrors(records, placeRecords = [], eventRecords = [], { placesTruncatedBefore = null } = {}) {
   const errors = []
   const begins = placeRecords.filter((p) => (p.entryTypeDailyWorkPeriod || '').startsWith('Begin')).map((p) => p.entryTime)
   const ends = placeRecords.filter((p) => (p.entryTypeDailyWorkPeriod || '').startsWith('End')).map((p) => p.entryTime)
   const near = (ts, arr) => arr.some((a) => Math.abs(ts - a) <= PLACE_MARK_TOLERANCE)
 
+  // Where the place ring buffer has wrapped, markings before the earliest
+  // retained one were overwritten and their absence means nothing. The boundary
+  // arrives from the caller (placeBufferBoundary) because it has to be derived
+  // from the COMPLETE place set: on a date-filtered slice a full buffer looks
+  // like it still has room, and suppression silently switches off.
+  const judgeable = (ts) => placesTruncatedBefore == null || ts >= placesTruncatedBefore
+
   // Art. 34(7) - symbols / start-end marking of the daily work period missing.
   for (const ev of reconstructCardEvents(records)) {
+    if (!judgeable(ev.ts)) continue
     if (ev.kind === 'insert' && !near(ev.ts, begins)) {
       errors.push({
         type: '34.7', code: 'EU165 34.7', severity: 'serious',
@@ -673,11 +693,11 @@ export function crossReference(sources) {
 
   // Compare overlapping dates
   for (const card of driverCards) {
-    const cardData = card.g2 || card.g1
+    const cardData = card.byGeneration?.g2 || card.byGeneration?.g1
     const cardRecords = cardData?.EF_Driver_Activity_Data?.CardDriverActivity?.activityDailyRecords || []
 
     for (const vu of vuDailies) {
-      const vuData = vu.g2 || vu.g1
+      const vuData = vu.byGeneration?.g2 || vu.byGeneration?.g1
       const vuRecords = vuData?.EF_Driver_Activity_Data?.CardDriverActivity?.activityDailyRecords || []
 
       const cardDates = new Set(cardRecords.map((r) => r.activityRecordDate))

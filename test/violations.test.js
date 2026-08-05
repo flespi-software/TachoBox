@@ -20,7 +20,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url))
 function loadDemo(file) {
   const json = JSON.parse(readFileSync(resolve(__dirname, '../public', file), 'utf8'))
   const src = detectAndNormalize(json)
-  const records = extractRecords(src.g1 || src.g2)
+  const records = extractRecords(src.byGeneration.g1 || src.byGeneration.g2)
   return { src, records }
 }
 
@@ -199,7 +199,7 @@ describe('biweekly driving — consecutive weeks only (Art.6.3)', () => {
 // carry the same day with different content the richer record (more activity
 // changes) must survive rather than first-wins, so a day's driving isn't dropped.
 describe('multi-source merge keeps the richer activity record', () => {
-  const mkSource = (records) => ({ g1: { EF_Driver_Activity_Data: { CardDriverActivity: { activityDailyRecords: records } } } })
+  const mkSource = (records) => ({ byGeneration: { g1: { EF_Driver_Activity_Data: { CardDriverActivity: { activityDailyRecords: records } } } } })
   const rich = {
     activityRecordDate: MONDAY,
     activityChangeInfo: [

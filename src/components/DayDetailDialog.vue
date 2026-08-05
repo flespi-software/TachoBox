@@ -44,6 +44,29 @@
           </div>
         </template>
 
+        <!-- Per-second speed, when the vehicle unit retained it for this day.
+             Sits right after the limits so it reads against the day's driving. -->
+        <template v-if="daySpeedBlocks.length">
+          <div class="text-subtitle2 q-mb-xs">
+            <q-icon name="mdi-speedometer" size="xs" class="q-mr-xs" />
+            {{ $t('Speed') }}
+          </div>
+          <div class="q-mb-md">
+            <SpeedChart
+              :blocks="daySpeedBlocks"
+              :authorised-speed="authorisedSpeed"
+              :from="dayTs"
+              :to="dayTs + 86400"
+              :height="110"
+              compact
+            >
+              <template #below>
+                <ActivityBar v-if="segments.length" :segments="segments" :height="10" class="q-mt-xs" />
+              </template>
+            </SpeedChart>
+          </div>
+        </template>
+
         <!-- Violations -->
         <template v-if="settingsStore.showViolations && dayViolations.length">
           <div class="text-subtitle2 q-mb-xs">
@@ -239,6 +262,8 @@ import { useQuasar } from 'quasar'
 import { useSettingsStore } from 'src/stores/settings'
 import { useDddStore } from 'src/stores/ddd'
 import ActivityDisc from 'src/components/ActivityDisc.vue'
+import SpeedChart from 'src/components/SpeedChart.vue'
+import ActivityBar from 'src/components/ActivityBar.vue'
 import ActivityRadar from 'src/components/ActivityRadar.vue'
 import EuroPlate from 'src/components/EuroPlate.vue'
 import { eventTypes as EVENT_TYPES, faultTypes as FAULT_TYPES } from 'src/reference'
@@ -246,7 +271,7 @@ import { formatDate, formatTimeOfDay, formatWeekdayLong } from 'src/utils/format
 
 export default defineComponent({
   name: 'DayDetailDialog',
-  components: { ActivityDisc, ActivityRadar, EuroPlate },
+  components: { ActivityDisc, ActivityRadar, EuroPlate, SpeedChart, ActivityBar },
   props: {
     dayTs: { type: Number, default: null },
   },
@@ -274,6 +299,16 @@ export default defineComponent({
 
     const activityRecord = computed(() =>
       dddStore.activityRecords.find((r) => r.activityRecordDate === props.dayTs),
+    )
+
+    const authorisedSpeed = computed(() => dddStore.authorisedSpeed)
+
+    // Blocks whose minute starts within this day. The vehicle unit keeps only
+    // about 24h of movement, so most days have none.
+    const daySpeedBlocks = computed(() =>
+      dddStore.speedBlocks.filter(
+        (b) => b.speedBlockBeginDate >= props.dayTs && b.speedBlockBeginDate < props.dayTs + 86400,
+      ),
     )
 
     const dayData = computed(() => {
@@ -457,7 +492,7 @@ export default defineComponent({
       dddStore.loadUnloadRecords
         .filter((r) => r.timeStamp >= dayStart.value && r.timeStamp < dayEnd.value)
         .map((r, i) => {
-          const geo = r.GNSSPlaceAuthRecord?.geoCoordinates
+          const geo = r.gnssPlaceAuthRecord?.geoCoordinates
           return {
             id: i,
             time: formatTimeOfDay(r.timeStamp),
@@ -592,6 +627,8 @@ export default defineComponent({
     }
 
     return {
+      daySpeedBlocks,
+      authorisedSpeed,
       show,
       highlightIndex,
       dayMapRef,

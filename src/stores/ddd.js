@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
 
-import { detectAndNormalize, mergeRecordSets, isCompatible } from '../utils/ddd'
+import { detectAndNormalize, mergeRecordSets, isCompatible, sourceData } from '../utils/ddd'
+import { placeBufferBoundary } from '../compliance'
 import { formatDayParts } from '../utils/format'
 
 export const useDddStore = defineStore('ddd', () => {
@@ -20,8 +21,10 @@ export const useDddStore = defineStore('ddd', () => {
 
   const enabledSources = computed(() => sources.value.filter((s) => s.enabled))
 
-  const hasG1 = computed(() => enabledSources.value.some((s) => !!s.g1))
-  const hasG2 = computed(() => enabledSources.value.some((s) => !!s.g2))
+  // Drive the G1/G2 selector: it is only meaningful when some enabled source
+  // actually offers both applications.
+  const hasG1 = computed(() => enabledSources.value.some((s) => !!s.byGeneration?.g1))
+  const hasG2 = computed(() => enabledSources.value.some((s) => !!s.byGeneration?.g2))
 
   // Keep activeGen valid: if no enabled source carries G2 data (e.g. after the
   // last G2 source is disabled or removed), fall back to G1. Without this it
@@ -32,7 +35,7 @@ export const useDddStore = defineStore('ddd', () => {
     if (!enabledSources.value.length) return null
     const driverCard = enabledSources.value.find((s) => s.type === 'driver-card')
     const src = driverCard || enabledSources.value[0]
-    return activeGen.value === 'g2' && src.g2 ? src.g2 : src.g1
+    return sourceData(src, activeGen.value)
   })
 
   const sourceType = computed(() => {
@@ -78,7 +81,7 @@ export const useDddStore = defineStore('ddd', () => {
     }
 
     src.enabled = true
-    if (src.g2 && activeGen.value === 'g1') {
+    if (src.byGeneration?.g2 && activeGen.value === 'g1') {
       activeGen.value = 'g2'
     }
     return null
@@ -119,7 +122,7 @@ export const useDddStore = defineStore('ddd', () => {
 
     sources.value.push(normalized)
 
-    if (normalized.enabled && normalized.g2 && activeGen.value === 'g1') {
+    if (normalized.enabled && normalized.byGeneration?.g2 && activeGen.value === 'g1') {
       activeGen.value = 'g2'
     }
 
@@ -133,7 +136,7 @@ export const useDddStore = defineStore('ddd', () => {
   function enableOnly(index) {
     sources.value.forEach((s, i) => { s.enabled = i === index })
     const src = sources.value[index]
-    if (src?.g2 && activeGen.value === 'g1') activeGen.value = 'g2'
+    if (src?.byGeneration?.g2 && activeGen.value === 'g1') activeGen.value = 'g2'
   }
 
   function removeSource(index) {
@@ -208,6 +211,9 @@ export const useDddStore = defineStore('ddd', () => {
       borders: m.borderCrossingRecords.length,
       cargo: m.loadUnloadRecords.length,
       controls: m.controlActivityRecords.length,
+      drivers: m.driverRecords.length,
+      technical: m.technicalData?.identification ? 1 : 0,
+      speed: m.speedBlocks.length,
     }
   })
 
@@ -225,11 +231,45 @@ export const useDddStore = defineStore('ddd', () => {
   const loadUnloadRecords = computed(() => merged.value.loadUnloadRecords.filter((r) => inRange(r.timeStamp)))
   const loadTypeRecords = computed(() => merged.value.loadTypeRecords.filter((r) => inRange(r.timeStamp)))
   const controlActivityRecords = computed(() => merged.value.controlActivityRecords.filter((r) => inRange(r.controlTime)))
+  // A card can be inserted before the range and withdrawn inside it, so either
+  // end landing in range keeps the record.
+  // Equipment metadata, not time-series, so the date range does not apply.
+  // Derived from the UNFILTERED place set: the date-range filter would make a
+  // full buffer look like it still has room.
+  const placesTruncatedBefore = computed(() =>
+    placeBufferBoundary(merged.value.placeRecords, merged.value.placeCapacity),
+  )
+  const technicalData = computed(() => merged.value.technicalData)
+
+  // The speed the vehicle unit was calibrated to, from the most recent
+  // calibration record. Used as a reference line on the speed chart.
+  const authorisedSpeed = computed(() => {
+    const cals = technicalData.value?.calibrations || []
+    if (!cals.length) return null
+    const latest = [...cals].sort((a, b) => (b.oldTimeValue || 0) - (a.oldTimeValue || 0))[0]
+    return latest.authorisedSpeed || null
+  })
+  // A block covers the minute starting at speedBlockBeginDate.
+  const speedBlocks = computed(() => merged.value.speedBlocks.filter((b) => inRange(b.speedBlockBeginDate)))
+  const driverRecords = computed(() => merged.value.driverRecords.filter((r) => inRange(r.cardInsertionTime) || inRange(r.cardWithdrawalTime)))
   const gnssAuthRecords = computed(() => merged.value.gnssAuthRecords.filter((r) => inRange(r.timeStamp)))
   const placesAuthRecords = computed(() => merged.value.placesAuthRecords.filter((r) => inRange(r.entryTime)))
 
   const warnings = computed(() => {
     const list = []
+
+    // Warnings raised while normalizing a source (e.g. a vehicle unit file
+    // decoded by an outdated parser). These stay on screen as a banner rather
+    // than a transient toast, because they qualify everything shown below.
+    // The warning text is its own i18n key, so it is pushed in {key} form.
+    const seen = new Set()
+    for (const src of sources.value) {
+      if (src.enabled && src.warning && !seen.has(src.warning)) {
+        seen.add(src.warning)
+        list.push({ key: src.warning })
+      }
+    }
+
     const activities = merged.value.activityRecords
     if (activities.length) {
       const tooOld = activities.filter((r) => r.activityRecordDate && r.activityRecordDate < MIN_VALID_TS)
@@ -258,7 +298,7 @@ export const useDddStore = defineStore('ddd', () => {
     let badCoords = 0
     for (const r of m.gnssRecords) if (outOfRange(r.gnssPlaceRecord?.geoCoordinates)) badCoords++
     for (const r of m.borderCrossingRecords) if (outOfRange(r.gnssPlaceAuthRecord?.geoCoordinates)) badCoords++
-    for (const r of m.loadUnloadRecords) if (outOfRange(r.GNSSPlaceAuthRecord?.geoCoordinates)) badCoords++
+    for (const r of m.loadUnloadRecords) if (outOfRange(r.gnssPlaceAuthRecord?.geoCoordinates)) badCoords++
     for (const r of m.placeRecords) if (outOfRange(r.entryGNSSPlaceRecord?.geoCoordinates)) badCoords++
     if (badCoords) {
       list.push({ key: '{count} GNSS position(s) have invalid coordinates and were excluded from the map — the tachograph file may be parsed incorrectly', params: { count: badCoords } })
@@ -307,6 +347,11 @@ export const useDddStore = defineStore('ddd', () => {
     loadUnloadRecords,
     loadTypeRecords,
     controlActivityRecords,
+    driverRecords,
+    technicalData,
+    placesTruncatedBefore,
+    authorisedSpeed,
+    speedBlocks,
     gnssAuthRecords,
     placesAuthRecords,
     warnings,

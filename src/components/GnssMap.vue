@@ -156,11 +156,11 @@ export default defineComponent({
       }
 
       for (const r of props.loadUnloadRecords) {
-        if (!isValidGeo(r.GNSSPlaceAuthRecord?.geoCoordinates)) continue
+        if (!isValidGeo(r.gnssPlaceAuthRecord?.geoCoordinates)) continue
         const isLoad = r.operationType === 1
         all.push({
-          lat: r.GNSSPlaceAuthRecord.geoCoordinates.latitude,
-          lng: r.GNSSPlaceAuthRecord.geoCoordinates.longitude,
+          lat: r.gnssPlaceAuthRecord.geoCoordinates.latitude,
+          lng: r.gnssPlaceAuthRecord.geoCoordinates.longitude,
           time: r.timeStamp,
           kind: isLoad ? 'load' : 'unload',
           color: isLoad ? '#66bb6a' : '#ef5350',
