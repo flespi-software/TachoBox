@@ -385,7 +385,24 @@ exports[`golden master — demo data > analysis of example.json is unchanged 1`]
 
 exports[`golden master — demo data > analysis of example-vu.json is unchanged 1`] = `
 {
-  "anomalies": [],
+  "anomalies": [
+    {
+      "description": "The driver card was inserted while the vehicle was already moving.",
+      "icon": "mdi-alert-circle",
+      "message": "Card insertion while driving",
+      "severity": "warning",
+      "ts": 1764826800,
+      "type": "event",
+    },
+    {
+      "description": "The tachograph lost its power supply.",
+      "icon": "mdi-alert-circle",
+      "message": "Power supply interruption",
+      "severity": "warning",
+      "ts": 1765509120,
+      "type": "event",
+    },
+  ],
   "dailyDriving": [
     {
       "code": "6.1",

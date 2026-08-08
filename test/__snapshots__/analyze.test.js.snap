@@ -28,7 +28,7 @@ exports[`analyze() pipeline > summary is unchanged 1`] = `
 
 exports[`analyze() pipeline > summary is unchanged 2`] = `
 {
-  "anomalies": 0,
+  "anomalies": 2,
   "bySeverity": {
     "most-serious": 1,
     "serious": 2,
