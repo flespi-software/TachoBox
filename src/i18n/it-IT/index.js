@@ -266,6 +266,7 @@ export default {
 
   'VU file contains no driver activity data — only technical/admin data loaded': 'Il file VU non contiene dati di attività del conducente — caricati solo dati tecnici/amministrativi',
   'This vehicle unit file was decoded by an older version of the parser and its data may be incomplete or wrong. Upload the original DDD file again to have it decoded properly.': 'Questo file dell\'unità veicolo è stato decodificato da una versione precedente del parser e i suoi dati potrebbero essere incompleti o errati. Carica di nuovo il file DDD originale per decodificarlo correttamente.',
+  'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.': 'Questo file della carta del conducente è stato decodificato da una versione precedente del parser. Quel formato è obsoleto e presto non sarà più supportato — carica di nuovo il file DDD originale per decodificarlo con il parser attuale.',
 
   // VU info
   'VU #': 'VU #',

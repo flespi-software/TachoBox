@@ -266,6 +266,7 @@ export default {
 
   'VU file contains no driver activity data — only technical/admin data loaded': 'Soubor VU neobsahuje data o činnosti řidiče — načtena pouze technická/administrativní data',
   'This vehicle unit file was decoded by an older version of the parser and its data may be incomplete or wrong. Upload the original DDD file again to have it decoded properly.': 'Tento soubor z jednotky vozidla byl dekódován starší verzí parseru a jeho data mohou být neúplná nebo chybná. Nahrajte původní DDD soubor znovu, aby byl dekódován správně.',
+  'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.': 'Tento soubor karty řidiče byl dekódován starší verzí parseru. Tento formát je zastaralý a brzy přestane být podporován — nahrajte původní soubor DDD znovu, aby byl dekódován aktuálním parserem.',
 
   // VU info
   'VU #': 'VU #',

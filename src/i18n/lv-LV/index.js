@@ -266,6 +266,7 @@ export default {
 
   'VU file contains no driver activity data — only technical/admin data loaded': 'VU fails nesatur vadītāja aktivitāšu datus — ielādēti tikai tehniskie/administratīvie dati',
   'This vehicle unit file was decoded by an older version of the parser and its data may be incomplete or wrong. Upload the original DDD file again to have it decoded properly.': 'Šis transportlīdzekļa bloka fails tika dekodēts ar vecāku parsera versiju, un tā dati var būt nepilnīgi vai kļūdaini. Augšupielādējiet oriģinālo DDD failu vēlreiz, lai tas tiktu dekodēts pareizi.',
+  'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.': 'Šis vadītāja kartes fails tika dekodēts ar vecāku parsera versiju. Šis formāts ir novecojis un drīz vairs netiks atbalstīts — augšupielādējiet oriģinālo DDD failu vēlreiz, lai tas tiktu dekodēts ar pašreizējo parseru.',
 
   // VU info
   'VU #': 'VU #',

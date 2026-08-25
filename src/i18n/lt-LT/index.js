@@ -266,6 +266,7 @@ export default {
 
   'VU file contains no driver activity data — only technical/admin data loaded': 'VU failas neturi vairuotojo veiklos duomenų — įkelti tik techniniai/administraciniai duomenys',
   'This vehicle unit file was decoded by an older version of the parser and its data may be incomplete or wrong. Upload the original DDD file again to have it decoded properly.': 'Šis transporto priemonės bloko failas buvo iššifruotas senesne analizatoriaus versija ir jo duomenys gali būti neišsamūs arba klaidingi. Įkelkite originalų DDD failą iš naujo, kad jis būtų iššifruotas teisingai.',
+  'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.': 'Šis vairuotojo kortelės failas buvo iššifruotas senesne analizatoriaus versija. Šis formatas yra pasenęs ir netrukus nebebus palaikomas — įkelkite originalų DDD failą iš naujo, kad jis būtų iššifruotas dabartiniu analizatoriumi.',
 
   // VU info
   'VU #': 'VU #',

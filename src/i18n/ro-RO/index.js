@@ -266,6 +266,7 @@ export default {
 
   'VU file contains no driver activity data — only technical/admin data loaded': 'Fișierul VU nu conține date de activitate ale șoferului — s-au încărcat doar date tehnice/administrative',
   'This vehicle unit file was decoded by an older version of the parser and its data may be incomplete or wrong. Upload the original DDD file again to have it decoded properly.': 'Acest fișier de unitate de vehicul a fost decodificat de o versiune mai veche a analizorului, iar datele sale pot fi incomplete sau greșite. Încărcați din nou fișierul DDD original pentru a fi decodificat corect.',
+  'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.': 'Acest fișier de card de conducător auto a fost decodificat de o versiune mai veche a analizorului. Acest format este învechit și în curând nu va mai fi acceptat — încărcați din nou fișierul DDD original pentru a fi decodificat cu analizorul actual.',
 
   // VU info
   'VU #': 'VU #',

@@ -117,6 +117,28 @@ export function formatTimeOfDay(ts) {
   })
 }
 
+/**
+ * Format a calendar date that carries no time of day, such as a card holder's
+ * date of birth. The parser emits it either as a "YYYY-MM-DD" string or, for
+ * older files, as a UNIX-seconds timestamp; both are accepted here. A pure
+ * calendar date must NOT shift with the timeZone setting - only the date-part
+ * order follows the user's preference.
+ */
+export function formatCalendarDate(v) {
+  if (typeof v !== 'string') return formatDate(v)
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(v)
+  if (!m) return NOT_RECORDED
+  const [, year, month, day] = m.map(Number)
+  // A date the card never carried decodes as zeros (Reg. 2016/799, Appendix 1).
+  if (!year || !month || !day) return NOT_RECORDED
+  return new Date(Date.UTC(year, month - 1, day)).toLocaleDateString(activeLocale(), {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })
+}
+
 // --- Day-grid labels (always UTC) ---
 // Tachograph activity is bucketed by UTC calendar day, so a label that names a
 // *day* of activity (chart axes, the activity disc, calendar/heatmap cells,

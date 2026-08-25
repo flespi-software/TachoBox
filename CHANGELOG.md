@@ -8,6 +8,25 @@ changed in the data, what it means for a port, and where to look in the code.
 See [src/compliance/README.md](src/compliance/README.md#porting-to-another-language)
 for the conformance artifacts used to check a port.
 
+## 0.9.3
+
+### The card holder's date of birth is a calendar date
+
+`DriverCardHolderIdentification.cardHolderBirthDate` is now a `"YYYY-MM-DD"`
+string; it used to be a UNIX timestamp like every other date in the output. It
+is the one field of the card application whose shape changed, so it doubles as
+the version marker of the parser output - see `isLegacyCardFormat()` in
+`src/utils/ddd.js`, which raises a deprecation warning on a card decoded by the
+older parser (its records still load).
+
+Treat it as a calendar date, not an instant: it carries no time of day, so
+rendering it in a time zone would shift it a day. In this codebase that is
+`formatCalendarDate()` in `src/utils/format.js`, which forces UTC and accepts
+both shapes; all-zero parts (`0000-00-00`) mean the card does not carry it.
+
+Vehicle unit files are unaffected - they carry no card holder identification,
+and nothing else in the output moved.
+
 ## 0.9.1
 
 ### Unwritten fields are all ones, not null

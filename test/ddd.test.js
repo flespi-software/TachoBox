@@ -160,6 +160,31 @@ describe('VU mass-memory normalization', () => {
     expect(src.warning).toMatch(/older version of the parser/i)
   })
 
+  // The card holder's date of birth is the parser-output version marker: a
+  // "YYYY-MM-DD" calendar date now, a UNIX timestamp in the deprecated output.
+  it('flags a driver card decoded by the old parser', () => {
+    const legacy = card([{ changeTime: 0, activity: 'DRIVING' }])
+    legacy.EF_Identification.DriverCardHolderIdentification = { cardHolderBirthDate: 479433600 }
+    expect(detectAndNormalize(legacy).warning).toMatch(/deprecated/i)
+
+    const current = card([{ changeTime: 0, activity: 'DRIVING' }])
+    current.EF_Identification.DriverCardHolderIdentification = { cardHolderBirthDate: '1985-03-12' }
+    expect(detectAndNormalize(current).warning).toBeNull()
+  })
+
+  it('flags a legacy driver card wrapped in a flespi result array', () => {
+    const wrapped = (born) => ({
+      result: [{ content: { DF_Tachograph_G2: {
+        EF_Identification: {
+          CardIdentification: { cardNumber: 'CARD-1' },
+          DriverCardHolderIdentification: { cardHolderBirthDate: born },
+        },
+      } } }],
+    })
+    expect(detectAndNormalize(wrapped(479433600)).warning).toMatch(/deprecated/i)
+    expect(detectAndNormalize(wrapped('1985-03-12')).warning).toBeNull()
+  })
+
   // Border crossings key off gnssPlaceAuthRecord - a different target name from
   // GNSS records. Getting it wrong is silent: every record hashes to the same
   // dedup key and the whole set collapses to one row.

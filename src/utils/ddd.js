@@ -19,6 +19,18 @@ const OUTDATED_VU_WARNING = 'This vehicle unit file was decoded by an older vers
 // Exact i18n keys - the English text is the key, so these must match the
 // entries in src/i18n/ character for character, em dash included.
 const NO_ACTIVITY_WARNING = 'VU file contains no driver activity data — only technical/admin data loaded'
+// Driver-card JSON produced before the parser was corrected. It still loads and
+// its records are usable, but the shape is deprecated and reading it will be
+// dropped, so the user is told to have the DDD file decoded again.
+const LEGACY_CARD_WARNING = 'This driver card file was decoded by an older version of the parser. That format is deprecated and will stop being supported — upload the original DDD file again to have it decoded with the current parser.'
+
+// Version marker of the card output: the current parser emits the holder's date
+// of birth as a "YYYY-MM-DD" calendar date, older output as a UNIX timestamp.
+// Checked per card application, since a card carries G1 and G2 side by side.
+function isLegacyCardFormat(app) {
+  const born = app?.EF_Identification?.DriverCardHolderIdentification?.cardHolderBirthDate
+  return born != null && typeof born !== 'string'
+}
 
 function resolveRegistration(c) {
   const regObj = scalar(c.VehicleRegistrationIdentification)
@@ -300,6 +312,9 @@ export function detectAndNormalize(json) {
           g2: content.DF_Tachograph_G2 || null,
         },
         enabled: true,
+        warning: isLegacyCardFormat(content.DF_Tachograph) || isLegacyCardFormat(content.DF_Tachograph_G2)
+          ? LEGACY_CARD_WARNING
+          : null,
       }
     }
 
@@ -400,6 +415,7 @@ export function detectAndNormalize(json) {
       generation: 'g1',
       byGeneration: { g1: json },
       enabled: true,
+      warning: isLegacyCardFormat(json) ? LEGACY_CARD_WARNING : null,
     }
   }
 

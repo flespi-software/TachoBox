@@ -52,7 +52,7 @@ import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { nationName } from 'src/reference'
 import { useDddStore } from 'src/stores/ddd'
-import { formatDate, formatDateTime, isUnsetOdometer } from 'src/utils/format'
+import { formatCalendarDate, formatDate, formatDateTime, isUnsetOdometer } from 'src/utils/format'
 import EuroPlate from 'src/components/EuroPlate.vue'
 
 export default defineComponent({
@@ -118,7 +118,7 @@ export default defineComponent({
         { icon: 'mdi-card-account-details', label: t('Card'), value: identification.value.cardNumber || '—' },
         { icon: 'mdi-flag', label: t('Country'), value: nationName(identification.value.cardIssuingMemberState) },
         { icon: 'mdi-calendar-range', label: t('Valid'), value: formatDate(identification.value.cardValidityBegin) + ' — ' + formatDate(identification.value.cardExpiryDate) },
-        { icon: 'mdi-cake-variant', label: t('Born'), value: formatDate(holder.value.cardHolderBirthDate) },
+        { icon: 'mdi-cake-variant', label: t('Born'), value: formatCalendarDate(holder.value.cardHolderBirthDate) },
         { icon: 'mdi-card-text', label: t('Licence'), value: [licence.value.drivingLicenceNumber, licence.value.drivingLicenceIssuingAuthority].filter(Boolean).join(' / ') || '—' },
       ]
       if (lastDownload.value) {
