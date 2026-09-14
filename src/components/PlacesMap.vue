@@ -8,7 +8,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import * as topojson from 'topojson-client'
 import worldTopo from 'world-atlas/countries-110m.json'
-import { getTileUrl, TILE_ATTRIBUTION } from 'src/utils/geo'
+import { createTileLayer } from 'src/utils/tiles'
 import { useQuasar } from 'quasar'
 
 // ISO 3166-1 alpha-2 -> numeric for European / tachograph-relevant countries
@@ -146,9 +146,7 @@ export default defineComponent({
         zoomControl: true,
         attributionControl: false,
       })
-      tileLayer = L.tileLayer(getTileUrl($q.dark.isActive).replace('_all', '_nolabels'), {
-        maxZoom: 8, attribution: TILE_ATTRIBUTION,
-      }).addTo(map)
+      tileLayer = createTileLayer($q.dark.isActive, { maxZoom: 8 }).addTo(map)
       const geo = visitedGeo()
       geoLayer = L.geoJSON(geo, { style, onEachFeature }).addTo(map)
 
@@ -166,7 +164,7 @@ export default defineComponent({
     }
 
     watch(() => $q.dark.isActive, () => {
-      if (tileLayer) tileLayer.setUrl(getTileUrl($q.dark.isActive).replace('_all', '_nolabels'))
+      if (tileLayer) tileLayer.setDark($q.dark.isActive)
     })
 
     watch(() => props.countries, () => {

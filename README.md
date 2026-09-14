@@ -52,7 +52,7 @@ TachoBox is a static single-page app with no backend of its own:
 - JSON files opened from disk or via `jsonurl` are parsed **in the browser** and never uploaded anywhere.
 - flespi data is fetched directly from **your own** flespi account with your own token.
 - Decoding a raw `.ddd` binary is the one exception: the app has no binary parser, so the Upload flow sends the file to your flespi device, where the `tacho-file-parse` plugin decodes it. Files you upload this way are stored in your flespi media storage.
-- Maps request tiles from [CARTO basemaps](https://carto.com/basemaps/); tile requests reveal the map area being viewed.
+- Maps request tiles from [OpenStreetMap](https://www.openstreetmap.org/); tile requests reveal the map area being viewed.
 
 There is no analytics, tracking or third-party reporting in this codebase.
 

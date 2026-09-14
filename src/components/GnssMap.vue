@@ -60,7 +60,8 @@ import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import { addFullscreenControl } from 'src/utils/map-fullscreen'
-import { isValidGeo, getTileUrl, TILE_ATTRIBUTION } from 'src/utils/geo'
+import { isValidGeo } from 'src/utils/geo'
+import { createTileLayer } from 'src/utils/tiles'
 import { formatDateTime } from 'src/utils/format'
 import { useQuasar } from 'quasar'
 
@@ -268,7 +269,7 @@ export default defineComponent({
       if (!mapContainer.value) return
 
       map = L.map(mapContainer.value, { center: [52, 10], zoom: 5 })
-      tileLayer = L.tileLayer(getTileUrl($q.dark.isActive), { maxZoom: 18, attribution: TILE_ATTRIBUTION }).addTo(map)
+      tileLayer = createTileLayer($q.dark.isActive).addTo(map)
 
       addFullscreenControl(map, mapContainer.value)
       updateMap()
@@ -279,7 +280,7 @@ export default defineComponent({
 
     watch(visiblePoints, updateMap)
     watch(() => $q.dark.isActive, () => {
-      if (tileLayer) tileLayer.setUrl(getTileUrl($q.dark.isActive))
+      if (tileLayer) tileLayer.setDark($q.dark.isActive)
     })
 
     onBeforeUnmount(() => {

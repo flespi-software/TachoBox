@@ -253,7 +253,8 @@ import { defineComponent, computed, ref, watch, nextTick, onBeforeUnmount } from
 import { useI18n } from 'vue-i18n'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { getTileUrl, TILE_ATTRIBUTION, isValidGeo } from 'src/utils/geo'
+import { isValidGeo } from 'src/utils/geo'
+import { createTileLayer } from 'src/utils/tiles'
 import { addFullscreenControl } from 'src/utils/map-fullscreen'
 import { buildDaySegments, formatDuration } from 'src/utils/activity'
 import { analyzeDayViolations, analyzeDailyDriving, analyzeDailyRest, analyzeWeeklyRest, getDayStatus, maxContinuousDriving } from 'src/compliance'
@@ -574,7 +575,7 @@ export default defineComponent({
       if (!dayMapRef.value || !dayGnss.value.length) return
 
       dayMap = L.map(dayMapRef.value, { zoomControl: false, attributionControl: false })
-      L.tileLayer(getTileUrl($q.dark.isActive), { maxZoom: 18, attribution: TILE_ATTRIBUTION }).addTo(dayMap)
+      createTileLayer($q.dark.isActive).addTo(dayMap)
       L.control.zoom({ position: 'topright' }).addTo(dayMap)
       addFullscreenControl(dayMap, dayMapRef.value)
 

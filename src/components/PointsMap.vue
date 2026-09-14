@@ -6,7 +6,7 @@
 import { defineComponent, ref, watch, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
-import { getTileUrl, TILE_ATTRIBUTION } from 'src/utils/geo'
+import { createTileLayer } from 'src/utils/tiles'
 import { formatDateTime } from 'src/utils/format'
 import { useQuasar } from 'quasar'
 
@@ -59,7 +59,7 @@ export default defineComponent({
     // watch already fires - a deep watch would just re-traverse every point.
     watch(() => props.points, updateMap)
     watch(() => $q.dark.isActive, () => {
-      if (tileLayer) tileLayer.setUrl(getTileUrl($q.dark.isActive))
+      if (tileLayer) tileLayer.setDark($q.dark.isActive)
     })
     watch(() => props.highlightIndex, (idx) => {
       markers.forEach((m, i) => {
@@ -79,7 +79,7 @@ export default defineComponent({
       await nextTick()
       if (!mapContainer.value) return
       map = L.map(mapContainer.value, { center: [50, 10], zoom: 5, attributionControl: false })
-      tileLayer = L.tileLayer(getTileUrl($q.dark.isActive), { maxZoom: 18, attribution: TILE_ATTRIBUTION }).addTo(map)
+      tileLayer = createTileLayer($q.dark.isActive).addTo(map)
       updateMap()
       resizeObserver = new ResizeObserver(() => { if (map) map.invalidateSize() })
       resizeObserver.observe(mapContainer.value)
