@@ -58,6 +58,23 @@ export async function loadJsonUrl(url, fetchFn = fetchJson) {
     : [{ error: res.reason, name: baseName(new URL(docs[i], root).href) }]))
 }
 
+// Several ?jsonurl= params (?jsonurl=a&jsonurl=b), loaded in parallel. One url
+// behaves exactly as loadJsonUrl(); with more, a url that fails becomes an
+// { error, name } entry instead of failing the rest.
+export async function loadJsonUrls(urls, fetchFn = fetchJson) {
+  const list = [].concat(urls).filter(Boolean)
+  if (list.length === 1) return loadJsonUrl(list[0], fetchFn)
+  const settled = await Promise.allSettled(list.map((url) => loadJsonUrl(url, fetchFn)))
+  return settled.flatMap((res, i) => (res.status === 'fulfilled'
+    ? res.value
+    : [{ error: res.reason, name: list[i].split('/').pop() || list[i] }]))
+}
+
+// fileUuid route param: one uuid or a comma-separated list, duplicates dropped
+export function parseUuidList(param) {
+  return [...new Set(String(param || '').split(',').map((s) => s.trim()).filter(Boolean))]
+}
+
 // ?from= / ?to= value: unix seconds or YYYY-MM-DD, floored to the UTC day the
 // date range filter works in. Null when absent or unparseable.
 export function parseDayParam(value) {

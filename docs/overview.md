@@ -9,7 +9,7 @@ TachoBox is a web-based viewer for tachograph DDD files parsed into JSON. It wor
 There are four ways to load data:
 - **From flespi** - log in, pick a device with the tachograph plugin, and browse its DDD files. You can add multiple devices and load files from each.
 - **From disk** - upload one or more JSON files directly.
-- **From URL** - pass `?jsonurl=https://example.com/data.json` to load a JSON file, a set of files or a manifest of links from an external URL - see [embedding.md](embedding.md#loading-from-your-backend).
+- **From URL** - pass `?jsonurl=https://example.com/data.json` to load a JSON file from an external URL; repeat `jsonurl` for several files - see [embedding.md](embedding.md#loading-from-your-backend).
 - **Demo data** - one click loads a realistic sample with 62 days of activity, 5 vehicles across Europe, violations, events, faults, and GNSS coordinates.
 
 Multiple files can be loaded simultaneously. Incompatible files (e.g. different drivers) prompt you to choose which one to display.

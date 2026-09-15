@@ -446,7 +446,7 @@ import { useSettingsStore } from 'src/stores/settings'
 import { useParserStore } from 'src/stores/parser'
 import { formatDateTime, DATE_FORMATS, TIME_FORMATS } from 'src/utils/format'
 import { downloadMediaFile } from 'src/utils/media'
-import { loadJsonUrl, isUnparsed, parseDayParam } from 'src/utils/embed'
+import { loadJsonUrls, isUnparsed, parseDayParam, parseUuidList } from 'src/utils/embed'
 
 const dateFormatOptions = DATE_FORMATS.map((f) => ({ label: f.sample, value: f.key }))
 const timeFormatOptions = TIME_FORMATS.map((f) => ({ label: f.sample, value: f.key }))
@@ -979,7 +979,10 @@ export default defineComponent({
       activeDeviceId.value = devId
 
       const fileUuid = route.params.fileUuid
-      if (fileUuid) {
+      const uuids = parseUuidList(fileUuid)
+      if (uuids.length > 1) {
+        if (!(await loadDeviceFiles(devId, uuids))) return
+      } else if (fileUuid) {
         // Load specific file
         try {
           const dataParam = JSON.stringify({ uuid: fileUuid, fields: 'uuid,name,meta,content' })
@@ -1056,50 +1059,78 @@ export default defineComponent({
       if (from || to) dddStore.setDateRange(from, to)
     }
 
-    // A newer jsonurl supersedes a load still in flight
-    let jsonUrlLoadId = 0
+    // A newer multi-file load (jsonurl or uuid list) supersedes one still in flight
+    let loadSeq = 0
 
-    async function loadFromJsonUrl(url) {
-      const loadId = ++jsonUrlLoadId
+    // Adds loaded documents [{ json, name } | { error, name }]; with hidepanels
+    // they replace what was shown. A lone document reports as a single file did.
+    function addDocuments(docs, { deviceId = null, errorPrefix = '' } = {}) {
+      if (hidePanels.value) dddStore.clearData()
+      const warnings = new Set()
+      for (const doc of docs) {
+        if (doc.error) {
+          $q.notify({ type: 'negative', message: `${errorPrefix}${doc.name}: ${doc.error.message}` })
+          continue
+        }
+        if (docs.length > 1 && isUnparsed(doc.json)) {
+          $q.notify({ type: 'warning', message: `${t('File not processed')}: ${doc.name}` })
+          continue
+        }
+        const result = dddStore.addData(doc.json, doc.name, { deviceId })
+        if (result?.error) {
+          $q.notify({ type: 'negative', message: docs.length > 1 ? `${t(result.error)} (${doc.name})` : t(result.error) })
+        }
+        if (result?.warning) warnings.add(result.warning)
+        if (result?.conflict) $q.notify({ type: 'warning', message: `${t('Incompatible file')}: ${doc.name}` })
+      }
+      warnings.forEach((w) => $q.notify({ type: 'warning', message: t(w) }))
+    }
+
+    async function loadFromJsonUrl(urls) {
+      const loadId = ++loadSeq
       dddStore.loading = true
       try {
-        const docs = await loadJsonUrl(url)
-        if (loadId !== jsonUrlLoadId) return
-        if (hidePanels.value) dddStore.clearData()
-        const warnings = new Set()
-        for (const doc of docs) {
-          if (doc.error) {
-            $q.notify({ type: 'negative', message: `${t('Failed to load JSON:')} ${doc.name}: ${doc.error.message}` })
-            continue
-          }
-          if (docs.length > 1 && isUnparsed(doc.json)) {
-            $q.notify({ type: 'warning', message: `${t('File not processed')}: ${doc.name}` })
-            continue
-          }
-          const result = dddStore.addData(doc.json, doc.name)
-          if (result?.error) {
-            $q.notify({ type: 'negative', message: docs.length > 1 ? `${t(result.error)} (${doc.name})` : t(result.error) })
-          }
-          if (result?.warning) warnings.add(result.warning)
-          if (result?.conflict) $q.notify({ type: 'warning', message: `${t('Incompatible file')}: ${doc.name}` })
-        }
-        warnings.forEach((w) => $q.notify({ type: 'warning', message: t(w) }))
+        const docs = await loadJsonUrls(urls)
+        if (loadId !== loadSeq) return
+        addDocuments(docs, { errorPrefix: `${t('Failed to load JSON:')} ` })
         applyRangeFromQuery()
       } catch (err) {
-        if (loadId === jsonUrlLoadId) {
+        if (loadId === loadSeq) {
           $q.notify({ type: 'negative', message: `${t('Failed to load JSON:')} ${err.message}` })
         }
       } finally {
-        if (loadId === jsonUrlLoadId) dddStore.loading = false
+        if (loadId === loadSeq) dddStore.loading = false
       }
     }
 
+    // /device/:id/file/uuid1,uuid2 - files fetched in parallel. False when a
+    // newer load took over while fetching.
+    async function loadDeviceFiles(devId, uuids) {
+      const loadId = ++loadSeq
+      const docs = await Promise.all(uuids.map(async (uuid) => {
+        try {
+          const dataParam = JSON.stringify({ uuid, fields: 'uuid,name,meta,content' })
+          const resp = await authStore.$connector.http.get(
+            `/gw/devices/${devId}/media?data=${encodeURIComponent(dataParam)}`,
+          )
+          const item = resp.data.result?.[0]
+          if (!item) return { error: new Error(t('File not found')), name: uuid }
+          return { json: resp.data, name: item.name || uuid }
+        } catch (err) {
+          return { error: err, name: uuid }
+        }
+      }))
+      if (loadId !== loadSeq) return false
+      addDocuments(docs, { deviceId: devId })
+      return true
+    }
+
     // An embedding host switches the period by changing the iframe hash only,
-    // which does not remount the app
+    // which does not remount the app. jsonurl may repeat, so compare by value.
     watch(
-      () => [route.query.jsonurl, route.query.from, route.query.to],
-      ([url, from, to], [oldUrl, oldFrom, oldTo]) => {
-        if (url && url !== oldUrl) loadFromJsonUrl(url)
+      () => [JSON.stringify(route.query.jsonurl ?? null), route.query.from, route.query.to],
+      ([urls, from, to], [oldUrls, oldFrom, oldTo]) => {
+        if (route.query.jsonurl && urls !== oldUrls) loadFromJsonUrl(route.query.jsonurl)
         else if ((from !== oldFrom || to !== oldTo) && (from || to)) applyRangeFromQuery()
       },
     )

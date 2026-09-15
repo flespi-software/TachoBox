@@ -42,7 +42,7 @@ Built with [Vue 3](https://vuejs.org/) and [Quasar 2](https://quasar.dev/) on Vi
 
 - **flespi** - log in, pick a device with the [tacho-file-parse](https://flespi.com/kb/tacho-file-parse-plugin) plugin, browse and load its DDD files
 - **JSON file** - upload one or more parsed files from disk
-- **URL** - `?jsonurl=https://example.com/data.json`: a file, a set of files or a manifest of links, see [docs/embedding.md](docs/embedding.md)
+- **URL** - `?jsonurl=https://example.com/data.json`, repeated for several files, see [docs/embedding.md](docs/embedding.md)
 - **Demo** - `?demo=1` or click "Demo data" in the sidebar
 
 ### How your data is handled
@@ -60,18 +60,18 @@ There is no analytics, tracking or third-party reporting in this codebase.
 
 TachoBox runs in an iframe, configured entirely through URL parameters - the data source, the period, which tabs and panels are shown, theme and language. The full reference is in **[docs/embedding.md](docs/embedding.md)**.
 
-A file from a flespi device:
+Files from a flespi device - one UUID, or several separated by commas:
 
 ```html
-<iframe src="https://tachobox.flespi.io/#/device/123/file/abc?token=TOKEN&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
+<iframe src="https://tachobox.flespi.io/#/device/123/file/UUID1,UUID2?token=TOKEN&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
 ```
 
 > A token in the URL ends up in browser history, referrer headers and server logs. Use a short-lived flespi token restricted to the devices being viewed.
 
-Several files for a period, served by your own backend - no token needed:
+Parsed files served by your own backend - no token needed; repeat `jsonurl` for several files and narrow the view to a period:
 
 ```html
-<iframe src="https://tachobox.flespi.io/#/?jsonurl=https://example.com/period/42/manifest.json&from=2026-01-01&to=2026-01-31&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
+<iframe src="https://tachobox.flespi.io/#/?jsonurl=https%3A%2F%2Fexample.com%2Fddd%2Fa.json&jsonurl=https%3A%2F%2Fexample.com%2Fddd%2Fb.json&from=2026-01-01&to=2026-01-31&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
 ```
 
 ## Compliance engine

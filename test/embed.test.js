@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { splitDocuments, isUnparsed, loadJsonUrl, parseDayParam } from '../src/utils/embed.js'
+import { splitDocuments, isUnparsed, loadJsonUrl, loadJsonUrls, parseDayParam, parseUuidList } from '../src/utils/embed.js'
 
 const item = (uuid, content = { DF_Tachograph: {} }) => ({ uuid, name: `${uuid}.ddd`, meta: {}, content })
 
@@ -69,6 +69,32 @@ describe('jsonurl payloads', () => {
       'https://h/n.json': ['a.json'],
     }))
     expect(docs).toEqual([])
+  })
+})
+
+describe('several jsonurl params', () => {
+  it('behaves as a single url when given one', async () => {
+    const routes = { 'https://h/one.json': { result: [item('a')] } }
+    expect(await loadJsonUrls('https://h/one.json', server(routes))).toEqual(await loadJsonUrl('https://h/one.json', server(routes)))
+    expect(await loadJsonUrls(['https://h/one.json'], server(routes))).toEqual(await loadJsonUrl('https://h/one.json', server(routes)))
+    await expect(loadJsonUrls('https://h/missing.json', server(routes))).rejects.toThrow('HTTP 404')
+  })
+
+  it('loads every url in order and reports a failing one without losing the rest', async () => {
+    const docs = await loadJsonUrls(['https://h/a.json', 'https://h/missing.json', 'https://h/b.json'], server({
+      'https://h/a.json': { result: [item('a')] },
+      'https://h/b.json': { result: [item('b')] },
+    }))
+    expect(docs.map((d) => d.name)).toEqual(['a.json', 'missing.json', 'b.json'])
+    expect(docs[1].error.message).toBe('HTTP 404')
+  })
+})
+
+describe('uuid list route param', () => {
+  it('splits a comma-separated list, trimming and dropping repeats', () => {
+    expect(parseUuidList('a')).toEqual(['a'])
+    expect(parseUuidList('a, b,,a')).toEqual(['a', 'b'])
+    expect(parseUuidList(undefined)).toEqual([])
   })
 })
 
