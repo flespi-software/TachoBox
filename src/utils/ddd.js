@@ -285,6 +285,34 @@ function normalizeVuTechnical(items) {
   }
 }
 
+// Legacy VU layouts spread one download over several result[] items (a day or a
+// technical block each), which detectAndNormalize() reads together.
+function isLegacyMultiItem(content) {
+  if (!content || content.DF_Tachograph || content.DF_Tachograph_G2) return false
+  if (content.VU_Tachograph || content.VU_Tachograph_G2 || content.VuActivities?.length) return false
+  return !!(content.ActivityChangeInfo?.length || content.VehicleIdentificationNumber
+    || content.VuCompanyLocksData || content.VuDownloadActivityData)
+}
+
+// Splits a document into single-file documents, one per media item, in the
+// { result: [item] } shape detectAndNormalize() reads (it looks at result[0]
+// only). Accepts a media response with any number of items or a bare item
+// { uuid, name, meta, content }. A legacy multi-item VU response stays whole;
+// anything else (a raw card object) passes through as is.
+export function splitResponse(json) {
+  if (Array.isArray(json?.result) && json.result.length > 1) {
+    if (json.result.some((item) => isLegacyMultiItem(item?.content))) return [json]
+    return json.result.map((item) => ({ result: [item] }))
+  }
+  if (isMediaItem(json)) return [{ result: [json] }]
+  return [json]
+}
+
+// One element of a media response's result[], outside its wrapper
+export function isMediaItem(json) {
+  return !!json && typeof json === 'object' && !Array.isArray(json) && !json.result && ('content' in json || 'uuid' in json)
+}
+
 export function detectAndNormalize(json) {
   if (json.result && Array.isArray(json.result)) {
     const items = json.result
@@ -484,6 +512,14 @@ export function sourceData(src, gen) {
   return by[gen] || by[src.generation] || by.g2 || by.g1 || null
 }
 
+// Appends a source's records, skipping those an earlier source already added.
+// Unlike dedup(), a file's own records are never collapsed: card ring buffers
+// only repeat across overlapping downloads of the same card.
+function addAcross(target, records, keyFn) {
+  const earlier = new Set(target.map(keyFn))
+  for (const rec of records) if (!earlier.has(keyFn(rec))) target.push(rec)
+}
+
 export function mergeRecordSets(sources, gen) {
   const all = { activityRecords: [], vehicleRecords: [], placeRecords: [], placeCapacity: null, eventRecords: [], faultRecords: [], conditionRecords: [], gnssRecords: [], vehicleUnitsUsed: [], companyLocksRecords: [], downloadActivityRecords: [], driverRecords: [], technicalData: null, speedBlocks: [], borderCrossingRecords: [], loadUnloadRecords: [], loadTypeRecords: [], controlActivityRecords: [], gnssAuthRecords: [], placesAuthRecords: [] }
 
@@ -498,7 +534,7 @@ export function mergeRecordSets(sources, gen) {
     all.faultRecords.push(...r.faultRecords)
     all.conditionRecords.push(...r.conditionRecords)
     all.gnssRecords.push(...r.gnssRecords)
-    all.vehicleUnitsUsed.push(...r.vehicleUnitsUsed)
+    addAcross(all.vehicleUnitsUsed, r.vehicleUnitsUsed, (x) => `${x.timeStamp}:${x.manufacturerCode}:${x.deviceID}`)
     all.companyLocksRecords.push(...r.companyLocksRecords)
     all.downloadActivityRecords.push(...r.downloadActivityRecords)
     all.driverRecords.push(...r.driverRecords)
@@ -507,9 +543,9 @@ export function mergeRecordSets(sources, gen) {
     all.borderCrossingRecords.push(...r.borderCrossingRecords)
     all.loadUnloadRecords.push(...r.loadUnloadRecords)
     all.loadTypeRecords.push(...r.loadTypeRecords)
-    all.controlActivityRecords.push(...r.controlActivityRecords)
-    all.gnssAuthRecords.push(...r.gnssAuthRecords)
-    all.placesAuthRecords.push(...r.placesAuthRecords)
+    addAcross(all.controlActivityRecords, r.controlActivityRecords, (x) => `${x.controlTime}`)
+    addAcross(all.gnssAuthRecords, r.gnssAuthRecords, (x) => `${x.timeStamp}:${x.authenticationStatus}`)
+    addAcross(all.placesAuthRecords, r.placesAuthRecords, (x) => `${x.entryTime}:${x.authenticationStatus}`)
   }
 
   // Activity is keyed on the calendar day, but two sources (e.g. driver card + VU,
@@ -534,7 +570,6 @@ export function mergeRecordSets(sources, gen) {
   all.borderCrossingRecords = dedup(all.borderCrossingRecords, (r) => `${r.gnssPlaceAuthRecord?.timeStamp}`)
   all.loadUnloadRecords = dedup(all.loadUnloadRecords, (r) => `${r.timeStamp}:${r.operationType}`)
   all.loadTypeRecords = dedup(all.loadTypeRecords, (r) => `${r.timeStamp}:${r.loadTypeEntered}`)
-
   return all
 }
 

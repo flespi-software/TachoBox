@@ -446,6 +446,7 @@ import { useSettingsStore } from 'src/stores/settings'
 import { useParserStore } from 'src/stores/parser'
 import { formatDateTime, DATE_FORMATS, TIME_FORMATS } from 'src/utils/format'
 import { downloadMediaFile } from 'src/utils/media'
+import { loadJsonUrl, isUnparsed, parseDayParam } from 'src/utils/embed'
 
 const dateFormatOptions = DATE_FORMATS.map((f) => ({ label: f.sample, value: f.key }))
 const timeFormatOptions = TIME_FORMATS.map((f) => ({ label: f.sample, value: f.key }))
@@ -1019,6 +1020,7 @@ export default defineComponent({
       }
 
       dddStore.loading = false
+      if (fileUuid) applyRangeFromQuery()
 
       // Clean URL only if not hidePanels
       if (!hidePanels.value) router.replace('/')
@@ -1047,31 +1049,67 @@ export default defineComponent({
       },
     )
 
+    // ?from= / ?to= narrow the date range once the data is in
+    function applyRangeFromQuery() {
+      const from = parseDayParam(route.query.from)
+      const to = parseDayParam(route.query.to)
+      if (from || to) dddStore.setDateRange(from, to)
+    }
+
+    // A newer jsonurl supersedes a load still in flight
+    let jsonUrlLoadId = 0
+
     async function loadFromJsonUrl(url) {
+      const loadId = ++jsonUrlLoadId
       dddStore.loading = true
       try {
-        const resp = await fetch(url)
-        if (!resp.ok) throw new Error(`HTTP ${resp.status}`)
-        const json = await resp.json()
-        const name = url.split('/').pop() || 'remote.json'
-        const result = hidePanels.value
-          ? dddStore.setData(json, name)
-          : dddStore.addData(json, name)
-        if (result?.error) $q.notify({ type: 'negative', message: t(result.error) })
-        if (result?.warning) $q.notify({ type: 'warning', message: t(result.warning) })
+        const docs = await loadJsonUrl(url)
+        if (loadId !== jsonUrlLoadId) return
+        if (hidePanels.value) dddStore.clearData()
+        const warnings = new Set()
+        for (const doc of docs) {
+          if (doc.error) {
+            $q.notify({ type: 'negative', message: `${t('Failed to load JSON:')} ${doc.name}: ${doc.error.message}` })
+            continue
+          }
+          if (docs.length > 1 && isUnparsed(doc.json)) {
+            $q.notify({ type: 'warning', message: `${t('File not processed')}: ${doc.name}` })
+            continue
+          }
+          const result = dddStore.addData(doc.json, doc.name)
+          if (result?.error) {
+            $q.notify({ type: 'negative', message: docs.length > 1 ? `${t(result.error)} (${doc.name})` : t(result.error) })
+          }
+          if (result?.warning) warnings.add(result.warning)
+          if (result?.conflict) $q.notify({ type: 'warning', message: `${t('Incompatible file')}: ${doc.name}` })
+        }
+        warnings.forEach((w) => $q.notify({ type: 'warning', message: t(w) }))
+        applyRangeFromQuery()
       } catch (err) {
-        $q.notify({ type: 'negative', message: `${t('Failed to load JSON:')} ${err.message}` })
+        if (loadId === jsonUrlLoadId) {
+          $q.notify({ type: 'negative', message: `${t('Failed to load JSON:')} ${err.message}` })
+        }
       } finally {
-        dddStore.loading = false
+        if (loadId === jsonUrlLoadId) dddStore.loading = false
       }
     }
+
+    // An embedding host switches the period by changing the iframe hash only,
+    // which does not remount the app
+    watch(
+      () => [route.query.jsonurl, route.query.from, route.query.to],
+      ([url, from, to], [oldUrl, oldFrom, oldTo]) => {
+        if (url && url !== oldUrl) loadFromJsonUrl(url)
+        else if ((from !== oldFrom || to !== oldTo) && (from || to)) applyRangeFromQuery()
+      },
+    )
 
     onMounted(() => {
       if (authStore.socketConnected) parserStore.subscribe()
 
       const demo = route.query.demo
       if (demo === '1' || demo === 'true') {
-        loadExample()
+        loadExample().then(applyRangeFromQuery)
       } else if (route.query.jsonurl) {
         loadFromJsonUrl(route.query.jsonurl)
       } else if (route.params.deviceId) {

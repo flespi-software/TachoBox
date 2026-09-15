@@ -248,8 +248,9 @@ export default defineComponent({
     watch(preset, applyPreset)
 
     const rangeLabel = computed(() => {
-      const f = fromStr.value || (dataRange.value ? tsToDateStr(dataRange.value.min) : '')
-      const t = toStr.value || (dataRange.value ? tsToDateStr(dataRange.value.max) : '')
+      // From the store, so a range set from outside (?from= / ?to=) shows too
+      const f = tsToDateStr(dddStore.dateFrom || dataRange.value?.min)
+      const t = tsToDateStr(dddStore.dateTo || dataRange.value?.max)
       if (!f && !t) return '—'
       if (f === t) return f
       return `${f} — ${t}`
@@ -563,8 +564,15 @@ export default defineComponent({
       }
     }
 
+    // Keep the "All" preset in step with a range set or cleared from outside
+    // (?from= / ?to=, a reload of the data)
+    watch(() => [dddStore.dateFrom, dddStore.dateTo], ([from, to]) => {
+      if ((from || to) && preset.value === 'all') preset.value = null
+      else if (!from && !to && preset.value !== 'all') preset.value = 'all'
+    })
+
     watch(() => dddStore.allActivityRecords.length, () => {
-      if (preset.value === 'all') {
+      if (preset.value === 'all' && !dddStore.dateFrom && !dddStore.dateTo) {
         dddStore.clearDateRange()
         fromStr.value = ''
         toStr.value = ''

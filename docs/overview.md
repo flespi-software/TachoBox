@@ -9,7 +9,7 @@ TachoBox is a web-based viewer for tachograph DDD files parsed into JSON. It wor
 There are four ways to load data:
 - **From flespi** - log in, pick a device with the tachograph plugin, and browse its DDD files. You can add multiple devices and load files from each.
 - **From disk** - upload one or more JSON files directly.
-- **From URL** - pass `?jsonurl=https://example.com/data.json` to load a JSON file from an external URL.
+- **From URL** - pass `?jsonurl=https://example.com/data.json` to load a JSON file, a set of files or a manifest of links from an external URL - see [embedding.md](embedding.md#loading-from-your-backend).
 - **Demo data** - one click loads a realistic sample with 62 days of activity, 5 vehicles across Europe, violations, events, faults, and GNSS coordinates.
 
 Multiple files can be loaded simultaneously. Incompatible files (e.g. different drivers) prompt you to choose which one to display.
@@ -70,87 +70,9 @@ Available when Gen2 GNSS data is present. Shows the full route with waypoints on
 - Responsive layout - works on desktop and mobile.
 - Not an official DDD viewer - intended for data exploration only.
 
-## URL parameters
+## Embedding and URL parameters
 
-TachoBox supports deep linking to load data directly via URL.
-
-### Open a device file list
-
-```
-/#/device/{deviceId}?token={flespiToken}
-```
-
-Opens the file browser dialog for the specified device.
-
-### Load a specific file
-
-```
-/#/device/{deviceId}/file/{fileUuid}?token={flespiToken}
-```
-
-Loads the file immediately and displays its data.
-
-### Parameters
-
-| Parameter | Description |
-|-----------|-------------|
-| `deviceId` | flespi device ID (route param) |
-| `fileUuid` | UUID of the media file on the device (route param) |
-| `token` | flespi token for authentication |
-| `demo` | `1` - load demo driver card data on startup |
-| `hidepanels` | `1` - hide header and sidebar (for embedding) |
-| `hidecalendar` | `1` - hide the calendar sidebar |
-| `hidedisclaimer` | `1` - hide the "not an official viewer" disclaimer banner |
-| `jsonurl` | URL to a JSON file - loads and displays the data on page load |
-| `tab` | Initial tab to open: `overview`, `activities`, `vehicles`, `places`, `events`, `faults`, `conditions`, `compliance`, `map` |
-| `tabs` | Comma-separated list of tabs to show (hides all others). Example: `tabs=overview,map,compliance` |
-| `day` | Unix timestamp - automatically open day detail dialog for this day |
-| `theme` | `light` or `dark` - override the default dark theme |
-| `lang` | Locale code - set the UI language. Example: `lang=fr-FR`. Supported: `en-US`, `bg-BG`, `cs-CZ`, `de-DE`, `es-ES`, `fr-FR`, `it-IT`, `lv-LV`, `lt-LT`, `nl-NL`, `pl-PL`, `ro-RO`, `fi-FI`, `sv-SE` |
-
-## Embedding
-
-TachoBox can be embedded into other applications via iframe. Use `hidepanels=1` to hide the header and sidebar, leaving only the data view.
-
-```html
-<iframe
-  src="https://your-host/#/device/123456/file/abc-def-123?token=YOUR_TOKEN&hidepanels=1"
-  width="100%"
-  height="600"
-  frameborder="0"
-></iframe>
-```
-
-To switch the displayed file dynamically, change the iframe URL:
-
-```js
-const iframe = document.getElementById('tachobox')
-iframe.src = `https://your-host/#/device/123456/file/NEW_UUID?token=YOUR_TOKEN&hidepanels=1`
-```
-
-The application detects URL changes and automatically loads the new file, replacing the previous one.
-
-### Embedded mode behavior
-
-When `hidepanels=1` is active:
-- A loading spinner is shown while data is being fetched (instead of "No data loaded").
-- If the URL points to a device without a specific file, the file picker dialog is locked to that device - the user cannot navigate to other devices, and must select a file before proceeding.
-- The disclaimer banner can be hidden with `hidedisclaimer=1`.
-
-### Loading JSON from external URL
-
-You can also load data without flespi authentication by pointing to a pre-built JSON file:
-
-```html
-<iframe
-  src="https://your-host/#/?jsonurl=https://example.com/driver-data.json&hidepanels=1&hidedisclaimer=1"
-  width="100%"
-  height="600"
-  frameborder="0"
-></iframe>
-```
-
-The JSON format should match the output of the flespi tacho-file-parse plugin.
+TachoBox can be embedded in another application through an iframe, with the data and the view described by URL parameters: a flespi device file, a JSON file or a set of files from your own backend, the period, visible tabs, theme and language. See [embedding.md](embedding.md).
 
 ## Languages
 

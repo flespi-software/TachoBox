@@ -2,7 +2,7 @@
 
 Web-based viewer for tachograph DDD files parsed into JSON. Works with driver card and vehicle unit (VU) data, Gen1 and Gen2 formats, and analyses driving and rest times against EU Regulation 561/2006.
 
-**[Live demo](https://tachobox.flespi.io/#/?demo=1)** | [Documentation](docs/overview.md) | [Changelog](CHANGELOG.md) | [MIT licensed](LICENSE)
+**[Live demo](https://tachobox.flespi.io/#/?demo=1)** | [Documentation](docs/overview.md) | [Embedding](docs/embedding.md) | [Changelog](CHANGELOG.md) | [MIT licensed](LICENSE)
 
 ![The overview: counts of violations, usage errors and anomalies, the vehicles driven, a daily distance chart, an activity heatmap, a driver profile radar and per-activity totals, with a colour-coded calendar alongside](docs/screenshot.png)
 
@@ -42,7 +42,7 @@ Built with [Vue 3](https://vuejs.org/) and [Quasar 2](https://quasar.dev/) on Vi
 
 - **flespi** - log in, pick a device with the [tacho-file-parse](https://flespi.com/kb/tacho-file-parse-plugin) plugin, browse and load its DDD files
 - **JSON file** - upload one or more parsed files from disk
-- **URL** - `?jsonurl=https://example.com/data.json`
+- **URL** - `?jsonurl=https://example.com/data.json`: a file, a set of files or a manifest of links, see [docs/embedding.md](docs/embedding.md)
 - **Demo** - `?demo=1` or click "Demo data" in the sidebar
 
 ### How your data is handled
@@ -56,33 +56,23 @@ TachoBox is a static single-page app with no backend of its own:
 
 There is no analytics, tracking or third-party reporting in this codebase.
 
-## URL parameters
-
-| Parameter | Description |
-|-----------|-------------|
-| `demo` | `1` - load demo driver card data |
-| `jsonurl` | URL to a JSON file to load on startup |
-| `hidepanels` | `1` - hide header and sidebar (for embedding) |
-| `hidecalendar` | `1` - hide the calendar sidebar |
-| `hidedisclaimer` | `1` - hide the disclaimer banner |
-| `tab` | Initial tab: `overview`, `activities`, `vehicles`, `places`, `events`, `faults`, `conditions`, `compliance`, `map` |
-| `tabs` | Comma-separated list of visible tabs |
-| `day` | Unix timestamp - open day detail dialog |
-| `theme` | `light` or `dark` |
-| `lang` | Locale code, e.g. `fr-FR` |
-
 ## Embedding
 
+TachoBox runs in an iframe, configured entirely through URL parameters - the data source, the period, which tabs and panels are shown, theme and language. The full reference is in **[docs/embedding.md](docs/embedding.md)**.
+
+A file from a flespi device:
+
 ```html
-<iframe
-  src="https://tachobox.flespi.io/#/device/123/file/abc?token=TOKEN&hidepanels=1"
-  width="100%" height="600" frameborder="0"
-></iframe>
+<iframe src="https://tachobox.flespi.io/#/device/123/file/abc?token=TOKEN&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
 ```
 
-> Passing a token in the URL is convenient but it ends up in browser history, referrer headers and server logs. Use a short-lived flespi token restricted to the devices being viewed.
+> A token in the URL ends up in browser history, referrer headers and server logs. Use a short-lived flespi token restricted to the devices being viewed.
 
-See [docs/overview.md](docs/overview.md) for full documentation.
+Several files for a period, served by your own backend - no token needed:
+
+```html
+<iframe src="https://tachobox.flespi.io/#/?jsonurl=https://example.com/period/42/manifest.json&from=2026-01-01&to=2026-01-31&hidepanels=1" width="100%" height="700" frameborder="0"></iframe>
+```
 
 ## Compliance engine
 
@@ -157,6 +147,13 @@ Multiple files are normalized and merged into one timeline (the same day from tw
 files keeps the richer record), then analysed together. They must be complementary -
 the same driver card or the same vehicle unit; mixing different drivers/vehicles (or a
 card with a VU) throws an error.
+
+Several files can also come in one document: a response listing more than one file
+(`{ result: [file, file, ...] }`) or a bare array of the items. Every file in it is
+analysed, the same as passing them as separate responses. Such a response used to be
+read by its first file only, so to keep that input working, files in it that do not
+match its first file, or are not parsed yet, are skipped rather than failing the run;
+`report.sources` lists what was analysed.
 
 [`scripts/find-violations.mjs`](scripts/find-violations.mjs) is only argument
 parsing and file reading around `analyze()`; import from

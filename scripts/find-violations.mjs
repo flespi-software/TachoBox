@@ -10,7 +10,8 @@
 // Pass several complementary files - successive downloads of the SAME driver card,
 // or of the same vehicle unit. They are normalized, merged into one timeline (same
 // day from two files -> the richer record is kept), and analysed together. Mixing
-// different drivers/vehicles (or a card with a VU) throws an error.
+// different drivers/vehicles (or a card with a VU) throws an error. A file may
+// itself list several files ({ result: [...] }); each of them is analysed.
 //
 // All the logic lives in src/analyze.js - import analyze() from there rather than
 // shelling out to this script.

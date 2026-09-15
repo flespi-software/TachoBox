@@ -8,6 +8,59 @@ changed in the data, what it means for a port, and where to look in the code.
 See [src/compliance/README.md](src/compliance/README.md#porting-to-another-language)
 for the conformance artifacts used to check a port.
 
+## 0.9.5
+
+### Several downloads of one card are merged, not replaced
+
+A driver card's ring buffer covers a few weeks, so a longer period comes from
+several downloads of the same card. In the app they used to replace each other
+(the newest won, and days only an older download held were lost); now every
+download stays a source of its own and `mergeRecordSets()` combines them, as
+`analyze()` already did for several inputs.
+
+For a port that means the merge has to tolerate the same record arriving from
+several sources. Days were already resolved by keeping the richer record; four
+more card record sets now skip a record an earlier source already added:
+
+| Records | Key |
+|---|---|
+| `vehicleUnitsUsed` | `timeStamp`, `manufacturerCode`, `deviceID` |
+| `controlActivityRecords` | `controlTime` |
+| `gnssAuthRecords` | `timeStamp`, `authenticationStatus` |
+| `placesAuthRecords` | `entryTime`, `authenticationStatus` |
+
+Unlike the other record sets, these are compared across sources only: records
+within one file are never collapsed, so a single-file merge is unchanged.
+
+File-wide card data (identification, last download) is taken from the source
+with the newest `downloadTs`.
+
+### One response can carry several files
+
+The media API returns `{ result: [...] }` with one item per file when asked for
+several. `detectAndNormalize()` reads `result[0]` only, and so did `analyze()`:
+the other files were silently ignored. The new `splitResponse()` in
+`src/utils/ddd.js` turns such a response into one `{ result: [item] }` per file;
+`analyze()` and the app's `jsonurl` loader both go through it. A bare array of
+items (`isMediaItem()`) is read as a response without its wrapper.
+
+Two traps for a port:
+
+- **Legacy vehicle unit output is not a list of files.** It spreads one download
+  over several items, one per day or technical block, and the adapter reads them
+  together. `splitResponse()` leaves such a response whole - see
+  `isLegacyMultiItem()`. Splitting it would turn one download into loose days.
+- **Do not start failing input that used to work.** A multi-file response was
+  read by its first file, so extra files in it that are unparsed or belong to a
+  different driver or vehicle are skipped by `analyze()` instead of throwing
+  (separate inputs still throw on a mismatch). `report.sources` lists what was
+  analysed.
+
+Every existing input gives the same report as in 0.9.4: all sample files, pairs
+of downloads, and a legacy multi-item VU response were compared against the
+previous release. Only a response with several parsed, compatible files changes,
+by adding the files that were ignored before.
+
 ## 0.9.3
 
 ### The card holder's date of birth is a calendar date

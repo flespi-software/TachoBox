@@ -28,10 +28,16 @@ and are used as the conformance inputs. A bare driver-card structure without the
 `result` wrapper (`{ EF_Application_Identification: ... }`) is also accepted, for
 files loaded straight from disk.
 
+A response can list several files - the media API does when asked for more than
+one uuid. `detectAndNormalize` reads the first file only, so split such a
+response with `splitResponse` first and normalize each part.
+
 ## API
 
 | Function | Purpose |
 |----------|---------|
+| `splitResponse(json)` | Splits a document into single-file documents, one `{ result: [item] }` per media item. Takes a response listing any number of files, or a bare item. A single-file response, a raw card structure and a legacy vehicle unit response that spreads one download over several items (one per day) come back whole, untouched. Call it before `detectAndNormalize`, which reads `result[0]` only. |
+| `isMediaItem(json)` | Whether `json` is one element of `result[]` without its wrapper (it has `uuid` or `content`). An array of such items is a response without its wrapper. |
 | `detectAndNormalize(json)` | Detects what the file is - driver card, vehicle unit, or a VU download with no activity - and returns a *source* object: `{ type, uuid, key, downloadTs, meta, name, enabled, generation, byGeneration }`. Returns `null` if the JSON is not a recognized parsed DDD file. |
 | `sourceData(src, gen)` | The payload of a source for the requested generation, falling back to whatever it actually has. Use this instead of reading `byGeneration` directly. |
 | `extractRecords(data)` | Pulls the flat record arrays (`activityRecords`, `placeRecords`, `eventRecords`, `faultRecords`, GNSS, vehicles, ...) out of one generation's data. |

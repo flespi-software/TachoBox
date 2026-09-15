@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { detectAndNormalize, extractRecords, mergeRecordSets, isCompatible, sourceData } from '../src/utils/ddd.js'
+import { detectAndNormalize, extractRecords, mergeRecordSets, isCompatible, sourceData, splitResponse } from '../src/utils/ddd.js'
 
 const DAY = 1717977600 // a UTC midnight
 const card = (changes) => ({
@@ -49,6 +49,52 @@ describe('ddd normalization adapter', () => {
     const { activityRecords } = mergeRecordSets([poor, rich], 'g1')
     expect(activityRecords).toHaveLength(1) // same day deduped
     expect(activityRecords[0].activityChangeInfo).toHaveLength(3) // richer wins
+  })
+
+  it('mergeRecordSets unions overlapping downloads of one card without repeats', () => {
+    const download = (days) => detectAndNormalize({
+      ...card([]),
+      EF_Driver_Activity_Data: {
+        CardDriverActivity: {
+          activityDailyRecords: days.map((d) => ({ activityRecordDate: DAY + d * 86400, activityChangeInfo: [{ changeTime: 0, activity: 'WORK' }] })),
+        },
+      },
+      EF_Vehicle_Units_Used: { cardVehicleUnitRecords: [{ timeStamp: DAY, manufacturerCode: 1, deviceID: 1 }] },
+      EF_Control_Activity_Data: { controlTime: DAY + 3600 },
+      EF_Places_Authentication: { placeAuthStatusRecords: [{ entryTime: DAY, authenticationStatus: 1 }] },
+      EF_GNSS_Places_Authentication: { gnssAuthStatusADRecords: [{ timeStamp: DAY, authenticationStatus: 1 }] },
+    })
+    const m = mergeRecordSets([download([0, 1]), download([1, 2])], 'g1')
+    expect(m.activityRecords.map((r) => (r.activityRecordDate - DAY) / 86400).sort()).toEqual([0, 1, 2])
+    expect(m.vehicleUnitsUsed).toHaveLength(1)
+    expect(m.controlActivityRecords).toHaveLength(1)
+    expect(m.placesAuthRecords).toHaveLength(1)
+    expect(m.gnssAuthRecords).toHaveLength(1)
+  })
+
+  // Only repeats across files are dropped; a single file's records stay as read
+  it('mergeRecordSets never collapses records within one file', () => {
+    const rec = { timeStamp: DAY, authenticationStatus: 1 }
+    const src = detectAndNormalize({ ...card([]), EF_GNSS_Places_Authentication: { gnssAuthStatusADRecords: [rec, { ...rec }] } })
+    expect(mergeRecordSets([src], 'g1').gnssAuthRecords).toHaveLength(2)
+  })
+
+  it('splitResponse gives one document per media item', () => {
+    const a = { uuid: 'a', content: { DF_Tachograph: {} } }
+    const b = { uuid: 'b', content: { DF_Tachograph: {} } }
+    expect(splitResponse({ result: [a, b] })).toEqual([{ result: [a] }, { result: [b] }])
+    expect(splitResponse(a)).toEqual([{ result: [a] }])
+    const single = { result: [a], extra: 1 }
+    expect(splitResponse(single)[0]).toBe(single) // a single file passes through untouched
+    const raw = card([])
+    expect(splitResponse(raw)[0]).toBe(raw)
+  })
+
+  // Legacy VU output spreads one download over several items, one per day
+  it('splitResponse keeps a legacy per-day VU response whole', () => {
+    const day = (ts) => ({ content: { CurrentDateTime: [ts], ActivityChangeInfo: [{ changeTime: 0, activity: 'WORK' }] } })
+    const legacy = { result: [day(DAY), day(DAY + 86400)] }
+    expect(splitResponse(legacy)).toEqual([legacy])
   })
 
   it('isCompatible rejects mixing card and VU sources', () => {

@@ -31,9 +31,12 @@ export const useDddStore = defineStore('ddd', () => {
   // stays 'g2' and the generation selector / indicator misreport the data.
   watch(hasG2, (g2) => { if (!g2 && activeGen.value === 'g2') activeGen.value = 'g1' })
 
+  // File-wide data (identification, last download) comes from the newest download
   const raw = computed(() => {
     if (!enabledSources.value.length) return null
-    const driverCard = enabledSources.value.find((s) => s.type === 'driver-card')
+    const driverCard = enabledSources.value
+      .filter((s) => s.type === 'driver-card')
+      .reduce((best, s) => (!best || s.downloadTs > best.downloadTs ? s : best), null)
     const src = driverCard || enabledSources.value[0]
     return sourceData(src, activeGen.value)
   })
@@ -103,17 +106,12 @@ export const useDddStore = defineStore('ddd', () => {
       if (existing >= 0) return { error: null, skipped: true }
     }
 
-    // Driver card: replace if same key and older download
-    if (normalized.type === 'driver-card') {
-      const idx = sources.value.findIndex((s) => s.type === 'driver-card' && s.key === normalized.key)
-      if (idx >= 0) {
-        if (normalized.downloadTs >= sources.value[idx].downloadTs) {
-          normalized.enabled = sources.value[idx].enabled
-          sources.value.splice(idx, 1, normalized)
-        }
-        return { error: null }
-      }
-    }
+    // Several downloads of one card or VU are kept side by side and merged, so
+    // days only an older download still holds are not lost. Only the same file
+    // loaded again without a uuid (e.g. from disk) is skipped.
+    const sameFile = sources.value.some((s) => !s.uuid && s.key === normalized.key
+      && s.downloadTs === normalized.downloadTs && s.name === normalized.name)
+    if (!normalized.uuid && sameFile) return { error: null, skipped: true }
 
     // Check compatibility with current enabled set
     const currentlyEnabled = sources.value.filter((s) => s.enabled)

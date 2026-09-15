@@ -6,7 +6,8 @@
 // Input is the JSON returned by the flespi media API for a tacho file, i.e.
 // GET /gw/devices/{id}/media?data={uuid, fields:'uuid,name,meta,content'} -
 // an object shaped { result: [{ uuid, name, meta, content }] }. The bundled
-// demo files in public/ are exactly that, unmodified.
+// demo files in public/ are exactly that, unmodified. A response listing several
+// files, a bare item, or an array of any of these is split into one file each.
 //
 // This is the facade over the two framework-free libraries in this repo:
 // ./utils/ddd.js normalizes the parser output into activity records, and
@@ -16,7 +17,7 @@
 //
 // Framework-free: runs in plain Node and in the browser, no dependencies.
 
-import { detectAndNormalize, mergeRecordSets, extractRecords, isCompatible, sourceData } from './utils/ddd.js'
+import { detectAndNormalize, mergeRecordSets, extractRecords, isCompatible, sourceData, splitResponse, isMediaItem } from './utils/ddd.js'
 import {
   analyzeDayViolations,
   analyzeDailyDriving,
@@ -65,15 +66,29 @@ function describeSource(src, usedGen) {
   }
 }
 
+// Sources of one input. A response listing several files used to be read by its
+// first file only; to keep such input working, files in it that are not parsed
+// or do not match the first parsed one are skipped instead of failing the run.
+// Null marks input that is not a parsed DDD file at all.
+function readFiles(json) {
+  const parts = splitResponse(json)
+  if (parts.length === 1) return [detectAndNormalize(parts[0])]
+  const files = parts.map(detectAndNormalize).filter(Boolean)
+  if (!files.length) return [null]
+  return files.filter((s) => isCompatible(s, [files[0]]))
+}
+
 // Analyze one or more flespi API responses. Returns a plain report object, no IO.
 // Multiple inputs must be complementary - the same driver card (e.g. successive
 // downloads) or the same vehicle unit; mixing different drivers/vehicles, or a
 // card with a VU, throws (same rule as the app's isCompatible).
 // opts.gen forces a generation; default prefers Gen2 when any source carries it.
 export function analyze(input, { gen } = {}) {
-  const jsons = Array.isArray(input) ? input : [input]
+  // An array of media items is one response without its wrapper
+  const bareItems = Array.isArray(input) && input.length && input.every(isMediaItem)
+  const jsons = bareItems ? [{ result: input }] : Array.isArray(input) ? input : [input]
   if (!jsons.length) throw new Error('No input provided')
-  const sources = jsons.map(detectAndNormalize)
+  const sources = jsons.flatMap(readFiles)
   if (sources.some((s) => !s)) throw new Error('One or more inputs are not a recognized parsed DDD file')
 
   // All inputs must be mutually compatible to be analysed as one dataset.

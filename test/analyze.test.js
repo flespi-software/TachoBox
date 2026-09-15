@@ -50,6 +50,27 @@ describe('analyze() pipeline', () => {
     expect(twice.violations).toEqual(one.violations)
   })
 
+  // A response listing several files - or those files as a bare item array -
+  // analyses every file, the same as passing them one response each.
+  it('splits a multi-file response into its files', () => {
+    const card = load('example.json').result[0]
+    const other = { ...card, uuid: 'second-download' }
+    const expected = analyze([{ result: [card] }, { result: [other] }])
+    expect(analyze({ result: [card, other] })).toEqual(expected)
+    expect(analyze([card, other])).toEqual(expected)
+    expect(analyze({ result: [card, other] }).sources).toHaveLength(2)
+  })
+
+  // Such a response used to be read by its first file only. Extra files that do
+  // not match it or are not parsed are skipped, so that input keeps working.
+  it('keeps reading a multi-file response when extra files do not fit', () => {
+    const card = load('example.json').result[0]
+    const vu = load('example-vu.json').result[0]
+    const one = analyze(load('example.json'))
+    expect(analyze({ result: [card, vu] })).toEqual(one)
+    expect(analyze({ result: [card, { uuid: 'x', name: 'not-parsed.ddd' }] })).toEqual(one)
+  })
+
   // Incompatible inputs (a driver card mixed with a VU, or different drivers) are
   // rejected rather than silently merged into meaningless results.
   it('throws on incompatible files', () => {
