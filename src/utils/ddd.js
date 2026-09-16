@@ -324,7 +324,11 @@ export function detectAndNormalize(json) {
     if (content?.DF_Tachograph || content?.DF_Tachograph_G2) {
       const cardNumber = content.DF_Tachograph?.EF_Identification?.CardIdentification?.cardNumber
         || content.DF_Tachograph_G2?.EF_Identification?.CardIdentification?.cardNumber || ''
-      const downloadTs = content.DF_Tachograph?.EF_Card_Download?.LastCardDownload || 0
+      // Both applications record the download; the later one is this download
+      const downloadTs = Math.max(
+        content.DF_Tachograph?.EF_Card_Download?.LastCardDownload || 0,
+        content.DF_Tachograph_G2?.EF_Card_Download?.LastCardDownload || 0,
+      )
       return {
         type: 'driver-card',
         uuid: first.uuid || null,
@@ -515,6 +519,25 @@ export function sourceData(src, gen) {
 // Appends a source's records, skipping those an earlier source already added.
 // Unlike dedup(), a file's own records are never collapsed: card ring buffers
 // only repeat across overlapping downloads of the same card.
+// The download cuts the day it happened on: the activity running at that moment
+// has no recorded end, and reading it as lasting until midnight inflates the
+// day (a morning download turns a short drive into a whole day of driving).
+// Mark where the data stops, in minutes from midnight, so consumers bound it
+// there. Left unset when the download time is unknown or the day carries a
+// change after it - then nothing is known about the end.
+function boundToDownload(records, downloadTs) {
+  if (!downloadTs) return records
+  const dayTs = dayStart(downloadTs)
+  const untilMin = Math.floor((downloadTs - dayTs) / 60)
+  if (untilMin <= 0 || untilMin >= 1440) return records
+  return records.map((r) => {
+    if (r.activityRecordDate !== dayTs || !r.activityChangeInfo?.length) return r
+    const lastChange = r.activityChangeInfo.reduce((m, c) => Math.max(m, c.changeTime || 0), 0)
+    if (lastChange >= untilMin) return r
+    return { ...r, recordedUntilMin: untilMin }
+  })
+}
+
 function addAcross(target, records, keyFn) {
   const earlier = new Set(target.map(keyFn))
   for (const rec of records) if (!earlier.has(keyFn(rec))) target.push(rec)
@@ -526,7 +549,7 @@ export function mergeRecordSets(sources, gen) {
   for (const src of sources) {
     const data = sourceData(src, gen)
     const r = extractRecords(data)
-    all.activityRecords.push(...r.activityRecords)
+    all.activityRecords.push(...boundToDownload(r.activityRecords, src.downloadTs))
     all.vehicleRecords.push(...r.vehicleRecords)
     all.placeRecords.push(...r.placeRecords)
     if (all.placeCapacity == null) all.placeCapacity = r.placeCapacity

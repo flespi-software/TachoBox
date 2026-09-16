@@ -103,7 +103,7 @@ export default defineComponent({
   setup(props) {
     const arcs = computed(() => {
       if (!props.record?.activityChangeInfo?.length) return []
-      const { segments } = buildDaySegments(props.record.activityChangeInfo, { isLastDay: props.isLastDay })
+      const { segments } = buildDaySegments(props.record, { isLastDay: props.isLastDay })
       return segments.map((s) => {
         const startAngle = (s.startMin / 1440) * 360
         const endAngle = s.ongoing ? startAngle + 30 : (s.endMin / 1440) * 360

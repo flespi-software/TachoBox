@@ -41,7 +41,7 @@ response with `splitResponse` first and normalize each part.
 | `detectAndNormalize(json)` | Detects what the file is - driver card, vehicle unit, or a VU download with no activity - and returns a *source* object: `{ type, uuid, key, downloadTs, meta, name, enabled, generation, byGeneration }`. Returns `null` if the JSON is not a recognized parsed DDD file. |
 | `sourceData(src, gen)` | The payload of a source for the requested generation, falling back to whatever it actually has. Use this instead of reading `byGeneration` directly. |
 | `extractRecords(data)` | Pulls the flat record arrays (`activityRecords`, `placeRecords`, `eventRecords`, `faultRecords`, GNSS, vehicles, ...) out of one generation's data. |
-| `mergeRecordSets(sources, gen)` | Merges several sources into one timeline for the chosen generation (`'g1'` or `'g2'`), deduplicating. Where two sources carry the same day, the record with more activity changes wins, so a day's driving is never silently dropped. |
+| `mergeRecordSets(sources, gen)` | Merges several sources into one timeline for the chosen generation (`'g1'` or `'g2'`), deduplicating. Where two sources carry the same day, the record with more activity changes wins, so a day's driving is never silently dropped. Also sets `recordedUntilMin` on the day each source was downloaded on - minutes from midnight where that day's data stops, so the activity that was still running is not read as lasting until midnight. |
 | `isCompatible(src, enabledSources)` | Whether a source can be analysed together with the ones already loaded. Different drivers, different vehicles, or a card mixed with a VU are incompatible. |
 
 ## How a vehicle unit file differs from a driver card

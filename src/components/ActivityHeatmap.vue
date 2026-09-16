@@ -91,7 +91,7 @@ export default defineComponent({
       const maxTs = validRecords.reduce((max, r) => Math.max(max, r.activityRecordDate), 0)
       for (const r of validRecords) {
         const isLastDay = r.activityRecordDate === maxTs
-        const { totals } = buildDaySegments(r.activityChangeInfo, { isLastDay })
+        const { totals } = buildDaySegments(r, { isLastDay })
         map[r.activityRecordDate] = totals
       }
       return map

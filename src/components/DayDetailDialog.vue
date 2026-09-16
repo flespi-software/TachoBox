@@ -317,7 +317,7 @@ export default defineComponent({
       const allRecords = dddStore.activityRecords.filter((r) => r.activityChangeInfo?.length)
       const maxTs = allRecords.reduce((max, r) => Math.max(max, r.activityRecordDate), 0)
       const isLastDay = activityRecord.value.activityRecordDate === maxTs
-      return buildDaySegments(activityRecord.value.activityChangeInfo, { isLastDay })
+      return buildDaySegments(activityRecord.value, { isLastDay })
     })
 
     const segments = computed(() =>
@@ -367,7 +367,7 @@ export default defineComponent({
         )
         let weekDriving = 0
         for (const r of weekRecords) {
-          const { totals: rt } = buildDaySegments(r.activityChangeInfo)
+          const { totals: rt } = buildDaySegments(r)
           weekDriving += rt.DRIVING || 0
         }
         if (weekDriving > 0) bars.push(limBar(t('Weekly driving'), weekDriving, 56 * 60))

@@ -8,12 +8,15 @@ function getDayActivities(record) {
   if (!record?.activityChangeInfo?.length) return []
   const changes = filterDriverChanges(record.activityChangeInfo)
   const result = []
+  // The day of the download ends where its data does, not at midnight: the
+  // activity running when the card or unit was read has no recorded end.
+  const dayEnd = Math.min(record.recordedUntilMin ?? MINUTES_IN_DAY, MINUTES_IN_DAY)
   for (let i = 0; i < changes.length; i++) {
     const startMin = changes[i].changeTime
     if (startMin >= MINUTES_IN_DAY) continue
     const endMin = i < changes.length - 1
       ? Math.min(changes[i + 1].changeTime, MINUTES_IN_DAY)
-      : MINUTES_IN_DAY
+      : Math.max(startMin, dayEnd)
     // Card-out time (cardInserted === false) is treated as rest. The stored
     // activity is stale (whatever was active before withdrawal, usually WORK or
     // DRIVING), so counting it would raise false rest/driving violations - the
@@ -509,8 +512,10 @@ export function detectAnomalies(records, eventRecords) {
     const activities = getDayActivities(r)
     if (!activities.length) continue
     const totalMin = activities.reduce((sum, a) => sum + a.duration, 0)
-    if (totalMin < MINUTES_IN_DAY - 5 && totalMin > 0) { // 5min tolerance
-      const unaccounted = MINUTES_IN_DAY - totalMin
+    // The day the download cut short is only expected to be covered up to it
+    const dayLength = Math.min(r.recordedUntilMin ?? MINUTES_IN_DAY, MINUTES_IN_DAY)
+    if (totalMin < dayLength - 5 && totalMin > 0) { // 5min tolerance
+      const unaccounted = dayLength - totalMin
       if (unaccounted > 30) { // Only flag if > 30min unaccounted
         anomalies.push({
           type: 'unaccounted',

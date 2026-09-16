@@ -64,7 +64,7 @@ export default defineComponent({
             ts,
             blocks,
             segments: record?.activityChangeInfo?.length
-              ? buildDaySegments(record.activityChangeInfo).segments
+              ? buildDaySegments(record).segments
               : [],
             label: `${formatDate(ts)}, ${formatWeekdayLong(ts)}`,
           }

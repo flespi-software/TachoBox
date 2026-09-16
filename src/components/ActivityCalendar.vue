@@ -57,8 +57,8 @@ import { useI18n } from 'vue-i18n'
 import { formatDuration, buildDaySegments, ACTIVITY_CLS } from 'src/utils/activity'
 import { formatDayParts } from 'src/utils/format'
 
-function buildCalendarData(rawChanges, isLastDay) {
-  const { segments, totals } = buildDaySegments(rawChanges, { isLastDay })
+function buildCalendarData(record, isLastDay) {
+  const { segments, totals } = buildDaySegments(record, { isLastDay })
   const calSegments = segments.map((s) => ({
     activity: s.activity,
     startPct: s.startPct,
@@ -126,7 +126,7 @@ export default defineComponent({
       const maxTs = validRecords.reduce((max, r) => Math.max(max, r.activityRecordDate), 0)
       for (const r of validRecords) {
         const isLastDay = r.activityRecordDate === maxTs
-        map[r.activityRecordDate] = buildCalendarData(r.activityChangeInfo, isLastDay)
+        map[r.activityRecordDate] = buildCalendarData(r, isLastDay)
       }
       return map
     })

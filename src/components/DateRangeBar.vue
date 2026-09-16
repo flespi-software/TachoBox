@@ -151,7 +151,7 @@ export default defineComponent({
       let maxDrive = 1
       const drive = new Map()
       for (const [ts, r] of recByDay) {
-        const m = buildDaySegments(r.activityChangeInfo, {}).totals?.DRIVING || 0
+        const m = buildDaySegments(r, {}).totals?.DRIVING || 0
         drive.set(ts, m)
         if (m > maxDrive) maxDrive = m
       }

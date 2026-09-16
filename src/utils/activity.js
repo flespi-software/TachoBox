@@ -49,8 +49,13 @@ export function formatDuration(minutes) {
   return `${h}h ${m}m`
 }
 
-export function buildDaySegments(rawChanges, { isLastDay = false } = {}) {
-  const changes = filterDriverChanges(rawChanges)
+// Takes an activity record, or a bare change list when the record is not at
+// hand. A record carrying `recordedUntilMin` (the day the download cut short)
+// ends its last activity there instead of at midnight.
+export function buildDaySegments(input, { isLastDay = false } = {}) {
+  const record = Array.isArray(input) ? null : input
+  const changes = filterDriverChanges(record ? record.activityChangeInfo || [] : input)
+  const recordedUntil = record?.recordedUntilMin ?? null
   const totals = { DRIVING: 0, WORK: 0, AVAILABILITY: 0, 'BREAK/REST': 0 }
   const segments = []
 
@@ -62,7 +67,9 @@ export function buildDaySegments(rawChanges, { isLastDay = false } = {}) {
     const isLast = i === changes.length - 1
     let endMin
 
-    if (isLast && isLastDay) {
+    if (isLast && recordedUntil != null) {
+      endMin = Math.max(startMin, recordedUntil)
+    } else if (isLast && isLastDay) {
       endMin = null
     } else {
       const nextMin = !isLast ? changes[i + 1].changeTime : MINUTES_IN_DAY
@@ -77,10 +84,13 @@ export function buildDaySegments(rawChanges, { isLastDay = false } = {}) {
 
     const color = ACTIVITY_COLORS[activity] || '#616161'
     const ongoing = endMin === null
+    // Recorded up to the download and still running then - a real duration, but
+    // marked like an ongoing one, since the activity did not end there.
+    const truncated = isLast && recordedUntil != null
     const cardOut = current.cardInserted === false
 
     let bgStyle = null
-    if (ongoing) bgStyle = { background: ongoingBackground(color) }
+    if (ongoing || truncated) bgStyle = { background: ongoingBackground(color) }
     else if (cardOut) bgStyle = cardOutBackground()
 
     segments.push({
@@ -95,6 +105,7 @@ export function buildDaySegments(rawChanges, { isLastDay = false } = {}) {
       startLabel: formatTime(startMin),
       endLabel: ongoing ? '...' : formatTime(endMin),
       ongoing,
+      truncated,
       bgStyle,
     })
   }

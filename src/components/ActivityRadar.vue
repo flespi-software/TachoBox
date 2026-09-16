@@ -105,8 +105,9 @@ export default defineComponent({
       const sums = { DRIVING: 0, WORK: 0, AVAILABILITY: 0, 'BREAK/REST': 0 }
       const validRecords = props.records.filter((r) => r.activityChangeInfo?.length)
       for (const r of validRecords) {
-        // Never pass isLastDay - radar needs actual durations, not "ongoing" behavior
-        const { totals: dayTotals } = buildDaySegments(r.activityChangeInfo)
+        // No isLastDay: the radar needs real durations. The record bounds its own
+        // last day at the download, so nothing is extrapolated to midnight.
+        const { totals: dayTotals } = buildDaySegments(r)
         for (const key of Object.keys(sums)) {
           sums[key] += dayTotals[key] || 0
         }

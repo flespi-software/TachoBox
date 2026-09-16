@@ -64,7 +64,7 @@ export default defineComponent({
       const start = props.fromTs - (props.fromTs % DAY)
       for (let ts = start; ts <= props.toTs; ts += DAY) {
         const rec = byTs.value.get(ts)
-        const segs = (rec ? buildDaySegments(rec.activityChangeInfo, {}) : { segments: [] }).segments
+        const segs = (rec ? buildDaySegments(rec, {}) : { segments: [] }).segments
         // highlighted portion of this day (the part of [hlFrom,hlTo] inside the day)
         let hl = null
         if (props.hlFrom != null && props.hlTo != null) {

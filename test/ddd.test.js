@@ -79,6 +79,30 @@ describe('ddd normalization adapter', () => {
     expect(mergeRecordSets([src], 'g1').gnssAuthRecords).toHaveLength(2)
   })
 
+  // The download truncates its own day: nothing is known about the activity
+  // that was still running when the card was read.
+  it('marks how far the download day was recorded', () => {
+    const DOWNLOAD = DAY + 6 * 3600 + 11 * 60 // 06:11
+    const withDownload = {
+      ...card([{ changeTime: 0, activity: 'WORK' }, { changeTime: 289, activity: 'DRIVING' }]),
+      EF_Card_Download: { LastCardDownload: DOWNLOAD },
+    }
+    const src = detectAndNormalize(withDownload)
+    const [rec] = mergeRecordSets([src], 'g1').activityRecords
+    expect(rec.recordedUntilMin).toBe(371)
+    // the record of the source itself is left untouched
+    expect(src.byGeneration.g1.EF_Driver_Activity_Data.CardDriverActivity.activityDailyRecords[0].recordedUntilMin).toBeUndefined()
+  })
+
+  it('leaves the day unbounded when it holds a change after the download', () => {
+    const late = {
+      ...card([{ changeTime: 0, activity: 'WORK' }, { changeTime: 800, activity: 'DRIVING' }]),
+      EF_Card_Download: { LastCardDownload: DAY + 6 * 3600 },
+    }
+    const [rec] = mergeRecordSets([detectAndNormalize(late)], 'g1').activityRecords
+    expect(rec.recordedUntilMin).toBeUndefined()
+  })
+
   it('splitResponse gives one document per media item', () => {
     const a = { uuid: 'a', content: { DF_Tachograph: {} } }
     const b = { uuid: 'b', content: { DF_Tachograph: {} } }

@@ -103,11 +103,20 @@ flespi tacho-file-parse output:
     { changeTime: 270, activity: 'BREAK/REST', slot: 'DRIVER', cardInserted: true },
     // activity: 'DRIVING' | 'WORK' | 'AVAILABILITY' | 'BREAK/REST'
   ],
+  recordedUntilMin: 371,  // optional: minutes since midnight where the data stops
 }
 ```
 
 Most functions take an array of these records (the whole loaded dataset), since
 weekly and rest rules span day boundaries.
+
+`recordedUntilMin` is set only on the day a download happened on, and says how
+far that day is recorded: the activity running when the card or unit was read
+has no recorded end, so the engine ends it there instead of at midnight. Without
+it a morning download reads as a whole day of whatever was running - hours of
+phantom driving in the daily and weekly totals, and false rest violations. The
+day is still incomplete, so `analyzeDayViolations` is called with
+`isLastDay: true` for it and does not judge it.
 
 ## Public API
 

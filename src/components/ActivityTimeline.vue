@@ -60,8 +60,8 @@ const ACT_VAR = {
   AVAILABILITY: 'var(--act-availability)', 'BREAK/REST': 'var(--act-rest)',
 }
 
-function buildTimelineSegments(rawChanges, isLastDay) {
-  const { segments } = buildDaySegments(rawChanges, { isLastDay })
+function buildTimelineSegments(record, isLastDay) {
+  const { segments } = buildDaySegments(record, { isLastDay })
   return segments.map((s) => ({
     cls: s.cls,
     activity: s.activity,
@@ -147,7 +147,7 @@ export default defineComponent({
             label: String(day),
             isMonthStart,
             monthLabel: formatDayParts(r.activityRecordDate, { month: 'short', year: 'numeric' }),
-            segments: buildTimelineSegments(r.activityChangeInfo, isLastDay),
+            segments: buildTimelineSegments(r, isLastDay),
             distance: r.activityDayDistance || 0,
             distPct: r.activityDayDistance ? Math.max(3, (r.activityDayDistance / maxDist) * 100) : 0,
           }

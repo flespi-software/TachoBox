@@ -135,7 +135,7 @@ export default defineComponent({
           const dateStr = formatDate(record.activityRecordDate)
 
           const isLastDay = idx === filtered.length - 1
-          const { segments, totals } = buildDaySegments(record.activityChangeInfo, { isLastDay })
+          const { segments, totals } = buildDaySegments(record, { isLastDay })
           const dist = record.activityDayDistance || 0
 
           return {

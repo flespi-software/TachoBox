@@ -8,6 +8,41 @@ changed in the data, what it means for a port, and where to look in the code.
 See [src/compliance/README.md](src/compliance/README.md#porting-to-another-language)
 for the conformance artifacts used to check a port.
 
+## 0.9.7
+
+### The download day ends at the download, not at midnight
+
+`RULES_VERSION` moves to `1.2.0`. The activity that was running when a card or
+vehicle unit was read has no recorded end: the file simply stops. Both this app
+and the engine used to read that last change as lasting until midnight, so a
+download at 06:11 turned an 82-minute morning drive into 19h of driving - in the
+day's totals, in the weekly and bi-weekly driving sums, and as false daily-rest
+infringements on that day.
+
+The adapter now records where the data stops. `mergeRecordSets()` sets
+`recordedUntilMin` (minutes from midnight) on the day the source was downloaded
+on, taken from `EF_Card_Download.LastCardDownload` for a card (the later of the
+two applications) and `VuOverview.CurrentDateTime` for a vehicle unit. It is
+left unset when that time is unknown, or when the day carries a change after it
+- then nothing is known about the end and the old reading stands.
+
+For a port:
+
+- `getDayActivities()` ends the last activity of a day at `recordedUntilMin`
+  when it is set. Everything downstream - continuous driving, daily and weekly
+  driving totals, rest analysis - follows from that one place.
+- The unaccounted-time anomaly measures the day against `recordedUntilMin`
+  instead of 24h, or every download day reports the hours after the download as
+  a data gap.
+- Judging is unchanged: the last day is still incomplete, and
+  `analyzeDayViolations(record, { isLastDay: true })` still returns nothing for
+  it. What changed is the arithmetic that feeds every other rule.
+
+Over the sample files this removes false `most-serious` daily-rest
+infringements on download days and adds no findings anywhere. Conformance
+reports are unchanged apart from the rules version: neither demo file has an
+activity still running at its download.
+
 ## 0.9.5
 
 ### Several downloads of one card are merged, not replaced
