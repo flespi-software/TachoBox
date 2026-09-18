@@ -37,6 +37,38 @@ function cardOutBackground() {
   }
 }
 
+// Theme-aware colours of the activity bands, as CSS variables
+export const ACTIVITY_VARS = {
+  DRIVING: 'var(--act-driving)',
+  WORK: 'var(--act-work)',
+  AVAILABILITY: 'var(--act-availability)',
+  'BREAK/REST': 'var(--act-rest)',
+}
+
+const NO_HIDDEN = new Set()
+
+// One day of segments as a single CSS gradient (cheaper than a node per
+// segment). A gradient stretches its first and last colour to the edges, so a
+// day the segments do not cover end to end - one cut short by the download -
+// would be painted with the neighbouring activity rather than reading as no
+// data. Those stretches get explicit transparent stops, as do the activities
+// hidden in the legend, which keeps every segment in place.
+export function segmentsGradient(segments, { hidden = NO_HIDDEN, direction = '90deg', empty = 'transparent' } = {}) {
+  const parts = []
+  let coveredTo = 0
+  for (const s of segments) {
+    const start = s.startPct
+    const end = Math.min(100, start + s.widthPct)
+    if (start > coveredTo) parts.push(`transparent ${coveredTo.toFixed(3)}% ${start.toFixed(3)}%`)
+    const col = hidden.has(s.activity) ? 'transparent' : (ACTIVITY_VARS[s.activity] || 'var(--act-rest)')
+    parts.push(`${col} ${start.toFixed(3)}% ${end.toFixed(3)}%`)
+    coveredTo = Math.max(coveredTo, end)
+  }
+  if (!parts.length) return empty
+  if (coveredTo < 100) parts.push(`transparent ${coveredTo.toFixed(3)}% 100%`)
+  return `linear-gradient(${direction}, ${parts.join(', ')})`
+}
+
 export function formatTime(minutes) {
   const h = Math.floor(minutes / 60)
   const m = minutes % 60

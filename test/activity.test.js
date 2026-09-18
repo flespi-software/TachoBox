@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { buildDaySegments } from '../src/utils/activity.js'
+import { buildDaySegments, segmentsGradient } from '../src/utils/activity.js'
 import { continuousDrivingStretches, detectAnomalies } from '../src/compliance/index.js'
 
 const DAY = 1717977600 // a UTC midnight
@@ -41,6 +41,20 @@ describe('the day a download cut short', () => {
       { startMin: 289, endMin: 371, driving: 82 },
     ])
     expect(continuousDrivingStretches(record())[0].driving).toBe(1440 - 289)
+  })
+
+  // A CSS gradient stretches its last colour to the edge, so the uncovered rest
+  // of the day used to be painted with the activity that was running.
+  it('paints only the recorded part of the day', () => {
+    const { segments } = buildDaySegments(record({ recordedUntilMin: 371 }))
+    const css = segmentsGradient(segments)
+    expect(css.endsWith('transparent 25.764% 100%)')).toBe(true)
+    expect(css).toContain('var(--act-driving) 20.069% 25.764%')
+  })
+
+  it('leaves a full day fully painted', () => {
+    const css = segmentsGradient(buildDaySegments(record()).segments)
+    expect(css).not.toContain('transparent')
   })
 
   it('does not report the rest of that day as unaccounted time', () => {

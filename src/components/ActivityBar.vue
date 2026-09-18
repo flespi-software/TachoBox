@@ -26,6 +26,7 @@
 <script>
 import { defineComponent, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { segmentsGradient } from 'src/utils/activity'
 
 // One day of driver activity as a horizontal band: a single CSS gradient rather
 // than one node per segment, plus the card-out hatch, optional markers and a
@@ -50,19 +51,7 @@ export default defineComponent({
   setup(props) {
     const { t } = useI18n()
 
-    const ACT_VAR = {
-      DRIVING: 'var(--act-driving)', WORK: 'var(--act-work)',
-      AVAILABILITY: 'var(--act-availability)', 'BREAK/REST': 'var(--act-rest)',
-    }
-
-    const gradient = computed(() => {
-      const parts = []
-      for (const s of props.segments) {
-        const col = props.hiddenActivities.has(s.activity) ? 'transparent' : (ACT_VAR[s.activity] || 'var(--act-rest)')
-        parts.push(`${col} ${s.startPct.toFixed(3)}% ${(s.startPct + s.widthPct).toFixed(3)}%`)
-      }
-      return parts.length ? `linear-gradient(90deg, ${parts.join(', ')})` : 'transparent'
-    })
+    const gradient = computed(() => segmentsGradient(props.segments, { hidden: props.hiddenActivities }))
 
     const cardOutSegs = computed(() =>
       props.segments.filter((s) => s.cardOut && !props.hiddenActivities.has(s.activity)),

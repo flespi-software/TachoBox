@@ -28,19 +28,12 @@
 
 <script>
 import { defineComponent, computed } from 'vue'
-import { buildDaySegments } from 'src/utils/activity'
+import { buildDaySegments, segmentsGradient } from 'src/utils/activity'
 import { formatDayParts } from 'src/utils/format'
 
-const ACT_VAR = {
-  DRIVING: 'var(--act-driving)', WORK: 'var(--act-work)',
-  AVAILABILITY: 'var(--act-availability)', 'BREAK/REST': 'var(--act-rest)',
-}
 const DAY = 86400
 
-function gradient(segments) {
-  const parts = segments.map((s) => `${ACT_VAR[s.activity] || 'var(--act-rest)'} ${s.startPct.toFixed(2)}% ${(s.startPct + s.widthPct).toFixed(2)}%`)
-  return parts.length ? `linear-gradient(to right, ${parts.join(', ')})` : 'transparent'
-}
+const gradient = (segments) => segmentsGradient(segments, { direction: 'to right' })
 
 export default defineComponent({
   name: 'ViolationTimeline',

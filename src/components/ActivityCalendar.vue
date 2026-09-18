@@ -54,7 +54,7 @@
 <script>
 import { defineComponent, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { formatDuration, buildDaySegments, ACTIVITY_CLS } from 'src/utils/activity'
+import { formatDuration, buildDaySegments, segmentsGradient, ACTIVITY_CLS } from 'src/utils/activity'
 import { formatDayParts } from 'src/utils/format'
 
 function buildCalendarData(record, isLastDay) {
@@ -94,21 +94,9 @@ export default defineComponent({
       hidden.value = s
     }
 
-    // Day timeline painted as one CSS gradient instead of one div per segment
-    // (mirrors ActivityTable). Hidden activities become a transparent stop, so
-    // segment positions stay put - toggling the legend leaves a gap rather than
-    // collapsing the bar. Reads hidden.value so the :style binding re-evaluates.
-    const ACT_VAR = {
-      DRIVING: 'var(--act-driving)', WORK: 'var(--act-work)',
-      AVAILABILITY: 'var(--act-availability)', 'BREAK/REST': 'var(--act-rest)',
-    }
+    // Reads hidden.value so the :style binding re-evaluates when the legend changes
     function dayGradient(segments) {
-      const parts = []
-      for (const s of segments) {
-        const col = hidden.value.has(s.activity) ? 'transparent' : (ACT_VAR[s.activity] || 'var(--act-rest)')
-        parts.push(`${col} ${s.startPct.toFixed(3)}% ${(s.startPct + s.widthPct).toFixed(3)}%`)
-      }
-      return parts.length ? `linear-gradient(90deg, ${parts.join(', ')})` : 'none'
+      return segmentsGradient(segments, { hidden: hidden.value, empty: 'none' })
     }
 
     function scrollToDate(ts) {
