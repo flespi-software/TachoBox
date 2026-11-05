@@ -12,7 +12,7 @@
 // or SEVERITY changes, or when the set of detected infringements changes.
 // Reimplementations in other languages should report the version they were
 // ported from, so a divergence shows up instead of going unnoticed.
-export const RULES_VERSION = '1.2.0'
+export const RULES_VERSION = '1.3.0'
 
 const H = (h) => Math.round(h * 60) // hours -> minutes
 
@@ -34,6 +34,8 @@ export const LIMITS = {
   weeklyRestReduced: 24 * 60, // Art.8.6 - 24h reduced weekly rest
   weeklyRestRegular: 45 * 60, // Art.8.6 - 45h regular weekly rest
   weeklyRestMaxInterval: 6 * 24 * 60, // Art.8.6 - next weekly rest within six 24h periods
+  multiManningRestWindow: 30 * 60, // Art.8.5 - multi-manning: 9h daily rest within 30h of the previous rest
+  multiManningSoloStart: 60, // Art.4(o) - the other driver is optional for the first hour of multi-manning
 }
 
 // --- Severity bands (Reg. 2016/403) ---
@@ -70,6 +72,16 @@ export const SEVERITY = {
   'daily-rest': {
     // Insufficient reduced daily rest < 9h (reduction allowed) - Reg. 2016/403
     // Annex III rows D4-D6: 8-9h Serious, 7-8h Very serious, < 7h Most serious.
+    dir: 'under',
+    bands: [
+      { at: H(7), level: 'most-serious' },
+      { at: H(8), level: 'very-serious' },
+      { at: H(9), level: 'serious' },
+    ],
+  },
+  'daily-rest-multi-manning': {
+    // Insufficient daily rest < 9h for multi-manning (Art.8.5) - Annex III rows
+    // D10-D12: 8-9h Serious, 7-8h Very serious, < 7h Most serious.
     dir: 'under',
     bands: [
       { at: H(7), level: 'most-serious' },

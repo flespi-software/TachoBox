@@ -282,6 +282,7 @@ export default defineComponent({
       { code: '6.3', label: 'Two-week driving' },
       { code: '7', label: 'Break' },
       { code: '8.2', label: 'Daily rest' },
+      { code: '8.5', label: 'Daily rest (multi-manning)' },
       { code: '8.6', label: 'Weekly rest' },
       { code: '34.1', label: 'Card withdrawal' },
       { code: '34.7', label: 'Work period marking' },

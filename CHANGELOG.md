@@ -8,6 +8,80 @@ changed in the data, what it means for a port, and where to look in the code.
 See [src/compliance/README.md](src/compliance/README.md#porting-to-another-language)
 for the conformance artifacts used to check a port.
 
+## 0.9.9
+
+`RULES_VERSION` moves to `1.3.0`. Both changes below concern driver-card data,
+whose ActivityChangeInfo bits mean something else than in VU data
+(Reg. 2016/799 App.1). Files from a single driver without manual entries analyse
+as before - the bundled demo output is unchanged apart from `rulesVersion`.
+
+### Multi-manning
+
+The engine now models multi-manning instead of judging crew drivers by the solo
+rules. A work period counts as multi-manned (Art. 4(o)) when it shows crew time
+(card inserted, `drivingStatus === 'CREW'`) and all its driving after the first
+hour is crew time. Then:
+
+- **Daily rest (Art. 8.5).** At least 9h within 30h of the end of the previous
+  rest. A shortfall is emitted as `daily-rest` with `code: '8.5'` and
+  `multiManning: true`, graded by `SEVERITY['daily-rest-multi-manning']`
+  (Annex III D10-D12, the same bands as D4-D6). The 9h rest of a crew period is
+  not counted as one of the three reductions of Art. 8.4.
+- **Breaks (Art. 7).** A break may be taken riding as co-driver: crew
+  AVAILABILITY of at least 45 min in the CO-DRIVER slot counts as a break. It
+  does not count as daily rest.
+
+`rules.json` gains `multiManningRestWindow`, `multiManningSoloStart` and the
+`daily-rest-multi-manning` bands.
+
+### Daily rest after days without a card
+
+A card keeps no record of the days it was never inserted, so after a weekend off
+its data resumes at 00:00 in the middle of a rest. `analyzeDailyRest()` used to
+start the next 24h window right there and judge the few hours of rest left
+before the shift as a short daily rest of their own - a false insufficient daily
+rest on almost every Monday. Now, when the data opens with rest or resumes with
+rest after a gap, the window starts where that rest ends.
+
+### Both slots of a driver card
+
+On a driver card, `slot` only says which slot this driver's card sat in. A crew
+driver moves the card between DRIVER and CO-DRIVER, and the changes of both
+slots form one chronological timeline. The engine used to keep only the DRIVER
+slot whenever a day had one, as is right for a vehicle unit, where the slots are
+two drivers. On a card that dropped every period spent in the co-driver slot,
+and stretched the one-minute withdrawal of a slot swap over the hours that
+followed.
+
+The adapter now sets `source: 'card'` on driver-card day records, and
+`filterDriverChanges(changes, { card })` keeps every slot for them. Records
+without it keep the one-slot selection.
+
+### Card-out time: UNKNOWN versus manual entry
+
+With the card out (`cardInserted === false`, bit p = 1) the c bit of a card
+change means 0 = UNKNOWN and 1 = KNOWN, i.e. a manual entry. The parser names it
+`drivingStatus` `SINGLE` / `CREW` whatever p is, and in VU data it is always the
+crew status. The adapter therefore spells it out on card changes only as
+`manualEntry: cardInserted === false && drivingStatus === 'CREW'`.
+
+The engine used to count all card-out time as rest, which threw away the
+activities a driver declared by manual entry. Now a change with
+`manualEntry === true` keeps its activity; all other card-out time is rest as
+before.
+
+For a port:
+
+- Mark driver-card day records `source: 'card'` and their card-out changes with
+  `manualEntry`, as `markCardActivity()` in `src/utils/ddd.js` does.
+- `filterDriverChanges()` skips the slot selection for card records;
+  `getDayActivities()` maps a card-out change to BREAK/REST unless
+  `manualEntry === true`.
+- The app's day totals (`buildDaySegments()` in `src/utils/activity.js`, not
+  part of the engine) put UNKNOWN card time in a separate `UNKNOWN` bucket
+  instead of the activity recorded at withdrawal, which had shown it as WORK.
+  Two changes in the same minute no longer stretch the first to midnight.
+
 ## 0.9.7
 
 ### The download day ends at the download, not at midnight

@@ -9,6 +9,7 @@ export const ACTIVITY_COLORS = {
   WORK: '#03a9f4',
   AVAILABILITY: '#ffa000',
   'BREAK/REST': '#616161',
+  UNKNOWN: '#616161',
 }
 
 export const ACTIVITY_CLS = {
@@ -16,6 +17,7 @@ export const ACTIVITY_CLS = {
   WORK: 'activity-work',
   AVAILABILITY: 'activity-availability',
   'BREAK/REST': 'activity-rest',
+  UNKNOWN: 'activity-rest',
 }
 
 function ongoingBackground(color) {
@@ -23,8 +25,7 @@ function ongoingBackground(color) {
 }
 
 // Diagonal hatch over the recorded colour - marks periods when the driver card
-// was NOT inserted (cardInserted === false). The stored activity for these is
-// unreliable (stale value from before withdrawal), so they are flagged visually.
+// was NOT inserted (cardInserted === false): either UNKNOWN time or a manual entry.
 // Even diagonal hatch laid OVER the activity colour (which comes from the
 // element's theme-aware class). Only background-image is set so the class
 // background-color shows through the transparent parts. A fixed background tile
@@ -43,6 +44,7 @@ export const ACTIVITY_VARS = {
   WORK: 'var(--act-work)',
   AVAILABILITY: 'var(--act-availability)',
   'BREAK/REST': 'var(--act-rest)',
+  UNKNOWN: 'var(--act-rest)',
 }
 
 const NO_HIDDEN = new Set()
@@ -86,9 +88,9 @@ export function formatDuration(minutes) {
 // ends its last activity there instead of at midnight.
 export function buildDaySegments(input, { isLastDay = false } = {}) {
   const record = Array.isArray(input) ? null : input
-  const changes = filterDriverChanges(record ? record.activityChangeInfo || [] : input)
+  const changes = filterDriverChanges(record ? record.activityChangeInfo || [] : input, { card: record?.source === 'card' })
   const recordedUntil = record?.recordedUntilMin ?? null
-  const totals = { DRIVING: 0, WORK: 0, AVAILABILITY: 0, 'BREAK/REST': 0 }
+  const totals = { DRIVING: 0, WORK: 0, AVAILABILITY: 0, 'BREAK/REST': 0, UNKNOWN: 0 }
   const segments = []
 
   for (let i = 0; i < changes.length; i++) {
@@ -105,11 +107,21 @@ export function buildDaySegments(input, { isLastDay = false } = {}) {
       endMin = null
     } else {
       const nextMin = !isLast ? changes[i + 1].changeTime : MINUTES_IN_DAY
-      endMin = nextMin <= startMin ? MINUTES_IN_DAY : Math.min(nextMin, MINUTES_IN_DAY)
+      // Two changes in the same minute (a card moved between slots) give a
+      // zero-length segment; only a backwards step means the day wrapped.
+      endMin = nextMin < startMin ? MINUTES_IN_DAY : Math.min(nextMin, MINUTES_IN_DAY)
     }
+    if (endMin === startMin) continue
 
     const duration = endMin !== null ? endMin - startMin : 0
-    const activity = current.activity || 'BREAK/REST'
+    // Card data marks each card-out change as a manual entry or not (see
+    // markCardActivity in ddd.js). UNKNOWN time carries the activity selected
+    // at withdrawal, not what the driver did, so it stays out of the activity
+    // totals. VU data has no such flag: there the recorded activity is real.
+    const cardOut = current.cardInserted === false
+    const activity = cardOut && current.manualEntry === false
+      ? 'UNKNOWN'
+      : current.activity || 'BREAK/REST'
     if (duration > 0 && totals[activity] !== undefined) {
       totals[activity] += duration
     }
@@ -119,7 +131,6 @@ export function buildDaySegments(input, { isLastDay = false } = {}) {
     // Recorded up to the download and still running then - a real duration, but
     // marked like an ongoing one, since the activity did not end there.
     const truncated = isLast && recordedUntil != null
-    const cardOut = current.cardInserted === false
 
     let bgStyle = null
     if (ongoing || truncated) bgStyle = { background: ongoingBackground(color) }

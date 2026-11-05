@@ -265,3 +265,40 @@ describe('VU mass-memory normalization', () => {
     expect(borderCrossingRecords[0].countryEntered).toBe('HU')
   })
 })
+
+// On a card, card-out c=1 (drivingStatus CREW) is a manual entry, c=0 is UNKNOWN.
+describe('card-out manual entries', () => {
+  const change = (cardInserted, drivingStatus) =>
+    ({ changeTime: 0, activity: 'WORK', cardInserted, drivingStatus, slot: 'DRIVER' })
+  const card = (changes) => ({
+    result: [{
+      content: {
+        DF_Tachograph: {
+          EF_Identification: { CardIdentification: { cardNumber: 'X' } },
+          EF_Driver_Activity_Data: {
+            CardDriverActivity: { activityDailyRecords: [{ activityRecordDate: 0, activityChangeInfo: changes }] },
+          },
+        },
+      },
+    }],
+  })
+  const flags = (json) => extractRecords(detectAndNormalize(json).byGeneration.g1)
+    .activityRecords[0].activityChangeInfo.map((c) => c.manualEntry)
+
+  it('flags only card-out changes with c=1', () => {
+    expect(flags(card([change(false, 'CREW'), change(false, 'SINGLE'), change(true, 'CREW')])))
+      .toEqual([true, false, false])
+  })
+
+  it('leaves the parsed JSON untouched', () => {
+    const json = card([change(false, 'CREW')])
+    flags(json)
+    expect('manualEntry' in json.result[0].content.DF_Tachograph.EF_Driver_Activity_Data
+      .CardDriverActivity.activityDailyRecords[0].activityChangeInfo[0]).toBe(false)
+  })
+})
+
+it('marks card activity records as card data', () => {
+  const json = { EF_Driver_Activity_Data: { CardDriverActivity: { activityDailyRecords: [{ activityRecordDate: 0, activityChangeInfo: [] }] } } }
+  expect(extractRecords(detectAndNormalize(json).byGeneration.g1).activityRecords[0].source).toBe('card')
+})

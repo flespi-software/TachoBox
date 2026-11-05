@@ -102,8 +102,11 @@ flespi tacho-file-parse output:
     { changeTime: 0,   activity: 'DRIVING',    slot: 'DRIVER', cardInserted: true },
     { changeTime: 270, activity: 'BREAK/REST', slot: 'DRIVER', cardInserted: true },
     // activity: 'DRIVING' | 'WORK' | 'AVAILABILITY' | 'BREAK/REST'
+    // manualEntry: optional, card data only - true when a card-out change is a
+    // manual entry rather than UNKNOWN time
   ],
   recordedUntilMin: 371,  // optional: minutes since midnight where the data stops
+  source: 'card',         // optional: set for driver-card data, see "Slot selection"
 }
 ```
 
@@ -244,6 +247,7 @@ Every finding has `type`, `severity` and `message`. The rest depends on the type
 | `startMin`, `endMin` | `continuous-driving` | Clock span of the driving stretch, minutes since midnight. |
 | `totalDriving` | `weekly-driving` | Week total in minutes. |
 | `uncertain` | `daily-rest` | Data gap - the finding may be an artefact of missing days. |
+| `multiManning` | `daily-rest` | Set when the work period was multi-manned and the rest was judged under Art. 8.5. |
 | `description` | anomalies | Plain-language explanation. |
 | `icon` | most | Material Design Icons name, purely for UI. Ignore it outside a UI. |
 
@@ -278,6 +282,7 @@ What the engine detects:
 | Art. 6.3 two-week driving over 90h | `biweekly-driving` | `SEVERITY['biweekly-driving']` |
 | Art. 7 driving over 4h30 without a qualifying break | `continuous-driving` | `SEVERITY['continuous-driving']` |
 | Art. 8.2 daily rest shorter than required | `daily-rest` | `SEVERITY['daily-rest']` (Annex III D4-D6) |
+| Art. 8.5 multi-manning: no 9h daily rest within 30h | `daily-rest`, code `8.5`, `multiManning: true` | `SEVERITY['daily-rest-multi-manning']` (Annex III D10-D12) |
 | Art. 8.4 more than three reduced daily rests between weekly rests | `daily-rest-reduced` | not graded -> `uncategorized` |
 | Art. 8.6 weekly rest not started within six 24h periods | `weekly-rest-interval` | `SEVERITY['weekly-rest-interval']` (D19-D21) |
 | Art. 8.6 two consecutive reduced weekly rests | `weekly-rest-pair` | `SEVERITY['weekly-rest-regular-short']` (D16-D18) |
@@ -295,8 +300,6 @@ What it deliberately does **not** detect. A port should not treat these as bugs:
   Daily rest is graded against the 9h reduced threshold only. Exceeding the
   three-reductions allowance is reported as `daily-rest-reduced` with severity
   `uncategorized` rather than graded by duration.
-- **Multi-manning (Art. 4(o), 8.5).** Only one card slot is analysed, so the
-  30-hour multi-manning window is not modelled.
 - **Ferry and train derogations (Art. 9.1) and Art. 12 departures.** A rest
   interrupted by a ferry crossing is treated as an ordinary interrupted rest.
 - **A driver who never rests at all.** Weekly-rest checks work by comparing
@@ -320,14 +323,35 @@ Weeks are ISO weeks starting Monday, UTC.
 
 **Slot selection.** A day may carry changes for the DRIVER and the CO-DRIVER
 slot, and stale changes from the previous day (`changeTime` resets at midnight).
-`filterDriverChanges` keeps the DRIVER slot when present, otherwise CO-DRIVER,
-and only from the last midnight reset onwards.
+`filterDriverChanges` keeps only the changes from the last midnight reset
+onwards. What `slot` means depends on the source. In VU data the two slots are
+two different drivers, so the DRIVER slot is kept when present, otherwise
+CO-DRIVER. On a driver card it only says where this driver's card sat: a crew
+driver moves the card between slots and both form one chronological timeline,
+so a record with `source: 'card'` keeps them all.
 
-**Card-out counts as rest.** When `cardInserted === false` the stored activity is
-whatever was active before the card was withdrawn, usually WORK or DRIVING.
-Counting it produces false rest and driving violations, so those minutes are
-treated as BREAK/REST. The missing manual entry is reported separately as a
-Reg. 165/2014 usage error.
+**Unknown card-out time counts as rest.** On a driver card, a card-out change
+(`cardInserted === false`) is either UNKNOWN time or a manual entry: the c bit of
+ActivityChangeInfo, which the parser names `drivingStatus` `SINGLE` / `CREW`,
+means UNKNOWN / KNOWN there (Reg. 2016/799 App.1). The adapter spells this out
+as `manualEntry`. UNKNOWN time keeps whatever was active when the card was
+withdrawn, usually WORK or DRIVING, so it is treated as BREAK/REST, as the
+regulation assimilates it for driving-time computations. A manual entry
+(`manualEntry === true`) keeps the activity the driver declared. Card-out time
+without the flag, as in VU data, where c is always the crew status, is treated
+as rest. The missing manual entry is reported separately as a Reg. 165/2014
+usage error.
+
+**Multi-manning.** A work period between two daily rests is multi-manned
+(Art. 4(o)) when it shows crew time - card inserted, `drivingStatus === 'CREW'` -
+and all its driving after the first hour is crew time; the other driver is
+optional for that first hour. Such a period needs a daily rest of at least 9h
+within 30h of the end of the previous rest (Art. 8.5) instead of the 24h rule,
+and that 9h rest does not count towards the three reductions of Art. 8.4.
+A break may be taken riding as co-driver while the other drives (Art. 7): crew
+AVAILABILITY of at least 45 min in the CO-DRIVER slot counts as a break, the
+same as BREAK/REST. It never counts as daily rest, which needs a stationary
+vehicle.
 
 **The last day is never judged.** The most recent day in the dataset may be a
 mid-day download. It is skipped for per-day violations, and it must not consume
@@ -348,6 +372,12 @@ A rest satisfies a window only if it *starts* no later than `windowEnd - 9h` --
 a rest begun later leaves under 9h inside the window even if it is long. A
 regular rest is 11h, or a 3h block earlier in the same window paired with a 9h
 block (the 3+9 split).
+
+Data that opens with rest, or resumes with rest after a gap, is taken to start
+mid-rest: a card keeps no record of the days it was never inserted, so a weekend
+off is a gap followed by rest. The first window then starts where that rest ends
+instead of at midnight, or every Monday would be judged on the few hours of rest
+left after 00:00.
 
 **Reduced daily rest counter.** Reduced rests are counted between weekly rests;
 only the fourth and later are flagged. The counter resets on a rest of 24h or

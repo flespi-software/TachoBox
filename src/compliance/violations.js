@@ -6,7 +6,7 @@ import { LIMITS, classifySeverity, classifyDailyDriving } from './rules.js'
 
 function getDayActivities(record) {
   if (!record?.activityChangeInfo?.length) return []
-  const changes = filterDriverChanges(record.activityChangeInfo)
+  const changes = filterDriverChanges(record.activityChangeInfo, { card: record.source === 'card' })
   const result = []
   // The day of the download ends where its data does, not at midnight: the
   // activity running when the card or unit was read has no recorded end.
@@ -17,15 +17,21 @@ function getDayActivities(record) {
     const endMin = i < changes.length - 1
       ? Math.min(changes[i + 1].changeTime, MINUTES_IN_DAY)
       : Math.max(startMin, dayEnd)
-    // Card-out time (cardInserted === false) is treated as rest. The stored
-    // activity is stale (whatever was active before withdrawal, usually WORK or
-    // DRIVING), so counting it would raise false rest/driving violations - the
-    // driver is normally off-shift. The missing manual entry is surfaced instead
-    // as a usage error (Reg. 165/2014 Art.34) in detectUsageErrors().
+    // Card-out time is UNKNOWN unless it is a manual entry (manualEntry, set by
+    // the adapter for card data). UNKNOWN time carries the activity selected at
+    // withdrawal, not what the driver did, and is assimilated to rest for
+    // driving-time computations (Reg. 2016/799 App.1). A manual entry keeps the
+    // declared activity. The missing entry is surfaced as a usage error
+    // (Reg. 165/2014 Art.34) in detectUsageErrors().
     const cardOut = changes[i].cardInserted === false
+    const unknown = cardOut && changes[i].manualEntry !== true
     result.push({
-      activity: cardOut ? 'BREAK/REST' : (changes[i].activity || 'BREAK/REST'),
+      activity: unknown ? 'BREAK/REST' : (changes[i].activity || 'BREAK/REST'),
       cardInserted: !cardOut,
+      // Two drivers on board (multi-manning, Art.4(o)). With the card out the
+      // c bit of a card change means something else, so only inserted time counts.
+      crew: !cardOut && changes[i].drivingStatus === 'CREW',
+      coDriver: changes[i].slot === 'CO-DRIVER',
       startMin,
       endMin,
       duration: endMin - startMin,
@@ -44,8 +50,12 @@ function getDailyDriving(record) {
 // accumulated between qualifying breaks. A qualifying break (Art.7) is a single
 // REST of >=45 min, OR a >=15 min rest followed later by a >=30 min rest (the
 // 15+30 split). Rests shorter than 15 min, "other work" and "availability" are
-// NOT breaks: they neither reset nor count toward the break. Each stretch carries
-// its driving total and the clock span [startMin,endMin] of the driving.
+// NOT breaks: they neither reset nor count toward the break - except that a
+// driver engaged in multi-manning may take the break in a vehicle driven by the
+// other driver (Art.7), which the recorder logs as crew AVAILABILITY in the
+// co-driver slot. Each
+// stretch carries its driving total and the clock span [startMin,endMin] of the
+// driving.
 export function continuousDrivingStretches(record) {
   const activities = getDayActivities(record)
   const stretches = []
@@ -56,7 +66,7 @@ export function continuousDrivingStretches(record) {
       if (!cur) cur = { startMin: a.startMin, endMin: a.endMin, driving: 0 }
       cur.driving += a.duration
       cur.endMin = a.endMin
-    } else if (a.activity === 'BREAK/REST') {
+    } else if (a.activity === 'BREAK/REST' || (a.activity === 'AVAILABILITY' && a.crew && a.coDriver)) {
       if (a.duration >= LIMITS.breakRequired || (had15 && a.duration >= LIMITS.breakSplit2)) {
         if (cur) { stretches.push(cur); cur = null }
         had15 = false
@@ -180,7 +190,10 @@ function buildTimeline(records) {
   for (const r of sorted) {
     const base = r.activityRecordDate / 60 // absolute minutes since epoch
     for (const a of getDayActivities(r)) {
-      segs.push({ start: base + a.startMin, end: base + a.endMin, rest: a.activity === 'BREAK/REST' })
+      segs.push({
+        start: base + a.startMin, end: base + a.endMin,
+        rest: a.activity === 'BREAK/REST', driving: a.activity === 'DRIVING', crew: a.crew,
+      })
     }
   }
   return segs
@@ -213,6 +226,19 @@ function getRestBlocks(records) {
   return { segs, restBlocks }
 }
 
+// Multi-manning (Art.4(o)): two drivers on board for the driving of the work
+// period between two daily rests. The other driver is optional for its first
+// hour, so every driving segment after that must be crew time, and the period
+// must show crew time at all.
+function isMultiManned(segs, from, to) {
+  const work = segs.filter((s) => !s.rest && s.end > from && s.start < to)
+  if (!work.some((s) => s.crew)) return false
+  const firstDrive = work.find((s) => s.driving)
+  if (!firstDrive) return true
+  const soloUntil = firstDrive.start + LIMITS.multiManningSoloStart
+  return work.every((s) => !s.driving || s.crew || s.end <= soloUntil)
+}
+
 export function analyzeDailyRest(records) {
   const { segs, restBlocks } = getRestBlocks(records)
   if (!segs.length) return []
@@ -220,6 +246,10 @@ export function analyzeDailyRest(records) {
   const timelineEnd = segs[segs.length - 1].end
   const violations = []
   let T0 = segs[0].start
+  // Data that opens with rest opens mid-rest; count from where that rest ends,
+  // the same as after a gap below.
+  const opening = restBlocks.find((b) => Math.abs(b.start - T0) < 1)
+  if (opening) T0 = opening.end
   let reducedCount = 0 // reduced daily rests taken since the last weekly rest (Art.8.2/8.4: max 3)
   // T0 advances by at least a reduced daily rest (9h) every iteration, so this
   // bound always covers a real timeline; it only guards a pathological non-advance.
@@ -231,8 +261,21 @@ export function analyzeDailyRest(records) {
     // a 9h rest must fall inside the window, so it must start by windowEnd - 9h. A
     // rest begun later (even a long one) leaves < 9h inside the 24h and does not
     // satisfy the daily rest for this window.
-    const dr = restBlocks.find((b) => b.start >= T0 - 1 && b.start <= windowEnd - LIMITS.dailyRestReduced && b.dur >= LIMITS.dailyRestReduced)
-    if (dr) {
+    let dr = restBlocks.find((b) => b.start >= T0 - 1 && b.start <= windowEnd - LIMITS.dailyRestReduced && b.dur >= LIMITS.dailyRestReduced)
+    // Multi-manning (Art.8.5): the 9h daily rest is due within 30h instead of
+    // 24h, and as the rule for crews it is not a reduction under Art.8.4. The
+    // work period runs to the next rest long enough to be a daily rest.
+    const nextRest = restBlocks.find((b) => b.start >= T0 - 1 && b.dur >= LIMITS.dailyRestReduced)
+    const mmEnd = T0 + LIMITS.multiManningRestWindow
+    const multi = isMultiManned(segs, T0, Math.min(nextRest ? nextRest.start : mmEnd, mmEnd))
+    if (multi && !dr) {
+      dr = restBlocks.find((b) => b.start >= T0 - 1 && b.start <= mmEnd - LIMITS.dailyRestReduced && b.dur >= LIMITS.dailyRestReduced)
+      if (!dr && mmEnd > timelineEnd + 1) break // the 30h window runs past the data
+    }
+    if (dr && multi) {
+      if (dr.dur >= LIMITS.weeklyRestReduced) reducedCount = 0
+      T0 = dr.end
+    } else if (dr) {
       // 3h+9h split counts as a regular daily rest (Art.4(g)): an earlier >=3h
       // block in the same window paired with this >=9h rest.
       const hasSplit = restBlocks.some((b) => b.end <= dr.start && b.start >= T0 - 1 && b.dur >= LIMITS.dailyRestSplitPart1)
@@ -253,6 +296,8 @@ export function analyzeDailyRest(records) {
       }
       T0 = dr.end
     } else {
+      // A multi-manned period is judged over its 30h window
+      const windowEnd = multi ? mmEnd : T0 + MINUTES_IN_DAY
       const within = restBlocks.filter((b) => b.start >= T0 - 1 && b.start < windowEnd)
       // A rest started inside the window only counts for the part before the 24h
       // boundary (a late-started long rest gives < 9h within the window).
@@ -265,20 +310,29 @@ export function analyzeDailyRest(records) {
         if (!next) break
         T0 = next.start
         reducedCount = 0
+        // Data that resumes with rest resumes mid-rest: a card keeps no record of
+        // days it was never inserted, so that rest ran through the gap and ends
+        // a daily rest. Counting from where the data resumes would judge its
+        // remainder as a short rest of its own.
+        const resumed = restBlocks.find((b) => Math.abs(b.start - T0) < 1)
+        if (resumed) T0 = resumed.end
         continue
       }
       const uncertain = missing > 60 && longest + missing >= LIMITS.dailyRestReduced
       violations.push({
-        type: 'daily-rest', code: '8.2',
-        severity: uncertain ? 'uncertain' : classifySeverity('daily-rest', longest),
+        type: 'daily-rest', code: multi ? '8.5' : '8.2',
+        severity: uncertain ? 'uncertain' : classifySeverity(multi ? 'daily-rest-multi-manning' : 'daily-rest', longest),
         message: uncertain
           ? 'Daily rest {time} — {missing} of data missing, rest may be sufficient'
-          : 'Daily rest {time} below minimum 9h',
+          : multi
+            ? 'Daily rest {time} below minimum 9h within 30h (multi-manning)'
+            : 'Daily rest {time} below minimum 9h',
         messageParams: uncertain
           ? { time: formatMin(longest), missing: formatMin(missing) }
           : { time: formatMin(longest) },
         icon: uncertain ? 'mdi-help-circle-outline' : 'mdi-sleep',
         uncertain, minutes: longest, dayTs: dayTsOf(T0),
+        ...(multi ? { multiManning: true } : {}),
       })
       // If a >=9h rest WAS taken in this window but started too late (so < 9h fell
       // inside the 24h), advance past its end so the ongoing rest isn't re-flagged
@@ -547,7 +601,7 @@ function reconstructCardEvents(records) {
   const events = []
   for (const r of sorted) {
     const base = r.activityRecordDate
-    const changes = filterDriverChanges(r.activityChangeInfo)
+    const changes = filterDriverChanges(r.activityChangeInfo, { card: r.source === 'card' })
     let prev = null
     for (const ch of changes) {
       const inserted = ch.cardInserted !== false

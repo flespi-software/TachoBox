@@ -1,5 +1,5 @@
 {
-  "rulesVersion": "1.2.0",
+  "rulesVersion": "1.3.0",
   "units": {
     "limits": "minutes, unless the name says otherwise",
     "severityValue": "minutes (driving time, rest duration or interval)"
@@ -31,7 +31,9 @@
     "dailyRestReducedMax": 3,
     "weeklyRestReduced": 1440,
     "weeklyRestRegular": 2700,
-    "weeklyRestMaxInterval": 8640
+    "weeklyRestMaxInterval": 8640,
+    "multiManningRestWindow": 1800,
+    "multiManningSoloStart": 60
   },
   "severity": {
     "continuous-driving": {
@@ -82,6 +84,23 @@
       ]
     },
     "daily-rest": {
+      "dir": "under",
+      "bands": [
+        {
+          "at": 420,
+          "level": "most-serious"
+        },
+        {
+          "at": 480,
+          "level": "very-serious"
+        },
+        {
+          "at": 540,
+          "level": "serious"
+        }
+      ]
+    },
+    "daily-rest-multi-manning": {
       "dir": "under",
       "bands": [
         {

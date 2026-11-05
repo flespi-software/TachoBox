@@ -12,6 +12,7 @@ import {
   detectAnomalies,
   detectUsageErrors,
   crossReference,
+  continuousDrivingStretches,
 } from '../src/compliance/violations.js'
 import { classifySeverity } from '../src/compliance/rules.js'
 
@@ -242,4 +243,128 @@ describe('weekly rest duration severity bands (Annex III D13–D18)', () => {
       expect(classifySeverity('weekly-rest-regular-short', m)).toBe(sev)
     })
   }
+})
+
+describe('multi-manning daily rest severity bands (Art.8.5, Annex III D10-D12)', () => {
+  const bands = [
+    [9 * 60 - 1, 'serious'], // 8-9h
+    [8 * 60, 'serious'],
+    [8 * 60 - 1, 'very-serious'], // 7-8h
+    [7 * 60, 'very-serious'],
+    [7 * 60 - 1, 'most-serious'], // < 7h
+  ]
+  for (const [m, sev] of bands) {
+    it(`${m} min -> ${sev}`, () => {
+      expect(classifySeverity('daily-rest-multi-manning', m)).toBe(sev)
+    })
+  }
+})
+
+// Card out: UNKNOWN time counts as rest, a manual entry keeps the declared
+// activity, and data without the flag (a VU) stays rest as before.
+describe('card-out time in the engine', () => {
+  const ch = (changeTime, activity, cardInserted, manualEntry) =>
+    ({ changeTime, activity, cardInserted, manualEntry, slot: 'DRIVER' })
+  const day = (manual) => ({
+    activityRecordDate: 1704067200,
+    activityChangeInfo: [
+      ch(0, 'DRIVING', true),
+      ch(200, 'WORK', false, manual),
+      ch(260, 'DRIVING', true),
+      ch(360, 'BREAK/REST', true),
+    ],
+  })
+
+  it('treats UNKNOWN time as a break', () => {
+    expect(continuousDrivingStretches(day(false)).map((s) => s.driving)).toEqual([200, 100])
+  })
+
+  it('keeps a manually entered activity', () => {
+    expect(continuousDrivingStretches(day(true)).map((s) => s.driving)).toEqual([300])
+  })
+
+  it('treats card-out time without the flag as a break', () => {
+    expect(continuousDrivingStretches(day(undefined)).map((s) => s.driving)).toEqual([200, 100])
+  })
+})
+
+// Multi-manning (Art.4(o)): a break may be taken riding as co-driver (Art.7), and
+// the daily rest is 9h within 30h (Art.8.5), graded by Annex III D10-D12.
+describe('multi-manning', () => {
+  const D0 = 1704067200 // Monday
+  const ch = (changeTime, activity, crew, slot = 'DRIVER') =>
+    ({ changeTime, activity, cardInserted: true, drivingStatus: crew ? 'CREW' : 'SINGLE', slot })
+  const H = (h) => h * 60
+  // Rest until 11:00, a long shift driving in turns, then a daily rest of
+  // `restH` from 08:00 the next day.
+  const shift = (crew, restH) => {
+    const co = crew ? 'CO-DRIVER' : 'DRIVER'
+    const restEnd = H(8 + restH)
+    return [
+      { source: 'card', activityRecordDate: D0, activityChangeInfo: [
+        ch(0, 'BREAK/REST', false), ch(H(11), 'DRIVING', crew), ch(H(15), 'AVAILABILITY', crew, co),
+        ch(H(19), 'DRIVING', crew), ch(H(23), 'AVAILABILITY', crew, co),
+      ] },
+      { source: 'card', activityRecordDate: D0 + 86400, activityChangeInfo: [
+        ch(0, 'AVAILABILITY', crew, co), ch(H(5), 'DRIVING', crew), ch(H(8), 'BREAK/REST', crew),
+        ch(restEnd, 'WORK', crew), ch(H(17), 'BREAK/REST', crew),
+      ] },
+      { source: 'card', activityRecordDate: D0 + 2 * 86400, activityChangeInfo: [
+        ch(0, 'BREAK/REST', crew), ch(H(4), 'WORK', crew),
+      ] },
+    ]
+  }
+  const rest = (records) => analyzeDailyRest(records).filter((v) => v.type === 'daily-rest')
+
+  it('takes a break riding as co-driver', () => {
+    expect(continuousDrivingStretches(shift(true, 9)[0]).map((s) => s.driving)).toEqual([H(4), H(4)])
+    expect(continuousDrivingStretches(shift(false, 9)[0]).map((s) => s.driving)).toEqual([H(8)])
+  })
+
+  it('does not count crew availability in the driver slot as a break', () => {
+    const day = { activityRecordDate: D0, activityChangeInfo: [
+      ch(0, 'DRIVING', true), ch(H(3), 'AVAILABILITY', true), ch(H(4), 'DRIVING', true), ch(H(6), 'BREAK/REST', true),
+    ] }
+    expect(continuousDrivingStretches(day).map((s) => s.driving)).toEqual([H(5)])
+  })
+
+  it('accepts a 9h daily rest within 30h for a crew', () => {
+    expect(rest(shift(true, 9))).toEqual([])
+  })
+
+  it('judges the same shift without a crew against 24h', () => {
+    const v = rest(shift(false, 9))
+    expect(v).toHaveLength(1)
+    expect(v[0]).toMatchObject({ code: '8.2', severity: 'most-serious' })
+  })
+
+  it('grades a short crew daily rest under Art.8.5', () => {
+    const v = rest(shift(true, 8))
+    expect(v).toHaveLength(1)
+    expect(v[0]).toMatchObject({ code: '8.5', severity: 'serious', minutes: H(8), multiManning: true })
+  })
+})
+
+// A card keeps no record of days it was never inserted, so its data resumes
+// mid-rest after a weekend off - and opens mid-rest on the first day.
+describe('daily rest around days without a card', () => {
+  const FRI = 1704412800 // Friday 2024-01-05
+  const ch = (changeTime, activity, cardInserted = true) =>
+    ({ changeTime, activity, cardInserted, manualEntry: false, slot: 'DRIVER' })
+  const records = [
+    { source: 'card', activityRecordDate: FRI, activityChangeInfo: [
+      ch(0, 'BREAK/REST', false), ch(360, 'WORK'), ch(960, 'WORK', false),
+    ] },
+    { source: 'card', activityRecordDate: FRI + 3 * 86400, activityChangeInfo: [
+      ch(0, 'BREAK/REST', false), ch(360, 'WORK'), ch(1080, 'BREAK/REST', false),
+    ] },
+    { source: 'card', activityRecordDate: FRI + 4 * 86400, activityChangeInfo: [
+      ch(0, 'BREAK/REST', false), ch(420, 'WORK'),
+    ] },
+  ]
+
+  it('does not judge the rest that ran through the gap as a short one', () => {
+    const graded = analyzeDailyRest(records).filter((v) => v.severity !== 'uncertain')
+    expect(graded).toEqual([])
+  })
 })

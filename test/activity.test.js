@@ -62,3 +62,64 @@ describe('the day a download cut short', () => {
     expect(bounded.filter((a) => a.type === 'unaccounted')).toHaveLength(0)
   })
 })
+
+// Card out (p=1): manualEntry, set by the adapter for card data, separates
+// UNKNOWN time from a manual entry.
+describe('card-out time', () => {
+  const ch = (changeTime, activity, cardInserted, manualEntry = false) =>
+    ({ changeTime, activity, cardInserted, manualEntry, slot: 'DRIVER' })
+
+  it('keeps UNKNOWN time out of the activity totals', () => {
+    const { segments, totals } = buildDaySegments([
+      ch(0, 'WORK', false),
+      ch(331, 'DRIVING', true),
+      ch(963, 'WORK', false),
+    ])
+    expect(totals.WORK).toBe(0)
+    expect(totals.DRIVING).toBe(963 - 331)
+    expect(totals.UNKNOWN).toBe(331 + 1440 - 963)
+    expect(segments.map((s) => s.activity)).toEqual(['UNKNOWN', 'DRIVING', 'UNKNOWN'])
+    expect(segments[0].cardOut).toBe(true)
+  })
+
+  it('counts a manual entry as the declared activity', () => {
+    const { segments, totals } = buildDaySegments([
+      ch(0, 'WORK', false, true),
+      ch(600, 'DRIVING', true),
+    ])
+    expect(totals.WORK).toBe(600)
+    expect(totals.UNKNOWN).toBe(0)
+    expect(segments[0]).toMatchObject({ activity: 'WORK', cardOut: true })
+  })
+
+  // In VU data the activity of an empty slot is what the unit recorded.
+  it('shows VU card-out time as recorded', () => {
+    const { totals } = buildDaySegments([
+      { changeTime: 0, activity: 'DRIVING', cardInserted: false, drivingStatus: 'SINGLE', slot: 'DRIVER' },
+    ])
+    expect(totals.DRIVING).toBe(1440)
+    expect(totals.UNKNOWN).toBe(0)
+  })
+})
+
+// On a card `slot` is only where the card sat; in VU data the slots are two drivers.
+describe('slots', () => {
+  const changes = [
+    { changeTime: 0, activity: 'BREAK/REST', cardInserted: true, slot: 'CO-DRIVER' },
+    { changeTime: 300, activity: 'AVAILABILITY', cardInserted: true, slot: 'CO-DRIVER' },
+    { changeTime: 600, activity: 'WORK', cardInserted: false, manualEntry: false, slot: 'CO-DRIVER' },
+    { changeTime: 600, activity: 'DRIVING', cardInserted: true, slot: 'DRIVER' },
+  ]
+
+  it('keeps both slots of a card day as one timeline', () => {
+    const { segments, totals } = buildDaySegments({ source: 'card', activityChangeInfo: changes })
+    expect(segments.map((s) => s.activity)).toEqual(['BREAK/REST', 'AVAILABILITY', 'DRIVING'])
+    expect(totals).toMatchObject({ 'BREAK/REST': 300, AVAILABILITY: 300, DRIVING: 840, UNKNOWN: 0 })
+  })
+
+  it('keeps one slot of a VU day', () => {
+    const { totals } = buildDaySegments({ activityChangeInfo: changes })
+    expect(totals.DRIVING).toBe(840)
+    expect(totals.AVAILABILITY).toBe(0)
+  })
+})

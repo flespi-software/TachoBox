@@ -32,6 +32,33 @@ function isLegacyCardFormat(app) {
   return born != null && typeof born !== 'string'
 }
 
+// Marks the activity of a driver card, whose bits mean something else than in
+// VU data (Reg. 2016/799 App.1 ActivityChangeInfo):
+//  - source 'card': `slot` is only where this driver's card sat, so the engine
+//    keeps both slots instead of picking one (see filterDriverChanges).
+//  - manualEntry: a card-out change (p=1) with c=1 is a manual entry, with c=0
+//    the time is UNKNOWN. The parser names c drivingStatus SINGLE/CREW whatever
+//    p is; in VU data c is always the crew status.
+function markCardActivity(app) {
+  const activity = app?.EF_Driver_Activity_Data?.CardDriverActivity
+  if (!activity?.activityDailyRecords) return app
+  const activityDailyRecords = activity.activityDailyRecords.map((r) => ({
+    ...r,
+    source: 'card',
+    activityChangeInfo: (r.activityChangeInfo || []).map((c) => ({
+      ...c,
+      manualEntry: c.cardInserted === false && c.drivingStatus === 'CREW',
+    })),
+  }))
+  return {
+    ...app,
+    EF_Driver_Activity_Data: {
+      ...app.EF_Driver_Activity_Data,
+      CardDriverActivity: { ...activity, activityDailyRecords },
+    },
+  }
+}
+
 function resolveRegistration(c) {
   const regObj = scalar(c.VehicleRegistrationIdentification)
   if (regObj) return regObj
@@ -340,8 +367,8 @@ export function detectAndNormalize(json) {
         // which to view. `generation` is the richest one present.
         generation: content.DF_Tachograph_G2 ? 'g2' : 'g1',
         byGeneration: {
-          g1: content.DF_Tachograph || null,
-          g2: content.DF_Tachograph_G2 || null,
+          g1: markCardActivity(content.DF_Tachograph) || null,
+          g2: markCardActivity(content.DF_Tachograph_G2) || null,
         },
         enabled: true,
         warning: isLegacyCardFormat(content.DF_Tachograph) || isLegacyCardFormat(content.DF_Tachograph_G2)
@@ -445,7 +472,7 @@ export function detectAndNormalize(json) {
       meta: {},
       name: '',
       generation: 'g1',
-      byGeneration: { g1: json },
+      byGeneration: { g1: markCardActivity(json) },
       enabled: true,
       warning: isLegacyCardFormat(json) ? LEGACY_CARD_WARNING : null,
     }
